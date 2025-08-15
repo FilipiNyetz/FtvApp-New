@@ -11,41 +11,32 @@ import HealthKit
 struct StartView: View {
     
     @ObservedObject var manager: WorkoutManager
+    @State private var isWorkoutActive = false
     
     var workoutTypes: [HKWorkoutActivityType] = [.soccer]
     
     var body: some View {
-        NavigationStack{
-            List(workoutTypes) { workoutType in
-                Button {
-                    //workoutManager.selectedWorkout = workoutType
-                } label: {
-                    Text(workoutType.name)
-                        .padding(.vertical, 15)
-                }
-            }
-            .listStyle(.carousel)
-            .navigationTitle("Workouts")
-            /*
-            if workoutManager.selectedWorkout == nil {
-                List(workoutTypes) { workoutType in
-                    Button {
-                        workoutManager.selectedWorkout = workoutType
-                    } label: {
-                        Text(workoutType.name)
-                            .padding(.vertical, 15)
+            NavigationStack {
+                if isWorkoutActive {
+                    SessionPagingView(manager: manager)
+                } else {
+                    List(workoutTypes) { workoutType in
+                        Button {
+                            manager.startWorkout(workoutType: workoutType)
+                            isWorkoutActive = true
+                        } label: {
+                            Text(workoutType.name)
+                                .font(.title3)
+                        }
+                    }
+                    .listStyle(.carousel)
+                    .navigationTitle("Workouts")
+                    .onAppear {
+                        manager.requestAuthorization()
                     }
                 }
-                .listStyle(.carousel)
-                .navigationTitle("Workouts")
-                .onAppear {
-                    workoutManager.requestAuthorization()
-                }
-            } else {
-                SessionPagingView()
-            }*/
+            }
         }
-    }
 }
 
 
