@@ -15,6 +15,7 @@ struct FtvAppApp: App {
     var body: some Scene {
         WindowGroup {
             HomeView(manager: manager, selectedDate: Date())
+                .preferredColorScheme(.dark)
         }
     }
 }

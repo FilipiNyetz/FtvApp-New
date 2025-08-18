@@ -32,20 +32,21 @@ struct HomeView: View {
                 VStack(alignment: .leading, spacing: 16) {
                     
                     // Data do treino
-                    DatePickerField(selectedDate: $selectedDate)
-                    VStack{
-                        
-                        Button(action:{
-                            manager.fetchDataWorkout(endDate: selectedDate, period: "day")
-                        },label: {
-                            Text("Buscar dados")
-                        })
-                        
-                        ForEach(manager.workouts, id: \.id) { workout in
-                            WorkoutView(workout: workout)
-                        }
-                        Text("Dados dos treinos")
-                    }
+//                    DatePickerField(selectedDate: $selectedDate)
+//                    VStack{
+//                        
+//                        Button(action:{
+//                            manager.fetchDataWorkout(endDate: selectedDate, period: "day")
+//                        },label: {
+//                            Text("Buscar dados")
+//                        })
+//                        
+//                        ForEach(manager.workouts, id: \.id) { workout in
+//                            WorkoutView(workout: workout)
+//                        }
+//                        Text("Dados dos treinos")
+//                    }
+                    CalendarScreen(selectedDate: $selectedDate)
                     
                     //jogos
                     //                    VStack(alignment: .leading, spacing: 8) {
