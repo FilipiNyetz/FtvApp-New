@@ -13,8 +13,6 @@ struct HomeView: View {
     
     @State private var isGamesPresented = false
     
-    @Query var workoutsSave: [WorkoutModel]
-    
     // Mock data
     //    let data = WorkoutMock(
     //        date: "12 de ago. de 2025",
@@ -50,13 +48,6 @@ struct HomeView: View {
                         ForEach(manager.workouts, id: \.id) { workout in
                             // A View para exibir o workout precisa ser definida
                             // WorkoutView(workout: workout)
-                        }
-                        Text("Dados dos treinos")
-                        Text("Tem \(workoutsSave.count) salvo")
-                        Text("Quantidade de workout da variavel published dailyWorkouts: \(manager.dailyWorkouts.count)")
-                        Text("Tem \(workoutsSave.count) salvo")
-                        ForEach(workoutsSave){workout in
-                            Text("Workout: \(workout.distance)")
                         }
                     }
                     
@@ -153,15 +144,6 @@ struct HomeView: View {
             } // Fim da ScrollView
             // A CHAVE EXTRA QUE ESTAVA AQUI FOI REMOVIDA
         } // Fim da NavigationStack
-        .onAppear(){
-            countWorkouts = workoutsSave.count
-            
-        }
-        .onChange(of: manager.dailyWorkouts){
-            Task{
-                // try await dataManager.saveOnDB(context:context, workouts: manager.dailyWorkouts, numberOfWorkoutsSaveds: workoutsSave.count)
-            }
-        }
         
         //struct InfoCard: View {
         //    let title: String

@@ -87,7 +87,6 @@ class HealthManager: ObservableObject, @unchecked Sendable {
     @Published var workouts: [Workout] = []
     @Published var mediaBatimentosCardiacos: Double = 0.0
     @Published var totalWorkoutsCount: Int = 0
-    @Published var dailyWorkouts: [WorkoutModel] = []
 
     init() {
         //Inicia a classe manager declarando quais serão as variaveis e os tipos de dados solicitados ao HealthKit
@@ -228,7 +227,8 @@ class HealthManager: ObservableObject, @unchecked Sendable {
                         duration: durationMinutes,
                         calories: Int(calories),
                         distance: Int(distance),
-                        frequencyHeart: mediumFrequencyHeartRate
+                        frequencyHeart: mediumFrequencyHeartRate,
+                        dateWorkout: endDate
                     )
                     DispatchQueue.main.async {
                         self.workouts.append(workoutSummary)

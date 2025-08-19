@@ -7,15 +7,6 @@
 
 import SwiftUI
 
-struct Workout: Identifiable{
-    let id: UUID
-    let idWorkoutType: Int
-    let duration: Int
-    let calories: Int
-    let distance: Int
-    let frequencyHeart: Double
-}
-
 struct WorkoutView: View {
     
     @State var workout: Workout
