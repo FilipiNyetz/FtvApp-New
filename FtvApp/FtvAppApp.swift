@@ -18,7 +18,7 @@ struct FtvAppApp: App {
     
     var body: some Scene {
         WindowGroup {
-            HomeView(manager: manager,selectedDate: Date())
+            HomeView(manager: manager, dataManager: dataManager)
                 .modelContainer(for:[
                     WorkoutModel.self
                 ])

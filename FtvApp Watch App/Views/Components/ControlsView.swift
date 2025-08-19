@@ -55,11 +55,6 @@ struct ControlsView: View {
                 .tint(.green)
                 .font(.title2)
                 Text("Próxima partida")
-                Button{
-                    manager.startWorkout(workoutType: .soccer)
-                }label: {
-                    Image(systemName: "forward.fill")
-                }
             }
         }
     }
