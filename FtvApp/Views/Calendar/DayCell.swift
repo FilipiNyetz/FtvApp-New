@@ -23,7 +23,7 @@ struct DayCell: View {
                 // Fundo do dia atual selecionado (rosa)
                 if isToday && isSelected {
                     Circle()
-                        .fill(Color.brandPink)
+                        .fill(Color.brandGreen)
                         .frame(width: 32, height: 32)
                 }
                 // Fundo do dia selecionado (branco)
@@ -56,7 +56,7 @@ struct DayCell: View {
         } else if isSelected && !isToday {
             return .black  // Texto preto no fundo branco
         } else if isToday && !isSelected {
-            return .brandPink  // Texto rosa para o dia atual
+            return .brandGreen  // Texto rosa para o dia atual
         } else if isFuture && !isSelected {
             return .gray  // Texto cinza para dias futuros
         } else {

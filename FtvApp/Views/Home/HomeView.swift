@@ -125,7 +125,14 @@ struct HomeView: View {
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     NavigationLink(destination: EvolutionView()) {
-                        Image(systemName: "chart.bar")
+                        Circle()
+                            .fill(Color.brandGreen)
+                            .frame(width: 40, height: 40)
+                            .overlay(
+                                Image(systemName: "chart.bar")
+                                    .font(.subheadline)
+                                    .foregroundStyle(.black)
+                            )
                     }
                 }
             }
@@ -178,4 +185,7 @@ struct WorkoutMock {
     let meta: Int
 }
 
-
+#Preview {
+    HomeView(manager: HealthManager(), selectedDate: Date())
+        .preferredColorScheme(.dark)
+}

@@ -9,15 +9,16 @@
 import SwiftUI
 import Charts
 
-struct EvolutionView: View {
 
+struct EvolutionView: View {
+    
     // ---- Dados do gráfico (mock) ----
     struct Dado: Identifiable {
         let id = UUID()
         let dia: Int
         let valor: Double
     }
-
+    
     let dados: [Dado] = [
         .init(dia: 1,  valor: 28),
         .init(dia: 4,  valor: 28),
@@ -29,10 +30,10 @@ struct EvolutionView: View {
         .init(dia: 26, valor: 16),
         .init(dia: 30, valor: 12)
     ]
-
+    
     // ---- Estado da métrica selecionada + lista de métricas ----
     @State private var selectedMetric: String = "Altura"
-
+    
     private let metrics: [(name: String, icon: String)] = [
         ("Altura",          "arrow.up.and.down"),
         ("Velocidade máx",  "speedometer"),
@@ -41,28 +42,35 @@ struct EvolutionView: View {
         ("Passos",          "figure.walk"),
         ("Distância",       "location")
     ]
-
+    
     // Ícone da métrica atual
     private var currentMetricIcon: String {
         metrics.first(where: { $0.name == selectedMetric })?.icon ?? "arrow.up.and.down"
     }
+    
+    @State private var selectedSelection = "M"
+//        let Selections = ["D", "S", "M", "6M", "A"]
 
+    
     var body: some View {
+        
         NavigationView {
             ScrollView {
                 VStack(spacing: 20) {
-
+                    
                     // ---------- Cabeçalho + seletor de métrica ----------
                     HStack {
                         VStack(alignment: .leading, spacing: 2) {
                             Text("Evolução")
-                                .font(.title2).bold()
+                                .font(.title)
+                                .bold()
+                            // aqui colocar o que ele selecionar (D,S,M,6M,A)
                             Text("Este mês")
                                 .foregroundColor(.gray)
                         }
-
+                        
                         Spacer()
-
+                        
                         // MENU CURTO: pílula com ícone, texto e chevron
                         Menu {
                             ForEach(metrics, id: \.name) { metric in
@@ -76,6 +84,7 @@ struct EvolutionView: View {
                             HStack(spacing: 8) {
                                 Image(systemName: currentMetricIcon)
                                     .font(.body)
+                                    .foregroundColor(.colorSecond)
                                 Text(selectedMetric == "Velocidade máx" ? "Vel. máx" : selectedMetric)
                                     .font(.body)
                                     .lineLimit(1)
@@ -99,20 +108,28 @@ struct EvolutionView: View {
                         .menuStyle(.button)
                         .menuIndicator(.hidden) // usamos nosso chevron
                     }
-
+                    
                     // ---------- Tabs de tempo ----------
+                    // ZStack {
+                    
+                   
+                    
+                }
+                .padding()
+                
+                VStack {
                     HStack {
-                        ForEach(["D", "S", "M", "6M", "A"], id: \.self) { periodo in
-                            Text(periodo)
-                                .font(.subheadline)
-                                .padding(.horizontal, 8)
-                                .padding(.vertical, 4)
-                                .background(periodo == "M" ? Color.white.opacity(0.2) : Color.clear)
-                                .cornerRadius(8)
+                        Picker("Período", selection: $selectedSelection) {
+                            ForEach(["D", "S", "M", "6M", "A"], id: \.self) { periodo in
+                                Text(periodo).tag(periodo) // mostra o valor e associa ao Picker
+                            }
                         }
+                        .pickerStyle(.segmented) // deixa no estilo do SegmentedControl
+                        .padding(.bottom, 8)
                         Spacer()
                     }
-
+                    
+                    // colocar em outra pagina depois !!!
                     // ---------- Gráfico ----------
                     Chart {
                         ForEach(dados) { dado in
@@ -124,90 +141,24 @@ struct EvolutionView: View {
                         }
                     }
                     .frame(height: 200)
-
-                    // ---------- Cards Máx / Mín ----------
-                    HStack(spacing: 12) {
-                        // Card Máx
-                        VStack(alignment: .leading, spacing: 6) {
-                            HStack {
-                                Text("MÁX")
-                                    .font(.caption)
-                                    .foregroundColor(.secondary)
-                                Spacer()
-                                Text("12/07/25")
-                                    .font(.caption2)
-                                    .foregroundColor(.secondary)
-                            }
-                            HStack(alignment: .firstTextBaseline, spacing: 2) {
-                                Text("40")
-                                    .font(.title3).bold()
-                                Text("cm")
-                                    .font(.caption)
-                                    .foregroundColor(.secondary)
-                            }
-                        }
-                        .padding(.vertical, 8)
-                        .padding(.horizontal, 12)
-                        .frame(height: 60)
-                        .background(Color.white.opacity(0.05))
-                        .cornerRadius(10)
-
-                        // Card Mín
-                        VStack(alignment: .leading, spacing: 6) {
-                            HStack {
-                                Text("MÍN")
-                                    .font(.caption)
-                                    .foregroundColor(.secondary)
-                                Spacer()
-                                Text("08/02/25")
-                                    .font(.caption2)
-                                    .foregroundColor(.secondary)
-                            }
-                            HStack(alignment: .firstTextBaseline, spacing: 2) {
-                                Text("12")
-                                    .font(.title3).bold()
-                                Text("cm")
-                                    .font(.caption)
-                                    .foregroundColor(.secondary)
-                            }
-                        }
-                        .padding(.vertical, 8)
-                        .padding(.horizontal, 12)
-                        .frame(height: 60)
-                        .background(Color.white.opacity(0.05))
-                        .cornerRadius(10)
-                    }
-
-                    // ---------- Sugestões ----------
-                    VStack(alignment: .leading, spacing: 12) {
-                        VStack(alignment: .leading, spacing: 4) {
-                            Text("Sugestões")
-                                .font(.headline)
-                            Text("Evolua nos jogos com as dicas certas")
-                                .font(.callout)
-                                .foregroundColor(.secondary)
-                        }
-
-                        SugestaoCard(
-                            icone: "figure.strengthtraining.traditional",
-                            titulo: "Fortalecer membros inferiores",
-                            descricao: "Faça agachamento, salto na caixa e prancha isométrica. Isso fortalece pernas e core — essenciais para pular mais alto com estabilidade."
-                        )
-
-                        SugestaoCard(
-                            icone: "book.fill",
-                            titulo: "Técnica",
-                            descricao: "Treine saltos com passada controlada e aterrissagem suave. Tente corrigir postura e alinhar braços, tronco e pernas no movimento."
-                        )
-
-                        SugestaoCard(
-                            icone: "figure.run",
-                            titulo: "Estratégia",
-                            descricao: "Jogue mais partidas focando em prever a jogada adversária."
-                        )
-                    }
+                    // Dados de Salto(max/min)
+                    jumpdata()
                 }
+                
                 .padding()
+                .background(
+                    LinearGradient(
+                        gradient: Gradient(colors: [Color.gradiente2,Color.gradiente2, Color.gradiente1]),
+                        startPoint: .topLeading,
+                        endPoint: .bottomTrailing
+                        
+                    )
+                )
+                // }
+                //Divider()
+                // Sugestões para o usuario
+                suggestions()
+                    .padding()
             }
             .navigationBarTitleDisplayMode(.inline)
             .background(.gray.opacity(0.1))
@@ -216,33 +167,9 @@ struct EvolutionView: View {
     }
 }
 
-struct SugestaoCard: View {
-    let icone: String
-    let titulo: String
-    let descricao: String
 
-    var body: some View {
-        VStack(alignment: .leading, spacing: 6) {
-            Label(titulo, systemImage: icone)
-                .font(.subheadline).bold()
-            Text(descricao)
-                .font(.footnote)
-                .foregroundColor(.secondary)
-        }
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .padding()
-        .background(.gray.opacity(0.2))
-        .cornerRadius(10)
-    }
-}
-
-struct EvolutionView_Previews: PreviewProvider {
-    static var previews: some View {
-        EvolutionView()
-            .preferredColorScheme(.dark)
-    }
-}
 
 #Preview {
     EvolutionView()
+        .preferredColorScheme(.dark)
 }
