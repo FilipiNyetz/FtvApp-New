@@ -39,9 +39,22 @@
 		BB2FFBC72E4E4FD200F15AF8 /* FtvApp Watch App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "FtvApp Watch App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		BB3B107E2E54FF0D00F22780 /* Exceptions for "FtvApp" folder in "FtvApp" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = BB2FFBB92E4E4FD100F15AF8 /* FtvApp */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		BB2FFBBC2E4E4FD100F15AF8 /* FtvApp */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				BB3B107E2E54FF0D00F22780 /* Exceptions for "FtvApp" folder in "FtvApp" target */,
+			);
 			path = FtvApp;
 			sourceTree = "<group>";
 		};
@@ -345,6 +358,7 @@
 				DEVELOPMENT_TEAM = 2XBHGB4LG5;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "FtvApp-Watch-App-Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = FtvvApp;
 				INFOPLIST_KEY_NSHealthShareUsageDescription = "Usar para anaalisar dados do usuario";
 				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "Usar para anaalisar dados do usuario";
@@ -363,7 +377,7 @@
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 4;
-				WATCHOS_DEPLOYMENT_TARGET = 11.0;
+				WATCHOS_DEPLOYMENT_TARGET = 10.6;
 			};
 			name = Debug;
 		};
@@ -378,6 +392,7 @@
 				DEVELOPMENT_TEAM = 2XBHGB4LG5;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "FtvApp-Watch-App-Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = FtvvApp;
 				INFOPLIST_KEY_NSHealthShareUsageDescription = "Usar para anaalisar dados do usuario";
 				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "Usar para anaalisar dados do usuario";
@@ -397,7 +412,7 @@
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 4;
 				VALIDATE_PRODUCT = YES;
-				WATCHOS_DEPLOYMENT_TARGET = 11.0;
+				WATCHOS_DEPLOYMENT_TARGET = 10.6;
 			};
 			name = Release;
 		};
@@ -412,6 +427,7 @@
 				DEVELOPMENT_TEAM = 2XBHGB4LG5;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = FtvApp/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = FtvvApp;
 				INFOPLIST_KEY_NSHealthShareUsageDescription = "Usar para anaalisar dados do usuario";
 				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "Usar para anaalisar dados do usuario";
@@ -446,6 +462,7 @@
 				DEVELOPMENT_TEAM = 2XBHGB4LG5;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = FtvApp/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = FtvvApp;
 				INFOPLIST_KEY_NSHealthShareUsageDescription = "Usar para anaalisar dados do usuario";
 				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "Usar para anaalisar dados do usuario";

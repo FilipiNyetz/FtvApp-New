@@ -6,11 +6,15 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct HomeView: View {
     @ObservedObject var manager: HealthManager
+    @Environment(\.modelContext) private var context
     
     @State private var isGamesPresented = false
+    
+    @Query var workoutsSave: [WorkoutModel]
     
     // Mock data
     //    let data = WorkoutMock(
@@ -26,27 +30,31 @@ struct HomeView: View {
     //        meta: 250
     //    )
     @State var selectedDate: Date
+    @State var countWorkouts: Int = 0
+    
+    
     var body: some View {
         NavigationStack {
             ScrollView {
                 VStack(alignment: .leading, spacing: 16) {
                     
                     // Data do treino
-//                    DatePickerField(selectedDate: $selectedDate)
-//                    VStack{
-//                        
-//                        Button(action:{
-//                            manager.fetchDataWorkout(endDate: selectedDate, period: "day")
-//                        },label: {
-//                            Text("Buscar dados")
-//                        })
-//                        
-//                        ForEach(manager.workouts, id: \.id) { workout in
-//                            WorkoutView(workout: workout)
-//                        }
-//                        Text("Dados dos treinos")
-//                    }
-                    CalendarScreen(selectedDate: $selectedDate)
+                    DatePickerField(selectedDate: $selectedDate)
+                    VStack{
+                        
+                        Button(action:{
+                            manager.fetchDataWorkout(endDate: selectedDate, period: "day")
+                        },label: {
+                            Text("Buscar dados")
+                        })
+                        
+                        ForEach(manager.workouts, id: \.id) { workout in
+                            WorkoutView(workout: workout)
+                        }
+                        Text("Dados dos treinos")
+                        
+                        Text("Tem \(workoutsSave.count) salvo")
+                    }
                     
                     //jogos
                     //                    VStack(alignment: .leading, spacing: 8) {
@@ -139,6 +147,11 @@ struct HomeView: View {
                     //            }
                 }
             }
+            
+        }
+        .onAppear(){
+            countWorkouts = workoutsSave.count
+            manager.fetchDailyValue(context: context, countWorkouts: countWorkouts)
         }
         
         //struct InfoCard: View {

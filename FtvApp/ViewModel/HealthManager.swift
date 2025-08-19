@@ -1,4 +1,4 @@
-//
+
 //  HealthManager.swift
 //  BeActiv
 //
@@ -7,6 +7,7 @@
 
 import Foundation
 import HealthKit
+import SwiftData
 
 extension Date {
     
@@ -70,14 +71,9 @@ extension Date {
         return calendar.date(byAdding: .day, value: 1, to: start)!
     }
     
-    
-    
-    
-    
-    
 }
 
-class HealthManager: ObservableObject {
+class HealthManager: ObservableObject, @unchecked Sendable {
     
     //Instancia a classe que controla do DB do healthKit, criando o objeto capaz de acessar e gerenciar os dados no healthKit
     let healthStore = HKHealthStore()
@@ -85,6 +81,7 @@ class HealthManager: ObservableObject {
     //Variavel que aramazena um array de workouts e pode ser acessada pela view
     @Published var workouts: [Workout] = []
     @Published var mediaBatimentosCardiacos: Double = 0.0
+    @Published var totalWorkoutsCount: Int = 0
     
     init(){
         //Inicia a classe manager declarando quais serão as variaveis e os tipos de dados solicitados ao HealthKit
@@ -108,6 +105,84 @@ class HealthManager: ObservableObject {
             }
         }
     }
+    
+    @MainActor
+    func fetchDailyValue(context: ModelContext, countWorkouts: Int) {
+        print("Chama a funcao diaria")
+        let calendar = Calendar.current
+        let today = Date()
+        let startOfDay = calendar.startOfDay(for: today)
+        let endOfDay = calendar.date(byAdding: .day, value: 1, to: startOfDay)!.addingTimeInterval(-1)
+
+        print("Start: \(today)")
+        print("End: \(endOfDay)")
+
+        let workoutType = HKObjectType.workoutType()
+
+        let timePredicate = HKQuery.predicateForSamples(withStart: startOfDay, end: endOfDay)
+        let workoutPredicate = HKQuery.predicateForWorkouts(with: .soccer)
+        let predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [timePredicate, workoutPredicate])
+
+        let query = HKSampleQuery(sampleType: workoutType, predicate: predicate, limit: 50, sortDescriptors: nil) { _, samples, error in
+            
+            guard let workouts = samples as? [HKWorkout], error == nil else {
+                print("Erro ao buscar workouts do dia")
+                return
+            }
+            
+            let fetchRequest = FetchDescriptor<WorkoutModel>(
+                predicate: #Predicate { $0.dataWorkout >= startOfDay && $0.dataWorkout <= endOfDay }
+            )
+
+            let savedWorkouts = (try? context.fetch(fetchRequest)) ?? []
+            
+            print("Já salvos no banco: \(savedWorkouts.count)")
+            print("Recebidos do HealthKit: \(workouts.count)")
+            
+            for workout in workouts {
+                if countWorkouts == workouts.count {
+                    return
+                }
+                let exists = savedWorkouts.contains(where: { saved in
+                    saved.dataWorkout == workout.startDate &&
+                    saved.idWorkoutType == Int(workout.workoutActivityType.rawValue) &&
+                    saved.duration == Int(workout.duration) / 60
+                })
+                
+                if exists {
+                    print("Treino já existe, pulando...")
+                    continue
+                }
+                
+                
+                let durationMinutes = Int(workout.duration) / 60
+                let calories = workout.totalEnergyBurned?.doubleValue(for: .kilocalorie()) ?? 0
+                let distance = workout.totalDistance?.doubleValue(for: .meter()) ?? 0
+                
+                queryFrequenciaCardiaca(workout: workout, healthStore: self.healthStore) { mediumFrequencyHeartRate in
+                    let workoutSummary = WorkoutModel(
+                        idWorkoutType: Int(workout.workoutActivityType.rawValue),
+                        dataWorkout: workout.startDate, // aqui usei a data real do treino
+                        duration: durationMinutes,
+                        calories: Int(calories),
+                        distance: Int(distance),
+                        frequencyHeart: mediumFrequencyHeartRate
+                    )
+                    
+                    context.insert(workoutSummary)
+                    do {
+                        try context.save()
+                        print("Treino novo salvo com sucesso!")
+                    } catch {
+                        print("Erro ao salvar: \(error.localizedDescription)")
+                    }
+                }
+            }
+        }
+        
+        healthStore.execute(query)
+    }
+
     
     func fetchDataWorkout(endDate: Date, period: String) {
         let calendar = Calendar.current
@@ -206,3 +281,6 @@ class HealthManager: ObservableObject {
 
 
 
+extension ModelContext: @unchecked @retroactive Sendable {
+    
+}
