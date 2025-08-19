@@ -6,11 +6,16 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct HomeView: View {
     @ObservedObject var manager: HealthManager
+    @ObservedObject var dataManager: DataManager
+    @Environment(\.modelContext) private var context
     
     @State private var isGamesPresented = false
+    
+    @Query var workoutsSave: [WorkoutModel]
     
     // Mock data
     //    let data = WorkoutMock(
@@ -26,6 +31,9 @@ struct HomeView: View {
     //        meta: 250
     //    )
     @State var selectedDate: Date
+    @State var countWorkouts: Int = 0
+    
+    
     var body: some View {
         NavigationStack {
             ScrollView {
@@ -45,6 +53,11 @@ struct HomeView: View {
                             WorkoutView(workout: workout)
                         }
                         Text("Dados dos treinos")
+                        Text("Quantidade de workout da variavel published dailyWorkouts: \(manager.dailyWorkouts.count)")
+                        Text("Tem \(workoutsSave.count) salvo")
+                        ForEach(workoutsSave){workout in
+                            Text("Workout: \(workout.distance)")
+                        }
                     }
                     
                     //jogos
@@ -137,6 +150,16 @@ struct HomeView: View {
                     //                }
                     //            }
                 }
+            }
+            
+        }
+        .onAppear(){
+            countWorkouts = workoutsSave.count
+            manager.fetchDailyValue(context: context, countWorkouts: countWorkouts)
+        }
+        .onChange(of: manager.dailyWorkouts){
+            Task{
+                try await dataManager.saveOnDB(context:context, workouts: manager.dailyWorkouts, numberOfWorkoutsSaveds: workoutsSave.count)
             }
         }
         
