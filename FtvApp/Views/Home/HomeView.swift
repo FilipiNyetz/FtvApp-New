@@ -10,8 +10,6 @@ import SwiftData
 
 struct HomeView: View {
     @ObservedObject var manager: HealthManager
-    @ObservedObject var dataManager: DataManager
-    @Environment(\.modelContext) private var context
     
     @State private var isGamesPresented = false
     
@@ -157,7 +155,7 @@ struct HomeView: View {
         } // Fim da NavigationStack
         .onAppear(){
             countWorkouts = workoutsSave.count
-            manager.fetchDailyValue(context: context, countWorkouts: countWorkouts)
+            
         }
         .onChange(of: manager.dailyWorkouts){
             Task{
