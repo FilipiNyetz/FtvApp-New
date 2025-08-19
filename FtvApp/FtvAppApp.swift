@@ -6,16 +6,22 @@
 //
 
 import SwiftUI
+import SwiftData
 
 @main
 struct FtvAppApp: App {
     
+    @AppStorage("countWorkouts") var countWorkouts: Int = 0
+    
     @StateObject var manager = HealthManager()
+    @StateObject var dataManager = DataManager()
     
     var body: some Scene {
         WindowGroup {
-            HomeView(manager: manager, selectedDate: Date())
-                .preferredColorScheme(.dark)
+            HomeView(manager: manager,selectedDate: Date())
+                .modelContainer(for:[
+                    WorkoutModel.self
+                ])
         }
     }
 }

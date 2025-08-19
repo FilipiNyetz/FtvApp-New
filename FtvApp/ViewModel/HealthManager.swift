@@ -76,12 +76,16 @@ extension Date {
 class HealthManager: ObservableObject, @unchecked Sendable {
     
     //Instancia a classe que controla do DB do healthKit, criando o objeto capaz de acessar e gerenciar os dados no healthKit
-    let healthStore = HKHealthStore()
+    let healthStore = HKHealthStore() 
     
     //Variavel que aramazena um array de workouts e pode ser acessada pela view
     @Published var workouts: [Workout] = []
     @Published var mediaBatimentosCardiacos: Double = 0.0
     @Published var totalWorkoutsCount: Int = 0
+<<<<<<< HEAD
+=======
+    @Published var dailyWorkouts : [WorkoutModel] = []
+>>>>>>> f4944c6ed6265a664562980cdff295b05a7ae939
     
     init(){
         //Inicia a classe manager declarando quais serão as variaveis e os tipos de dados solicitados ao HealthKit
@@ -107,7 +111,11 @@ class HealthManager: ObservableObject, @unchecked Sendable {
     }
     
     @MainActor
+<<<<<<< HEAD
     func fetchDailyValue(context: ModelContext, countWorkouts: Int) {
+=======
+    func fetchDailyValue(context: ModelContext, countWorkouts: Int){
+>>>>>>> f4944c6ed6265a664562980cdff295b05a7ae939
         print("Chama a funcao diaria")
         let calendar = Calendar.current
         let today = Date()
@@ -130,6 +138,7 @@ class HealthManager: ObservableObject, @unchecked Sendable {
                 return
             }
             
+<<<<<<< HEAD
             let fetchRequest = FetchDescriptor<WorkoutModel>(
                 predicate: #Predicate { $0.dataWorkout >= startOfDay && $0.dataWorkout <= endOfDay }
             )
@@ -153,6 +162,31 @@ class HealthManager: ObservableObject, @unchecked Sendable {
                     print("Treino já existe, pulando...")
                     continue
                 }
+=======
+//            let fetchRequest = FetchDescriptor<WorkoutModel>(
+//                predicate: #Predicate { $0.dataWorkout >= startOfDay && $0.dataWorkout <= endOfDay }
+//            )
+
+//            let savedWorkouts = (try? context.fetch(fetchRequest)) ?? []
+            
+            print(samples?.count ?? 0)
+            
+//            print("Já salvos no banco: \(savedWorkouts.count)")
+            print("Recebidos do HealthKit: \(workouts.count)")
+            
+            for workout in workouts {
+                print("Entrou no for")
+//                let exists = savedWorkouts.contains(where: { saved in
+//                    saved.dataWorkout == workout.startDate &&
+//                    saved.idWorkoutType == Int(workout.workoutActivityType.rawValue) &&
+//                    saved.duration == Int(workout.duration) / 60
+//                })
+                
+//                if exists {
+//                    print("Treino já existe, pulando...")
+//                    continue
+//                }
+>>>>>>> f4944c6ed6265a664562980cdff295b05a7ae939
                 
                 
                 let durationMinutes = Int(workout.duration) / 60
@@ -169,12 +203,18 @@ class HealthManager: ObservableObject, @unchecked Sendable {
                         frequencyHeart: mediumFrequencyHeartRate
                     )
                     
+<<<<<<< HEAD
                     context.insert(workoutSummary)
                     do {
                         try context.save()
                         print("Treino novo salvo com sucesso!")
                     } catch {
                         print("Erro ao salvar: \(error.localizedDescription)")
+=======
+                    
+                    DispatchQueue.main.async {
+                        self.dailyWorkouts.append(workoutSummary)
+>>>>>>> f4944c6ed6265a664562980cdff295b05a7ae939
                     }
                 }
             }

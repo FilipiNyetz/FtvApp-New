@@ -19,7 +19,8 @@ import SwiftData
 //}
 
 @Model
-class WorkoutModel{
+
+class WorkoutModel: @unchecked Sendable{
     @Attribute(.unique)
     var id: UUID = UUID()
     

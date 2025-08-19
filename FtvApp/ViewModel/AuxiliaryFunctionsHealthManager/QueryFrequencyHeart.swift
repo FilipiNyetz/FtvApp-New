@@ -8,7 +8,7 @@
 import Foundation
 import HealthKit
 
-func queryFrequenciaCardiaca(workout: HKWorkout, healthStore: HKHealthStore, completionHandler: @escaping (Double) -> Void){
+func queryFrequenciaCardiaca(workout: HKWorkout, healthStore: HKHealthStore, completionHandler: @escaping @Sendable (Double) -> Void){
     
     var sumFrequency: Double = 0
     

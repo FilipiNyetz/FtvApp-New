@@ -10,6 +10,10 @@ import SwiftData
 
 struct HomeView: View {
     @ObservedObject var manager: HealthManager
+<<<<<<< HEAD
+=======
+    @ObservedObject var dataManager: DataManager
+>>>>>>> f4944c6ed6265a664562980cdff295b05a7ae939
     @Environment(\.modelContext) private var context
     
     @State private var isGamesPresented = false
@@ -52,8 +56,16 @@ struct HomeView: View {
                             WorkoutView(workout: workout)
                         }
                         Text("Dados dos treinos")
+<<<<<<< HEAD
                         
                         Text("Tem \(workoutsSave.count) salvo")
+=======
+                        Text("Quantidade de workout da variavel published dailyWorkouts: \(manager.dailyWorkouts.count)")
+                        Text("Tem \(workoutsSave.count) salvo")
+                        ForEach(workoutsSave){workout in
+                            Text("Workout: \(workout.distance)")
+                        }
+>>>>>>> f4944c6ed6265a664562980cdff295b05a7ae939
                     }
                     
                     //jogos
@@ -152,6 +164,14 @@ struct HomeView: View {
         .onAppear(){
             countWorkouts = workoutsSave.count
             manager.fetchDailyValue(context: context, countWorkouts: countWorkouts)
+<<<<<<< HEAD
+=======
+        }
+        .onChange(of: manager.dailyWorkouts){
+            Task{
+                try await dataManager.saveOnDB(context:context, workouts: manager.dailyWorkouts, numberOfWorkoutsSaveds: workoutsSave.count)
+            }
+>>>>>>> f4944c6ed6265a664562980cdff295b05a7ae939
         }
         
         //struct InfoCard: View {

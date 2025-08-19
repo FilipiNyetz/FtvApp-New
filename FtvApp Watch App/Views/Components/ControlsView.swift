@@ -8,15 +8,16 @@
 import SwiftUI
 
 struct ControlsView: View {
+    
     @ObservedObject var manager: WorkoutManager
-
+    
     var body: some View {
-        VStack(spacing: 15) {
-            HStack {
-                VStack {
-                    Button {
+        VStack(spacing: 15){
+            HStack{
+                VStack{
+                    Button{
                         manager.endWorkout()
-                    } label: {
+                    }label: {
                         Image(systemName: "xmark")
                     }
                     .tint(.red)
@@ -42,18 +43,23 @@ struct ControlsView: View {
                     )
                 }
             }
-
+            
             VStack {
                 Button {
                     manager.endWorkout(shouldShowSummary: false) {
-                                        self.manager.startWorkout(workoutType: .soccer)
-                                    }
+                        self.manager.startWorkout(workoutType: .soccer)
+                    }
                 } label: {
                     Image(systemName: "forward.fill")
                 }
                 .tint(.green)
                 .font(.title2)
                 Text("Próxima partida")
+                Button{
+                    manager.startWorkout(workoutType: .soccer)
+                }label: {
+                    Image(systemName: "forward.fill")
+                }
             }
         }
     }
