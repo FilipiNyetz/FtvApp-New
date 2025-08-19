@@ -11,13 +11,11 @@ struct DatePickerField: View {
     @Binding var selectedDate: Date
     
     var body: some View {
-        HStack {
-            DatePicker("Data", selection: $selectedDate, displayedComponents: .date)
-                .labelsHidden() // opcional: remove o label
-                .environment(\.locale, Locale(identifier: "pt_BR"))
-            Spacer()
-            Text("\(selectedDate)")
+        VStack {
+            CalendarScreen(selectedDate: $selectedDate)
+            //Text("\(selectedDate)")
         }
+        
     }
 }
 

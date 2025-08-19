@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import SwiftData
 
 @main
 struct FtvAppApp: App {
@@ -16,6 +17,7 @@ struct FtvAppApp: App {
         WindowGroup {
             HomeView(manager: manager, selectedDate: Date())
                 .preferredColorScheme(.dark)
+                .modelContainer(for: [WorkoutModel.self])
         }
     }
 }

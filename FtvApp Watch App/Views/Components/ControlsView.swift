@@ -7,13 +7,18 @@
 
 import SwiftUI
 
+
 struct ControlsView: View {
+    
+    @ObservedObject var manager: WorkoutManager
+    
     var body: some View {
         VStack(spacing: 15){
             HStack{
                 VStack{
                     Button{
                         //terminar partida
+                        manager.endWorkout()
                     }label: {
                         Image(systemName: "xmark")
                     }
@@ -35,6 +40,7 @@ struct ControlsView: View {
             }
             Button{
                 //salar e reiniciar
+                manager.startWorkout(workoutType: .soccer)
             }label: {
                 Image(systemName: "forward.fill")
             }
@@ -43,8 +49,4 @@ struct ControlsView: View {
             Text("Próxima partida")
         }
     }
-}
-
-#Preview {
-    ControlsView()
 }
