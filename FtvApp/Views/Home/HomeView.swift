@@ -138,16 +138,24 @@ struct HomeView: View {
                 .padding(.horizontal)
                 .padding(.vertical)
             }
-        }
-        .navigationTitle("Seus jogos")
-        .toolbar {
-            ToolbarItem(placement: .navigationBarTrailing) {
-                NavigationLink(destination: EvolutionView()) {
+            .navigationTitle("Seus jogos")
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    NavigationLink(destination: EvolutionView()) {
+                        Circle()
+                            .fill(Color.brandGreen)
+                            .frame(width: 40, height: 40)
+                            .overlay(
+                                Image(systemName: "chart.bar")
+                                    .font(.subheadline)
+                                    .foregroundStyle(.black)
+                            )
+                    }
                 }
             }
-        }
-        .onAppear {
-            manager.fetchMonthWorkouts(for: selectedDate)
+            .onAppear {
+                manager.fetchMonthWorkouts(for: selectedDate)
+            }
         }
     }
 }
@@ -288,4 +296,3 @@ struct WorkoutStatsCard: View {
         .frame(maxWidth: .infinity)
     }
 }
-

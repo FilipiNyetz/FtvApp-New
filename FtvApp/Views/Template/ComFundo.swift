@@ -123,7 +123,7 @@ struct SessionPosterView: View {
                     Text("TEMPO")
                         .font(.system(size: 10, weight: .semibold))
                         .foregroundStyle(textSecondary)
-                    Text(data.elapsed.mmssSS)
+                    //Text(data.elapsed.mmssSS)
                         .font(.system(size: 24, weight: .bold, design: .rounded))
                         .monospacedDigit()
                         .foregroundStyle(.white)
