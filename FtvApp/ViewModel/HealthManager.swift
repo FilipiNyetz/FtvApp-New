@@ -7,7 +7,6 @@
 import Foundation
 import HealthKit
 
-
 class HealthManager: ObservableObject, @unchecked Sendable {
     
     //Instancia a classe que controla do DB do healthKit, criando o objeto capaz de acessar e gerenciar os dados no healthKit
@@ -45,7 +44,6 @@ class HealthManager: ObservableObject, @unchecked Sendable {
             }
         }
     }
-    
     func updateWorkoutsByDay() {
         let calendar = Calendar.current
         DispatchQueue.main.async {

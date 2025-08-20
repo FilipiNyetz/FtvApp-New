@@ -8,8 +8,9 @@
 import SwiftUI
 
 struct GamesView: View {
+    
     var body: some View {
-        Text("Jogos")
+      Text("Aqui ficará seus jogos realizados!")
     }
 }
 

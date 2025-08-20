@@ -143,7 +143,6 @@ struct HomeView: View {
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
                 NavigationLink(destination: EvolutionView()) {
-                    Image(systemName: "chart.bar")
                 }
             }
         }
@@ -153,7 +152,6 @@ struct HomeView: View {
     }
 }
 
-// MARK: - InfoCard
 struct InfoCard: View {
     let title: String
     let value: String
