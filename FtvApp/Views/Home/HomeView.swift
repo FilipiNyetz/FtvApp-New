@@ -52,7 +52,7 @@ struct HomeView: View {
         NavigationStack {
             ScrollView {
                 VStack(alignment: .leading, spacing: 16) {
-                    DatePickerField(selectedDate: $selectedDate)
+                    DatePickerField(selectedDate: $selectedDate, manager: manager)
 
                     VStack {
                         Button("Buscar dados") {

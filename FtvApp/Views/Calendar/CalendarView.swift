@@ -13,13 +13,13 @@ import SwiftUI
 
 struct CalendarView: View {
     @Binding var selectedDate: Date
-    let calendarData: [Date: DayInfo]
+    @ObservedObject var manager: HealthManager   // <-- referência direta
     
     @State private var currentMonth: Date
     
-    init(selectedDate: Binding<Date>, calendarData: [Date: DayInfo]) {
+    init(selectedDate: Binding<Date>, manager: HealthManager) {
         self._selectedDate = selectedDate
-        self.calendarData = calendarData
+        self.manager = manager
         self._currentMonth = State(initialValue: selectedDate.wrappedValue.startOfMonth)
     }
     
@@ -40,18 +40,18 @@ struct CalendarView: View {
                 .padding(.horizontal, 16)
                 .padding(.top, 8)
             
-            // Linha separadora (se houver jogos)
-            if selectedDayHasGames {
-                Divider()
-                    .background(Color.gray.opacity(0.3))
-                    .padding(.horizontal, 16)
-                    .padding(.top, 8)
-            }
-            
-            // Componente de jogos
-            gameSection
-                .padding(.horizontal, 16)
-                .padding(.bottom, 16)
+//            // Linha separadora (se houver jogos)
+//            if selectedDayHasGames {
+//                Divider()
+//                    .background(Color.gray.opacity(0.3))
+//                    .padding(.horizontal, 16)
+//                    .padding(.top, 8)
+//            }
+//            
+//            // Componente de jogos
+//            gameSection
+//                .padding(.horizontal, 16)
+//                .padding(.bottom, 16)
         }
         .background(
             RoundedRectangle(cornerRadius: 16)
@@ -101,66 +101,57 @@ struct CalendarView: View {
     }
     
     private var monthGrid: some View {
-        let days = getDaysInMonth()
-        let today = Date()
-        
-        return LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 7), spacing: 6) {
-            // Espaços vazios no início do mês
-            ForEach(0..<getLeadingBlanks(), id: \.self) { _ in
-                Color.clear.frame(height: 44)
-            }
+            let days = getDaysInMonth()
+            let today = Date()
             
-            // Dias do mês
-            ForEach(days, id: \.self) { day in
-                let dayInfo = calendarData[normalizeDate(day)]
-                let isFuture = day > today && !day.isSameDay(as: today)
+            return LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 7), spacing: 6) {
+                ForEach(0..<getLeadingBlanks(), id: \.self) { _ in Color.clear.frame(height: 44) }
                 
-                DayCell(
-                    date: day,
-                    dayInfo: dayInfo,
-                    isToday: day.isSameDay(as: today),
-                    isSelected: day.isSameDay(as: selectedDate),
-                    isFuture: isFuture
-                )
-                .onTapGesture {
-                    // Só permite clique se não for dia futuro
-                    if !isFuture {
-                        withAnimation(.easeInOut(duration: 0.15)) {
-                            selectedDate = day
-                        }
+                ForEach(days, id: \.self) { day in
+                    let isFuture = day > today && !day.isSameDay(as: today)
+                    let hasWorkout = manager.workoutsByDay[Calendar.current.startOfDay(for: day)]?.isEmpty == false
+                    
+                    DayCell(
+                        date: day,
+                        isToday: day.isSameDay(as: today),
+                        isSelected: day.isSameDay(as: selectedDate),
+                        isFuture: isFuture,
+                        hasWorkout: hasWorkout
+                    )
+                    .onTapGesture {
+                        if !isFuture { selectedDate = day }
                     }
                 }
             }
         }
-    }
     
-    private var gameSection: some View {
-        Group {
-            if selectedDayHasGames, let gameTimes = selectedDayInfo?.gameTimes {
-                
-                VStack(alignment: .leading, spacing: 8) {
-                    NavigationLink(destination: GamesView()) {
-                        HStack {
-                            Text("Meus Jogos")
-                                .font(.title3)
-
-                            Spacer()
-
-                            Image(systemName: "chevron.right")
-                        }
-                        .background(Color(.secondarySystemBackground))
-                        .cornerRadius(12)
-                    }
-                    .buttonStyle(PlainButtonStyle())
-                }
-                .padding()
-                .background(Color(.secondarySystemBackground))
-                .cornerRadius(12)
-                .frame(height: 56)
-                .transition(.opacity.combined(with: .move(edge: .top)))
-            }
-        }
-    }
+//    private var gameSection: some View {
+//        Group {
+//            if selectedDayHasGames, let gameTimes = selectedDayInfo?.gameTimes {
+//                
+//                VStack(alignment: .leading, spacing: 8) {
+//                    NavigationLink(destination: GamesView()) {
+//                        HStack {
+//                            Text("Meus Jogos")
+//                                .font(.title3)
+//
+//                            Spacer()
+//
+//                            Image(systemName: "chevron.right")
+//                        }
+//                        .background(Color(.secondarySystemBackground))
+//                        .cornerRadius(12)
+//                    }
+//                    .buttonStyle(PlainButtonStyle())
+//                }
+//                .padding()
+//                .background(Color(.secondarySystemBackground))
+//                .cornerRadius(12)
+//                .frame(height: 56)
+//                .transition(.opacity.combined(with: .move(edge: .top)))
+//            }
+//        }
+//    }
     // MARK: - Funções auxiliares
     
     private var monthTitle: String {
@@ -170,13 +161,13 @@ struct CalendarView: View {
         return formatter.string(from: currentMonth).capitalized
     }
     
-    private var selectedDayInfo: DayInfo? {
-        return calendarData[normalizeDate(selectedDate)]
-    }
-    
-    private var selectedDayHasGames: Bool {
-        return selectedDayInfo?.hasGames == true
-    }
+//    private var selectedDayInfo: DayInfo? {
+//        return calendarData[normalizeDate(selectedDate)]
+//    }
+//    
+//    private var selectedDayHasGames: Bool {
+//        return selectedDayInfo?.hasGames == true
+//    }
     
     private func normalizeDate(_ date: Date) -> Date {
         return Calendar.current.startOfDay(for: date)
@@ -199,14 +190,4 @@ struct CalendarView: View {
         let weekday = calendar.component(.weekday, from: currentMonth.startOfMonth)
         return (weekday + 6) % 7  // Converte domingo=1 para domingo=0
     }
-}
-
-#Preview {
-    CalendarView(
-        selectedDate: .constant(Date()),
-        calendarData: SampleData.createCalendarData()
-    )
-    .padding()
-    .background(Color.black)
-    .preferredColorScheme(.dark)
 }

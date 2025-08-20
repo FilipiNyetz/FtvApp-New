@@ -14,8 +14,9 @@ import SwiftUI
 struct CalendarScreen: View {
     @State private var showCalendar = false
     @Binding var selectedDate: Date
+    @ObservedObject var manager: HealthManager
     
-    private let calendarData = SampleData.createCalendarData()
+    //private let calendarData = SampleData.createCalendarData()
     
     var body: some View {
         VStack(spacing: 16) {
@@ -43,7 +44,7 @@ struct CalendarScreen: View {
             if showCalendar {
                 CalendarView(
                     selectedDate: $selectedDate,
-                    calendarData: calendarData
+                    manager: manager
                 )
                 .transition(.move(edge: .leading).combined(with: .opacity))
             }
@@ -53,9 +54,4 @@ struct CalendarScreen: View {
         //.padding()
         .background(Color.black.ignoresSafeArea())
     }
-}
-
-#Preview {
-    CalendarScreen(selectedDate: .constant(Date()))
-        .preferredColorScheme(.dark) // opcional
 }
