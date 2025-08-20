@@ -65,6 +65,7 @@ struct HomeView: View {
                         ForEach(manager.workouts, id: \.id) { workout in
                             //WorkoutView(workout: workout)
                             //Text("\(workout.dateWorkout)")
+                            //
                         }
                     }
 
