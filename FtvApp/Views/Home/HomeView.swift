@@ -289,13 +289,3 @@ struct WorkoutStatsCard: View {
     }
 }
 
-// MARK: - DatePickerField
-struct DatePickerField: View {
-    @Binding var selectedDate: Date
-
-    var body: some View {
-        DatePicker("Data", selection: $selectedDate, displayedComponents: .date)
-            .datePickerStyle(.compact)
-            .padding(.horizontal)
-    }
-}
