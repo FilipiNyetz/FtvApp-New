@@ -29,7 +29,7 @@ struct DayCell: View {
                 // Fundo do dia selecionado (branco)
                 else if isSelected && !isToday {
                     Circle()
-                        .fill(Color.white)
+                        .fill(Color.brandGreen.opacity(0.1))
                         .frame(width: 32, height: 32)
                 }
                 
@@ -42,7 +42,7 @@ struct DayCell: View {
             
             // Bolinha indicando treino finalizado
             Circle()
-                .fill(Color.dayDot)
+                .fill(Color.brandGreen.opacity(0.8))
                 .frame(width: 6, height: 6)
                 .opacity(dayInfo?.hasCompletedTraining == true ? 1 : 0)
         }
@@ -52,9 +52,9 @@ struct DayCell: View {
     
     private var textColor: Color {
         if isToday && isSelected {
-            return .white  // Texto branco no fundo rosa
+            return .black  // Texto branco no fundo rosa
         } else if isSelected && !isToday {
-            return .black  // Texto preto no fundo branco
+            return .brandGreen  // Texto preto no fundo branco
         } else if isToday && !isSelected {
             return .brandGreen  // Texto rosa para o dia atual
         } else if isFuture && !isSelected {
