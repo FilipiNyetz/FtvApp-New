@@ -11,27 +11,31 @@ struct SugestaoCard: View {
     let icone: String
     let titulo: String
     let descricao: String
-
+    
     var body: some View {
         VStack(alignment: .leading, spacing: 6) {
-            HStack{
-                Text(titulo)
-                    .foregroundColor(.white)
-                
-                Image(icone)
+            // Linha do título + ícone
+            HStack {
+                Image(systemName: icone)
                     .foregroundColor(.colorSecond)
                 
-                Text(descricao)
-                    .font(.footnote)
+                Text(titulo)
                     .foregroundColor(.white)
-                    .foregroundColor(.secondary)
+                    .font(.callout)
+                    .fontWeight(.medium)
             }
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .padding()
-            .background(.gray.opacity(0.2))
-            .cornerRadius(10)
+            
+            // Texto da descrição
+            Text(descricao)
+                .font(.subheadline)
+                .foregroundColor(.white)
+                .foregroundColor(.secondary)
+            
         }
-
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding()
+        .background(.gray.opacity(0.2))
+        .cornerRadius(10)
     }
 }
 

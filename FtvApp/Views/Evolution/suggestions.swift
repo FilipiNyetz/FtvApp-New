@@ -13,9 +13,10 @@ struct suggestions: View {
         VStack(alignment: .leading, spacing: 12) {
             VStack(alignment: .leading, spacing: 4) {
                 Text("Sugestões")
-                    .font(.headline)
+                    .font(.title3)
+                    .bold()
                 Text("Evolua nos jogos com as dicas certas")
-                    .font(.callout)
+                    .font(.subheadline)
                     .foregroundColor(.secondary)
             }
 

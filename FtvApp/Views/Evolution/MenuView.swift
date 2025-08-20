@@ -1,0 +1,82 @@
+//
+//  MenuView.swift
+//  FtvApp
+//
+//  Created by Joao pedro Leonel on 19/08/25.
+//
+
+import SwiftUI
+
+struct MenuView: View {
+    
+    // ---- Estado da métrica selecionada + lista de métricas ----
+    @State private var selectedMetric: String = "Batimento"
+    
+    private let metrics: [(name: String, icon: String)] = [
+        ("Altura",          "arrow.up.and.down"),
+        ("Velocidade máx",  "speedometer"),
+        ("Batimento",       "heart"),
+        ("Caloria",         "flame"),
+        ("Passos",          "figure.walk"),
+        ("Distância",       "location")
+    ]
+    
+    // Ícone da métrica atual
+    private var currentMetricIcon: String {
+        metrics.first(where: { $0.name == selectedMetric })?.icon ?? "arrow.up.and.down"
+    }
+    
+    var body: some View {
+        Menu {
+            Button("Altura", systemImage: "arrow.up.and.down"){
+                selectedMetric = "Altura"
+                //currentMetricIcon = "arrow.up.and.down"
+            }
+            Button("Batimento", systemImage: "heart"){
+                selectedMetric = "Batimento"
+            }
+            Button("Caloria", systemImage: "flame"){
+                selectedMetric = "Caloria"
+            }
+            Button("Distância", systemImage: "location"){
+                selectedMetric = "Distância"
+            }
+            Button("Passos", systemImage: "figure.walk"){
+                selectedMetric = "Passos"
+            }
+            Button("Velocidade máx", systemImage: "speedometer"){
+                selectedMetric = "Velocidade Máx"
+            }
+        } label: {
+            HStack(spacing: 8) {
+                Image(systemName: currentMetricIcon)
+                    .font(.body)
+                    .foregroundColor(.colorSecond)
+                Text(selectedMetric == "Velocidade máx" ? "Vel. máx" : selectedMetric)
+                    .font(.body)
+                    .lineLimit(1)
+                Spacer(minLength: 0)
+                Image(systemName: "chevron.down")
+                    .font(.caption)
+                    .opacity(0.85)
+            }
+            .padding(.vertical, 8)
+            .padding(.horizontal, 12)
+            .frame(maxWidth: 160, alignment: .leading) // <<< largura controlada
+            .background(
+                RoundedRectangle(cornerRadius: 12, style: .continuous)
+                    .fill(Color.white.opacity(0.10))
+            )
+            .overlay(
+                RoundedRectangle(cornerRadius: 12, style: .continuous)
+                    .stroke(Color.white.opacity(0.12), lineWidth: 0.5)
+            )
+        }
+        .menuStyle(.button)
+        .menuIndicator(.hidden) // usamos nosso chevron
+    }
+}
+
+#Preview {
+    MenuView()
+}
