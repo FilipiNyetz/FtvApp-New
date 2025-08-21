@@ -56,6 +56,9 @@ struct HomeView: View {
                             selectedDate: $selectedDate,
                             manager: manager
                         )
+                        .background(Color.ligthGrayBackground)
+                        .foregroundStyle(.white)
+                        
                         
                         if let workoutsDoDia = manager.workoutsByDay[
                             Calendar.current.startOfDay(for: selectedDate)
