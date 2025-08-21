@@ -104,6 +104,15 @@ class HealthManager: ObservableObject, @unchecked Sendable {
                 to: adjustedEndDate
             )!
             
+            // Case de 6M liberar somente caso seja autorizado por filipi e gustavo(falar com eles amanha) 
+        case "sixmonth":
+            adjustedEndDate = endDate
+            startDate = calendar.date(
+                byAdding: .month,
+                value: -6,
+                to: adjustedEndDate
+            )!
+            
         case "year":
             adjustedEndDate = endDate
             startDate = calendar.date(
@@ -115,10 +124,6 @@ class HealthManager: ObservableObject, @unchecked Sendable {
         default:
             return
         }
-        
-//        print("Start: \(startDate)")
-//        print("End: \(adjustedEndDate)")
-        
         DispatchQueue.main.async {
             self.workouts.removeAll()
         }

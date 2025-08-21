@@ -11,6 +11,9 @@ import Charts
 struct EvolutionView: View {
     
     @State private var selectedSelection = "M"
+    @State private var selectedMetric: String = "Batimento"
+    @StateObject var healthManager = HealthManager()
+    
     
     var body: some View {
         
@@ -18,7 +21,7 @@ struct EvolutionView: View {
             ScrollView {
                 VStack(spacing: 20) {
                     
-                    // Cabeçalho + seletor de métrica 
+                    // Cabeçalho + seletor de métrica
                     HStack {
                         VStack(alignment: .leading, spacing: 2) {
                             Text("Evolução")
@@ -33,7 +36,7 @@ struct EvolutionView: View {
                         Spacer()
                         
                         // pílula com ícone, texto e chevron
-                        MenuView()
+                        MenuView(selectedMetric: $selectedMetric)
                     }
                 }
                 .padding()
@@ -41,7 +44,7 @@ struct EvolutionView: View {
                 VStack {
                     HStack {
                         Picker("Período", selection: $selectedSelection) {
-                            ForEach(["D", "S", "M", "6M", "A"], id: \.self) { periodo in
+                            ForEach(["S", "M", "6M", "A"], id: \.self) { periodo in
                                 Text(periodo).tag(periodo) // mostra o valor e associa ao Picker
                             }
                         }
@@ -50,7 +53,9 @@ struct EvolutionView: View {
                         Spacer()
                     }
                     // Gráfico
-                    graphic()
+                    GraphicView(healthManager: healthManager, period: Period(selection: selectedSelection), selectedMetric: selectedMetric)
+                            .id(selectedSelection)
+                    //graphic()
                     
                     //Dados selecionados
                     jumpdata()
@@ -73,12 +78,16 @@ struct EvolutionView: View {
             .navigationBarTitleDisplayMode(.inline)
             .background(.gray.opacity(0.1))
             .foregroundColor(.white)
+            .onAppear {
+                healthManager.fetchDataWorkout(endDate: Date(), period: Period(selection: selectedSelection))
+            }
+            .onChange(of: selectedSelection) { oldSelection, newSelection in
+                healthManager.fetchDataWorkout(endDate: Date(), period: Period(selection: newSelection))
+            }
         }
     }
     func selectedselection() -> String {
         switch selectedSelection {
-        case "D":
-            return "Diário"
         case "S":
             return "Semanal"
         case "M":
@@ -90,6 +99,22 @@ struct EvolutionView: View {
         default:
             return "mensal"
         }
+    }
+    
+    func Period(selection: String) -> String {
+        switch selection {
+        case "S":
+            return "week"
+        case "M":
+            return "month"
+        case "6M":
+            return "sixmonth"
+        case "A":
+            return "year"
+        default:
+            return "month"
+        }
+        
     }
 }
 
