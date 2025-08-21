@@ -38,7 +38,6 @@ struct CalendarView: View {
             // Grid com os dias do mês
             monthGrid
                 .padding(.horizontal, 16)
-                .padding(.top, 8)
             
 //            // Linha separadora (se houver jogos)
 //            if selectedDayHasGames {
@@ -47,7 +46,7 @@ struct CalendarView: View {
 //                    .padding(.horizontal, 16)
 //                    .padding(.top, 8)
 //            }
-//            
+//
 //            // Componente de jogos
 //            gameSection
 //                .padding(.horizontal, 16)
@@ -104,8 +103,8 @@ struct CalendarView: View {
             let days = getDaysInMonth()
             let today = Date()
             
-            return LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 7), spacing: 6) {
-                ForEach(0..<getLeadingBlanks(), id: \.self) { _ in Color.clear.frame(height: 44) }
+            return LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 7), spacing: 2) {
+                ForEach(0..<getLeadingBlanks(), id: \.self) { _ in Color.clear.frame(height: 22) }
                 
                 ForEach(days, id: \.self) { day in
                     let isFuture = day > today && !day.isSameDay(as: today)
@@ -128,7 +127,7 @@ struct CalendarView: View {
 //    private var gameSection: some View {
 //        Group {
 //            if selectedDayHasGames, let gameTimes = selectedDayInfo?.gameTimes {
-//                
+//
 //                VStack(alignment: .leading, spacing: 8) {
 //                    NavigationLink(destination: GamesView()) {
 //                        HStack {
@@ -164,7 +163,7 @@ struct CalendarView: View {
 //    private var selectedDayInfo: DayInfo? {
 //        return calendarData[normalizeDate(selectedDate)]
 //    }
-//    
+//
 //    private var selectedDayHasGames: Bool {
 //        return selectedDayInfo?.hasGames == true
 //    }

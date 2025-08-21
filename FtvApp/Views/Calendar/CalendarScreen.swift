@@ -19,7 +19,7 @@ struct CalendarScreen: View {
     //private let calendarData = SampleData.createCalendarData()
     
     var body: some View {
-        VStack(spacing: 16) {
+        VStack(spacing: 12) {
             // Pílula da data ( fixa a esquerda)
             HStack{
                 Button {

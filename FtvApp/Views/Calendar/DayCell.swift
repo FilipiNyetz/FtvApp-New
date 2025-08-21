@@ -18,7 +18,7 @@ struct DayCell: View {
     let hasWorkout: Bool
 
     var body: some View {
-        VStack(spacing: 6) {
+        VStack(spacing: 2) {
             ZStack {
                 if isToday && isSelected {
                     Circle()
@@ -34,13 +34,14 @@ struct DayCell: View {
                     .font(.system(size: 15, weight: .semibold))
                     .foregroundStyle(textColor)
                     .frame(width: 32, height: 32)
+                
+                // Bolinha indicando treino concluído
+                Circle()
+                    .fill(Color.brandGreen.opacity(0.8))
+                    .frame(width: 6, height: 6)
+                    .opacity(hasWorkout ? 1 : 0)
+                    .padding(.top, 24)
             }
-
-            // Bolinha indicando treino concluído
-            Circle()
-                .fill(Color.brandGreen.opacity(0.8))
-                .frame(width: 6, height: 6)
-                .opacity(hasWorkout ? 1 : 0)
         }
         .frame(maxWidth: .infinity, minHeight: 44)
         .opacity(isFuture ? 0.5 : 1.0)

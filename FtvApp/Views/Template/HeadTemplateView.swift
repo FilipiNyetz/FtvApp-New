@@ -80,5 +80,3 @@ struct HeadTemplateView: View {
             .background(Color.black.ignoresSafeArea())
     }
 }
-
-

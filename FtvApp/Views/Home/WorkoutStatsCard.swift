@@ -47,6 +47,16 @@ struct WorkoutStatsCard: View {
                     icon: "location.fill"
                 )
             }
+            
+            NavigationLink(destination: TemplateMainView(workout: workout)) {
+                Text("Gerar Template")
+                    .font(.headline)
+                    .foregroundColor(.black)
+                    .padding(.vertical, 10)
+                    .padding(.horizontal, 20)
+                    .background(Color.brandGreen)
+                    .cornerRadius(12)
+            }
         }
         .padding()
         .background(

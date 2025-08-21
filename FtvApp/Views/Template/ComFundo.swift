@@ -9,21 +9,6 @@
 import SwiftUI
 import UniformTypeIdentifiers
 
-// MARK: - Modelo vindo do watch
-struct SessionData {
-    var points: Int
-    var score: Int
-    var elapsed: TimeInterval
-    var maxHeightCM: Int
-    var avgBPM: Int
-    var maxSpeedKMH: Int
-    var athleteName: String
-    var sport: String
-}
-
-// MARK: - Helpers
-
-// MARK: - Heatmap
 struct HeatmapView: View {
     let points: [CGPoint]
     let grid: Int
@@ -73,12 +58,20 @@ struct SessionPosterView: View {
     @State private var showShare = false
     @State private var renderedImage: UIImage?
     
-    var data: SessionData
+    let workout: Workout
     
     private let neon = Color.brandGreen
     private let card = Color.white.opacity(0.06)
     private let stroke = Color.white.opacity(0.16)
     private let textSecondary = Color.white.opacity(0.7)
+    
+    var timeFormatter: DateComponentsFormatter {
+        let formatter = DateComponentsFormatter()
+        formatter.allowedUnits = [.hour, .minute, .second]
+        formatter.unitsStyle = .positional
+        formatter.zeroFormattingBehavior = .pad
+        return formatter
+    }
     
     var body: some View {
         let base = posterBody
@@ -114,7 +107,7 @@ struct SessionPosterView: View {
                 HStack(spacing: 6) {
                     Image(systemName: "flame.fill")
                         .foregroundStyle(neon)
-                    Text("\(data.points)")
+                    Text("\(workout.calories)")
                         .foregroundStyle(.white)
                         .font(.system(size: 16, weight: .semibold))
                 }
@@ -123,7 +116,8 @@ struct SessionPosterView: View {
                     Text("TEMPO")
                         .font(.system(size: 10, weight: .semibold))
                         .foregroundStyle(textSecondary)
-                    //Text(data.elapsed.mmssSS)
+                    Text(timeFormatter.string(from: TimeInterval(workout.duration)) ?? "00:00:00")
+                        .foregroundColor(.white)
                         .font(.system(size: 24, weight: .bold, design: .rounded))
                         .monospacedDigit()
                         .foregroundStyle(.white)
@@ -132,7 +126,7 @@ struct SessionPosterView: View {
                 HStack(spacing: 6) {
                     Image(systemName: "shield.checkerboard")
                         .foregroundStyle(neon)
-                    Text("\(data.score)")
+                    Text("20")
                         .foregroundStyle(.white)
                         .font(.system(size: 16, weight: .semibold))
                 }
@@ -170,24 +164,24 @@ struct SessionPosterView: View {
             
             // Métricas
             HStack {
-                metric(icon: "arrow.up.arrow.down", value: "\(data.maxHeightCM)", unit: "cm", label: "ALTURA MÁX")
+                metric(icon: "arrow.up.arrow.down", value: "40", unit: "cm", label: "ALTURA MÁX") //puxar do relogio dps
                 Spacer()
-                metric(icon: "heart.fill", value: "\(data.avgBPM)", unit: "bpm", label: "BATIMENTO")
+                metric(icon: "heart.fill", value: "\(workout.frequencyHeart)", unit: "bpm", label: "BATIMENTO")
                 Spacer()
-                metric(icon: "wind", value: "\(data.maxSpeedKMH)", unit: "km/h", label: "VELOCIDADE MÁX")
+                metric(icon: "wind", value: "20", unit: "km/h", label: "VELOCIDADE MÁX") // puxar do relogio dps
             }
             .padding(.top, 4)
             
-            // Nome
-            VStack(spacing: 4) {
-                Text(data.athleteName)
-                    .font(.system(size: 24, weight: .bold))
-                    .foregroundStyle(neon)
-                Text(data.sport.uppercased())
-                    .font(.system(size: 12, weight: .semibold))
-                    .foregroundStyle(textSecondary)
-                    .tracking(1.2)
-            }
+                         // Nome do App e Esporte
+             VStack(spacing: 4) {
+                 Text("SETE")
+                     .font(.system(size: 24, weight: .bold))
+                     .foregroundStyle(neon)
+                 Text("Futevolei")
+                     .font(.system(size: 12, weight: .semibold))
+                     .foregroundStyle(textSecondary)
+                     .tracking(1.2)
+             }
             .padding(.top, 8)
         }
     }
@@ -219,23 +213,17 @@ struct SessionPosterView: View {
     }
 }
 
-// Preview
-struct SessionPosterView_Previews: PreviewProvider {
-    static var previews: some View {
-        let data = SessionData(
-            points: 0,
-            score: 0,
-            elapsed: 0,
-            maxHeightCM: 0,
-            avgBPM: 0,
-            maxSpeedKMH: 0,
-            athleteName: "Se7e",
-            sport: "FUTVÔLEI"
-        )
-        NavigationStack {
-            SessionPosterView(data: data)
-                .preferredColorScheme(.dark)
-                .padding()
+// MARK: - Extensions
+extension TimeInterval {
+    var mmssSS: String {
+        let hours = Int(self) / 3600
+        let minutes = (Int(self) % 3600) / 60
+        let seconds = Int(self) % 60
+        
+        if hours > 0 {
+            return String(format: "%02d:%02d:%02d", hours, minutes, seconds)
+        } else {
+            return String(format: "%02d:%02d", minutes, seconds)
         }
     }
 }
