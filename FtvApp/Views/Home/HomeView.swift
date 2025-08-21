@@ -73,7 +73,7 @@ struct HomeView: View {
                         Calendar.current.startOfDay(for: selectedDate)
                     ] {
                         ForEach(workoutsDoDia, id: \.id) { workout in
-                            WorkoutView(workout: workout)
+                            WorkoutStatsCard(workout: workout)
                         }
                     } else {
                         Text("Nenhum treino nesse dia")
@@ -94,15 +94,7 @@ struct HomeView: View {
                         )
                     }
 
-                    HStack {
-                        WorkoutStatsCard(
-                            heartRate: totalHeartRate,
-                            calories: totalCalories,
-                            elapsedTime: totalDuration,
-                            steps: 0,
-                            distance: totalDistance
-                        )
-                    }
+
 
                     Divider()
 
@@ -183,116 +175,6 @@ struct InfoCard: View {
     }
 }
 
-// MARK: - WorkoutView
-struct WorkoutView: View {
-    let workout: Workout
 
-    var body: some View {
-        VStack(alignment: .leading, spacing: 4) {
-            Text("Duração: \(workout.duration) min")
-            Text("Calorias: \(workout.calories) cal")
-            Text("Distância: \(workout.distance) m")
-            Text("Freq. Cardíaca: \(workout.frequencyHeart) bpm")
-        }
-        .padding()
-        .background(Color(.secondarySystemBackground))
-        .cornerRadius(12)
-        .padding(.horizontal)
-    }
-}
 
-// MARK: - WorkoutStatsCard
-struct WorkoutStatsCard: View {
-    var heartRate: Int
-    var calories: Double
-    var elapsedTime: TimeInterval
-    var steps: Int
-    var distance: Double
 
-    private var timeFormatter: DateComponentsFormatter {
-        let formatter = DateComponentsFormatter()
-        formatter.allowedUnits = [.hour, .minute, .second]
-        formatter.unitsStyle = .positional
-        formatter.zeroFormattingBehavior = .pad
-        return formatter
-    }
-
-    var body: some View {
-        VStack(spacing: 16) {
-            // Linha de cima
-            HStack {
-                statItem(
-                    title: "BATIMENTO",
-                    value: "\(heartRate)",
-                    unit: "bpm",
-                    icon: "heart.fill"
-                )
-                Divider().frame(height: 40).background(Color.white.opacity(0.4))
-                statItem(
-                    title: "CALORIA",
-                    value: String(format: "%.0f", calories),
-                    unit: "cal",
-                    icon: "flame.fill"
-                )
-            }
-
-            // Tempo central
-            Text(timeFormatter.string(from: elapsedTime) ?? "00:00:00")
-                .font(.system(size: 28, weight: .medium, design: .rounded))
-                .foregroundColor(.white)
-
-            // Linha de baixo
-            HStack {
-                statItem(
-                    title: "PASSOS",
-                    value: "\(steps)",
-                    unit: "",
-                    icon: "figure.walk"
-                )
-                Divider().frame(height: 40).background(Color.white.opacity(0.4))
-                statItem(
-                    title: "DISTÂNCIA",
-                    value: String(format: "%.1f", distance),
-                    unit: "km",
-                    icon: "location.fill"
-                )
-            }
-        }
-        .padding()
-        .background(
-            RoundedRectangle(cornerRadius: 12)
-                .fill(Color(.secondarySystemBackground))
-        )
-    }
-
-    private func statItem(
-        title: String,
-        value: String,
-        unit: String,
-        icon: String
-    ) -> some View {
-        VStack(spacing: 2) {
-            Text(title)
-                .font(.system(size: 10, weight: .medium, design: .rounded))
-                .foregroundColor(.gray)
-
-            HStack(spacing: 4) {
-                Image(systemName: icon)
-                    .foregroundColor(.white)
-                Text(value)
-                    .font(
-                        .system(size: 22, weight: .semibold, design: .rounded)
-                    )
-                    .foregroundColor(.white)
-                if !unit.isEmpty {
-                    Text(unit)
-                        .font(
-                            .system(size: 12, weight: .medium, design: .rounded)
-                        )
-                        .foregroundColor(.gray)
-                }
-            }
-        }
-        .frame(maxWidth: .infinity)
-    }
-}

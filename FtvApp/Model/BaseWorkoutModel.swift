@@ -10,7 +10,7 @@ import Foundation
 struct Workout: Identifiable{
     let id: UUID
     let idWorkoutType: Int
-    let duration: Int
+    let duration: TimeInterval
     let calories: Int
     let distance: Int
     let frequencyHeart: Double

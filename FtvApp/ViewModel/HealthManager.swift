@@ -152,8 +152,7 @@ class HealthManager: ObservableObject, @unchecked Sendable {
             
             //percorre todos os workouts e pega um por um
             for workout in workouts {
-                let durationMinutes = Int(workout.duration) / 60
-                
+                let durationSeconds = workout.duration
 //                print("A data do treino é: \(workout.endDate)")
                 
                 // Calorias
@@ -178,7 +177,7 @@ class HealthManager: ObservableObject, @unchecked Sendable {
                         idWorkoutType: Int(
                             workout.workoutActivityType.rawValue
                         ),
-                        duration: durationMinutes,
+                        duration: durationSeconds,
                         calories: Int(calories),
                         distance: Int(distance),
                         frequencyHeart: mediumFrequencyHeartRate,
