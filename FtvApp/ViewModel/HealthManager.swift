@@ -156,9 +156,16 @@ class HealthManager: ObservableObject, @unchecked Sendable {
 //                print("A data do treino é: \(workout.endDate)")
                 
                 // Calorias
-                let calories =
-                workout.totalEnergyBurned?.doubleValue(for: .kilocalorie())
-                ?? 0
+                let calories: Double
+                if #available(iOS 18.0, *) {
+                    if let stats = workout.statistics(for: HKQuantityType(.activeEnergyBurned)) {
+                        calories = stats.sumQuantity()?.doubleValue(for: .kilocalorie()) ?? 0
+                    } else {
+                        calories = 0
+                    }
+                } else {
+                    calories = workout.totalEnergyBurned?.doubleValue(for: .kilocalorie()) ?? 0
+                }
                 
                 // Distância
                 let distance =

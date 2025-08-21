@@ -24,7 +24,7 @@ struct WorkoutStatsCard: View {
                 Divider().frame(height: 40).background(Color.white.opacity(0.4))
                 statItem(
                     title: "CALORIA",
-                    value: String(format: "%.0f", workout.calories),
+                    value: "\(workout.calories)",
                     unit: "cal",
                     icon: "flame.fill"
                 )
