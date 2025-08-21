@@ -141,15 +141,30 @@ struct HomeView: View {
             .navigationTitle("Seus jogos")
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    NavigationLink(destination: EvolutionView()) {
-                        Circle()
-                            .fill(Color.brandGreen)
-                            .frame(width: 40, height: 40)
-                            .overlay(
-                                Image(systemName: "chart.bar")
-                                    .font(.subheadline)
-                                    .foregroundStyle(.black)
-                            )
+                    HStack(spacing: 12) {
+                        // Botão de Template
+                        NavigationLink(destination: TemplateMainView()) {
+                            Circle()
+                                .fill(Color.brandGreen)
+                                .frame(width: 40, height: 40)
+                                .overlay(
+                                    Image(systemName: "photo.badge.plus")
+                                        .font(.subheadline)
+                                        .foregroundStyle(.black)
+                                )
+                        }
+                        
+                        // Botão de Evolução
+                        NavigationLink(destination: EvolutionView()) {
+                            Circle()
+                                .fill(Color.brandGreen)
+                                .frame(width: 40, height: 40)
+                                .overlay(
+                                    Image(systemName: "chart.bar")
+                                        .font(.subheadline)
+                                        .foregroundStyle(.black)
+                                )
+                        }
                     }
                 }
             }

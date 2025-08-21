@@ -9,7 +9,6 @@
 import SwiftUI
 import UniformTypeIdentifiers
 
-// MARK: - Modelo vindo do watch
 struct SessionData {
     var points: Int
     var score: Int
@@ -17,13 +16,10 @@ struct SessionData {
     var maxHeightCM: Int
     var avgBPM: Int
     var maxSpeedKMH: Int
-    var athleteName: String
     var sport: String
 }
 
-// MARK: - Helpers
 
-// MARK: - Heatmap
 struct HeatmapView: View {
     let points: [CGPoint]
     let grid: Int
@@ -123,7 +119,7 @@ struct SessionPosterView: View {
                     Text("TEMPO")
                         .font(.system(size: 10, weight: .semibold))
                         .foregroundStyle(textSecondary)
-                    //Text(data.elapsed.mmssSS)
+                    Text(data.elapsed.mmssSS)
                         .font(.system(size: 24, weight: .bold, design: .rounded))
                         .monospacedDigit()
                         .foregroundStyle(.white)
@@ -178,16 +174,16 @@ struct SessionPosterView: View {
             }
             .padding(.top, 4)
             
-            // Nome
-            VStack(spacing: 4) {
-                Text(data.athleteName)
-                    .font(.system(size: 24, weight: .bold))
-                    .foregroundStyle(neon)
-                Text(data.sport.uppercased())
-                    .font(.system(size: 12, weight: .semibold))
-                    .foregroundStyle(textSecondary)
-                    .tracking(1.2)
-            }
+                         // Nome do App e Esporte
+             VStack(spacing: 4) {
+                 Text("SETE")
+                     .font(.system(size: 24, weight: .bold))
+                     .foregroundStyle(neon)
+                 Text(data.sport.uppercased())
+                     .font(.system(size: 12, weight: .semibold))
+                     .foregroundStyle(textSecondary)
+                     .tracking(1.2)
+             }
             .padding(.top, 8)
         }
     }
@@ -219,6 +215,21 @@ struct SessionPosterView: View {
     }
 }
 
+// MARK: - Extensions
+extension TimeInterval {
+    var mmssSS: String {
+        let hours = Int(self) / 3600
+        let minutes = (Int(self) % 3600) / 60
+        let seconds = Int(self) % 60
+        
+        if hours > 0 {
+            return String(format: "%02d:%02d:%02d", hours, minutes, seconds)
+        } else {
+            return String(format: "%02d:%02d", minutes, seconds)
+        }
+    }
+}
+
 // Preview
 struct SessionPosterView_Previews: PreviewProvider {
     static var previews: some View {
@@ -229,7 +240,6 @@ struct SessionPosterView_Previews: PreviewProvider {
             maxHeightCM: 0,
             avgBPM: 0,
             maxSpeedKMH: 0,
-            athleteName: "Se7e",
             sport: "FUTVÔLEI"
         )
         NavigationStack {
