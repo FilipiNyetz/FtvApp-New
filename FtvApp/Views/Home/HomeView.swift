@@ -33,7 +33,7 @@ struct HomeView: View {
                         }
                         .padding(.top, 16)
                     }
-                    .padding(.top, 50)
+                   // .padding(.top, 50)
                     
                     // “Foguinho” logo abaixo do título
                     HStack(spacing: 6) {
