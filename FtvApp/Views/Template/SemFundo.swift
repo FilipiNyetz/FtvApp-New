@@ -38,8 +38,16 @@ struct SemFundoView: View {
                 Button {
                     copyImageToClipboard(of: base)
                 } label: {
-                    Label("Copiar", systemImage: "doc.on.clipboard")
+                    ZStack {
+                        Circle().fill(neon)
+                        Image(systemName: "document.on.document")
+                            .font(.headline.weight(.bold))
+                            .foregroundStyle(.black)
+                    }
+                    .frame(width: 44, height: 44)
+                    .contentShape(Circle())
                 }
+                .accessibilityLabel("Copiar")
             }
         }
         .alert("Imagem Copiada!", isPresented: $showCopiedAlert) {
@@ -49,7 +57,7 @@ struct SemFundoView: View {
         }
     }
     
-    private var posterBody: some View {
+    var posterBody: some View {
         VStack(spacing: 40) {
             // Altura máxima
             VStack(spacing: 8) {
@@ -128,7 +136,8 @@ struct SemFundoView: View {
         }
     }
     
-    private func copyImageToClipboard(of view: some View) {
+    @MainActor
+    func copyImageToClipboard(of view: some View) {
         let renderer = ImageRenderer(content: view)
         renderer.scale = UIScreen.main.scale
         renderer.isOpaque = false  // IMPORTANTE: Sem fundo opaco para transparência

@@ -7,6 +7,12 @@
 
 import SwiftUI
 
+// Opções do segmented
+enum ShareBg: String, CaseIterable {
+    case comFundo = "Com fundo"
+    case semFundo = "Sem fundo"
+}
+
 struct TemplateMainView: View {
     @ObservedObject private var manager = HealthManager()
     @State private var selectedBackground: ShareBg = .comFundo
@@ -16,6 +22,12 @@ struct TemplateMainView: View {
     
     
     var body: some View {
+        
+        @State var selection: ShareBg = .comFundo
+
+
+        let neon = Color.brandGreen
+
         NavigationStack {
             VStack(spacing: 0) {
                 // Header com segmented control
@@ -42,42 +54,20 @@ struct TemplateMainView: View {
                 .padding(.top, 16)
             }
             .background(Color.black.ignoresSafeArea())
-            .navigationBarTitleDisplayMode(.large)
             .toolbarBackground(.black, for: .navigationBar)
-            .toolbarBackground(.visible, for: .navigationBar)
             .toolbarColorScheme(.dark, for: .navigationBar)
             .toolbar {
-                // Título
-                ToolbarItem(placement: .topBarLeading) {
-                    VStack(alignment: .leading, spacing: 4) {
+                // 2. Item para o título e subtítulo customizados no CENTRO
+                ToolbarItem(placement: .principal) {
+                    VStack {
                         Text("TEMPLATE")
-                            .font(.system(size: 34, weight: .bold))
+                            .font(.headline.bold())
                             .foregroundStyle(.white)
-                            .lineLimit(1)
-                        
+
                         Text("Compartilhe com seus amigos")
-                            .font(.subheadline)
+                            .font(.caption) // .caption é mais adequado para subtítulos
                             .foregroundStyle(.gray)
-                            .lineLimit(1)
                     }
-                    .padding(.top, 2)
-                }
-                
-                // Botão compartilhar
-                ToolbarItem(placement: .topBarTrailing) {
-                    Button {
-                        exportCurrentTemplate()
-                    } label: {
-                        ZStack {
-                            Circle().fill(Color.brandGreen)
-                            Image(systemName: "square.and.arrow.up")
-                                .font(.headline.weight(.bold))
-                                .foregroundStyle(.black)
-                        }
-                        .frame(width: 52, height: 52)
-                        .contentShape(Circle())
-                    }
-                    .accessibilityLabel("Compartilhar")
                 }
             }
         }
@@ -88,7 +78,7 @@ struct TemplateMainView: View {
         }
     }
     
-    private func exportCurrentTemplate() {
+    func exportCurrentTemplate() {
         let templateView = selectedBackground == .comFundo
             ? AnyView(SessionPosterView(workout: workout))
             : AnyView(SemFundoView(workout: workout))

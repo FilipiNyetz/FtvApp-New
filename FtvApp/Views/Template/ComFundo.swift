@@ -9,54 +9,12 @@
 import SwiftUI
 import UniformTypeIdentifiers
 
-struct HeatmapView: View {
-    let points: [CGPoint]
-    let grid: Int
-    
-    var body: some View {
-        GeometryReader { _ in
-            Canvas { ctx, size in
-                guard !points.isEmpty else { return }
-                
-                var bins = Array(repeating: 0.0, count: grid*grid)
-                for p in points {
-                    let x = max(0, min(1, p.x))
-                    let y = max(0, min(1, p.y))
-                    let i = Int(x * CGFloat(grid - 1))
-                    let j = Int(y * CGFloat(grid - 1))
-                    bins[j*grid + i] += 1.0
-                }
-                if let maxBin = bins.max(), maxBin > 0 {
-                    let cw = size.width / CGFloat(grid)
-                    let ch = size.height / CGFloat(grid)
-                    for j in 0..<grid {
-                        for i in 0..<grid {
-                            let v = bins[j*grid + i] / maxBin
-                            if v <= 0 { continue }
-                            let rect = CGRect(x: CGFloat(i)*cw, y: CGFloat(j)*ch, width: cw, height: ch)
-                        }
-                    }
-                }
-            }
-        }
-        .drawingGroup()
-        .clipShape(RoundedRectangle(cornerRadius: 8))
-    }
-}
-
-// MARK: - Compartilhamento
-struct ShareSheet: UIViewControllerRepresentable {
-    let items: [Any]
-    func makeUIViewController(context: Context) -> UIActivityViewController {
-        UIActivityViewController(activityItems: items, applicationActivities: nil)
-    }
-    func updateUIViewController(_ vc: UIActivityViewController, context: Context) {}
-}
-
 // MARK: - Poster / Template
 struct SessionPosterView: View {
     @State private var showShare = false
     @State private var renderedImage: UIImage?
+    
+    var onShare: () -> Void = {}
     
     let workout: Workout
     
@@ -73,34 +31,23 @@ struct SessionPosterView: View {
         return formatter
     }
     
-    var body: some View {
-        let base = posterBody
-            .padding(.horizontal, 16)
-            .padding(.top, 12)
-            .padding(.bottom, 24)
-            .background(Color.black) // fixado com fundo
-        
-        VStack(spacing: 12) {
-            base
-                .cornerRadius(24)
-        }
-        .toolbar {
-            ToolbarItem(placement: .navigationBarTrailing) {
-                Button {
-                    exportImage(of: base)
-                } label: {
-                    Label("Exportar", systemImage: "square.and.arrow.up")
+    @ViewBuilder
+    func metric(icon: String, value: String, unit: String, label: String) -> some View {
+        VStack(spacing: 6) {
+            HStack(spacing: 6) {
+                Image(systemName: icon).foregroundStyle(neon)
+                HStack(alignment: .firstTextBaseline, spacing: 2) {
+                    Text(value).font(.system(size: 22, weight: .bold)).foregroundStyle(.white)
+                    Text(unit).font(.system(size: 12, weight: .semibold)).foregroundStyle(textSecondary)
                 }
             }
-        }
-        .sheet(isPresented: $showShare) {
-            if let image = renderedImage {
-                ShareSheet(items: [image])
-            }
+            Text(label)
+                .font(.system(size: 10, weight: .semibold))
+                .foregroundStyle(textSecondary)
         }
     }
     
-    private var posterBody: some View {
+    var posterBody: some View {
         VStack(spacing: 16) {
             // Top bar
             HStack {
@@ -186,23 +133,8 @@ struct SessionPosterView: View {
         }
     }
     
-    @ViewBuilder
-    private func metric(icon: String, value: String, unit: String, label: String) -> some View {
-        VStack(spacing: 6) {
-            HStack(spacing: 6) {
-                Image(systemName: icon).foregroundStyle(neon)
-                HStack(alignment: .firstTextBaseline, spacing: 2) {
-                    Text(value).font(.system(size: 22, weight: .bold)).foregroundStyle(.white)
-                    Text(unit).font(.system(size: 12, weight: .semibold)).foregroundStyle(textSecondary)
-                }
-            }
-            Text(label)
-                .font(.system(size: 10, weight: .semibold))
-                .foregroundStyle(textSecondary)
-        }
-    }
     
-    private func exportImage(of view: some View) {
+    func exportImage(of view: some View) {
         let renderer = ImageRenderer(content: view)
         renderer.scale = UIScreen.main.scale
         renderer.isOpaque = true  // sempre com fundo
@@ -211,6 +143,36 @@ struct SessionPosterView: View {
             self.showShare = true
         }
     }
+    
+    var body: some View {
+        let base = posterBody
+            .padding(.horizontal, 16)
+            .padding(.top, 12)
+            .padding(.bottom, 24)
+            .background(Color.black) // fixado com fundo
+        
+        VStack(spacing: 12) {
+            base
+                .cornerRadius(24)
+        }
+        .toolbar{
+            ToolbarItem(placement: .topBarTrailing) {
+                Button(action: onShare) {
+                    ZStack {
+                        Circle().fill(neon)
+                        Image(systemName: "square.and.arrow.up")
+                            .font(.headline.weight(.bold))
+                            .foregroundStyle(.black)
+                    }
+                    .frame(width: 44, height: 44)
+                    .contentShape(Circle())
+                }
+                .accessibilityLabel("Compartilhar")
+            }
+        }
+        
+    }
+    
 }
 
 // MARK: - Extensions
