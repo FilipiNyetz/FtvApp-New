@@ -44,7 +44,7 @@ struct EvolutionView: View {
                 VStack {
                     HStack {
                         Picker("Período", selection: $selectedSelection) {
-                            ForEach(["S", "M", "6M", "A"], id: \.self) { periodo in
+                            ForEach(["D","S", "M", "6M", "A"], id: \.self) { periodo in
                                 Text(periodo).tag(periodo) // mostra o valor e associa ao Picker
                             }
                         }
