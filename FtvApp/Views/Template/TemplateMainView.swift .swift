@@ -16,67 +16,76 @@ enum ShareBg: String, CaseIterable {
 struct TemplateMainView: View {
     @StateObject private var viewModel = TemplateViewModel()
     @State private var selectedBackground: ShareBg = .comFundo
+    @State private var showCopiedAlert = false
     let workout: Workout
     
     var body: some View {
         NavigationStack {
-            VStack(spacing: 0) {
-                
-                HStack{
-                    VStack(alignment: .leading, spacing: 2) {
-                        Text("TEMPLATE")
-                            .font(.title2.bold())
-                            .foregroundColor(.white)
-                        Text("Compartilhe com seus amigos")
-                            .font(.headline)
-                            .foregroundStyle(.gray)
-                    }
+            ZStack{
+                VStack(spacing: 0) {
                     
-                    Spacer()
-                    
-                    Button {
-                        if selectedBackground == .comFundo {
-                            viewModel.exportTemplate(workout: workout, withBackground: true)
-                        } else {
-                            viewModel.copyTemplateToClipboard(workout: workout)
+                    HStack{
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text("TEMPLATE")
+                                .font(.title2.bold())
+                                .foregroundColor(.white)
+                            Text("Compartilhe com seus amigos")
+                                .font(.headline)
+                                .foregroundStyle(.gray)
                         }
-                    } label: {
-                        ZStack {
-                            Circle().fill(Color.brandGreen)
-                            Image(systemName: selectedBackground == .comFundo ? "square.and.arrow.up" : "doc.on.doc")
-                                .font(.headline.weight(.bold))
-                                .foregroundStyle(.black)
+                        
+                        Spacer()
+                        
+                        Button {
+                            if selectedBackground == .comFundo {
+                                viewModel.exportTemplate(workout: workout, withBackground: true)
+                            } else {
+                                viewModel.copyTemplateToClipboard(workout: workout)
+                                showCopiedAlert = true
+                            }
+                        } label: {
+                            ZStack {
+                                Circle().fill(Color.brandGreen)
+                                Image(systemName: selectedBackground == .comFundo ? "square.and.arrow.up" : "doc.on.doc")
+                                    .font(.headline.weight(.bold))
+                                    .foregroundStyle(.black)
+                            }
+                            .frame(width: 44, height: 44)
+                            .contentShape(Circle())
                         }
-                        .frame(width: 44, height: 44)
-                        .contentShape(Circle())
+                        .accessibilityLabel(selectedBackground == .comFundo ? "Compartilhar" : "Copiar")
+                        
                     }
-                    .accessibilityLabel(selectedBackground == .comFundo ? "Compartilhar" : "Copiar")
+                    .padding(.horizontal)
                     
+                    // Picker
+                    Picker("", selection: $selectedBackground) {
+                        Text(ShareBg.comFundo.rawValue).tag(ShareBg.comFundo)
+                        Text(ShareBg.semFundo.rawValue).tag(ShareBg.semFundo)
+                    }
+                    .pickerStyle(.segmented)
+                    .padding(12)
+                    
+                    Divider()
+                        .background(Color.white.opacity(0.15))
+                    
+                    // Template Preview
+                    ScrollView {
+                        TemplateBodyView(
+                            workout: workout,
+                            withBackground: selectedBackground == .comFundo
+                        )
+                        .padding(.vertical, 20)
+                        .padding(.horizontal, 16)
+                    }
                 }
-                .padding(.horizontal)
+                .background(Color.black.ignoresSafeArea())
                 
-                // Picker
-                Picker("", selection: $selectedBackground) {
-                    Text(ShareBg.comFundo.rawValue).tag(ShareBg.comFundo)
-                    Text(ShareBg.semFundo.rawValue).tag(ShareBg.semFundo)
-                }
-                .pickerStyle(.segmented)
-                .padding(12)
-                
-                Divider()
-                    .background(Color.white.opacity(0.15))
-                
-                // Template Preview
-                ScrollView {
-                    TemplateBodyView(
-                        workout: workout,
-                        withBackground: selectedBackground == .comFundo
-                    )
-                    .padding(.vertical, 20)
-                    .padding(.horizontal, 16)
+                if showCopiedAlert {
+                    CopiedAlertView(isPresented: $showCopiedAlert)
                 }
             }
-            .background(Color.black.ignoresSafeArea())
+            
         }
         .sheet(isPresented: $viewModel.showShare) {
             if let image = viewModel.renderedImage {
