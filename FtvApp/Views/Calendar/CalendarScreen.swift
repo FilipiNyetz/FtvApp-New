@@ -12,7 +12,7 @@ import SwiftUI
 import SwiftUI
 
 struct CalendarScreen: View {
-    @State private var showCalendar = false
+    @Binding var showCalendar: Bool
     @Binding var selectedDate: Date
     @ObservedObject var manager: HealthManager
     

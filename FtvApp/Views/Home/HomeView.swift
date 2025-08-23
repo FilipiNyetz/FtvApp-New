@@ -7,6 +7,7 @@ struct HomeView: View {
     @State private var isGamesPresented = false
     @State var selectedDate: Date = Date()
     @State var opcaoDeTreinoParaMostrarCard: Int = 0
+    @State private var showCalendar = false
     
     var body: some View {
         NavigationStack {
@@ -69,6 +70,7 @@ struct HomeView: View {
                                    VStack{
                                        DatePickerField(
                                            selectedDate: $selectedDate,
+                                           showCalendar: $showCalendar,
                                            manager: manager
                                        )
                                        //.padding(.top)
@@ -104,6 +106,13 @@ struct HomeView: View {
             manager.fetchMonthWorkouts(for: selectedDate)
         }
         .navigationBarHidden(true)
+        .onTapGesture {
+            if showCalendar {
+                withAnimation {
+                    showCalendar = false
+                }
+            }
+        }
     }
     
 }
