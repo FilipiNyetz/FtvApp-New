@@ -10,6 +10,7 @@ import HealthKit
 
 struct MetricsView: View {
     @ObservedObject var workoutManager: WorkoutManager
+    @StateObject private var jumpDetector = JumpDetector()
 
     var body: some View {
         TimelineView(MetricsTimeLineSchedule(from: workoutManager.startDate ?? Date())) { context in
@@ -46,6 +47,11 @@ struct MetricsView: View {
                         )
                     )
                 )
+                
+                // Saltos
+                Text("Ú: \(String(format: "%.0f", jumpDetector.lastJumpHeight * 100)) cm")
+                
+                Text("MKA: \(String(format: "%.0f", jumpDetector.bestJumpHeight * 100)) cm")
             }
             .font(
                 .system(.title, design: .rounded)
@@ -55,6 +61,12 @@ struct MetricsView: View {
             .frame(maxWidth: .infinity, alignment: .leading)
             .ignoresSafeArea(edges: .bottom)
             .scenePadding()
+        }
+        .onAppear {
+            jumpDetector.start()
+        }
+        .onDisappear {
+            jumpDetector.stop()
         }
     }
 }

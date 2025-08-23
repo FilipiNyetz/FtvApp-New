@@ -363,6 +363,7 @@
 				INFOPLIST_KEY_NSHealthShareUsageDescription = "Usar para anaalisar dados do usuario";
 				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "Usar para anaalisar dados do usuario";
 				INFOPLIST_KEY_NSHomeKitUsageDescription = "Usar para anaalisar dados do usuario";
+				INFOPLIST_KEY_NSMotionUsageDescription = "Este app usa dados de movimento para detectar saltos";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = br.com.gustavosouto.FtvvApp;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -397,6 +398,7 @@
 				INFOPLIST_KEY_NSHealthShareUsageDescription = "Usar para anaalisar dados do usuario";
 				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "Usar para anaalisar dados do usuario";
 				INFOPLIST_KEY_NSHomeKitUsageDescription = "Usar para anaalisar dados do usuario";
+				INFOPLIST_KEY_NSMotionUsageDescription = "Este app usa dados de movimento para detectar saltos";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = br.com.gustavosouto.FtvvApp;
 				LD_RUNPATH_SEARCH_PATHS = (
