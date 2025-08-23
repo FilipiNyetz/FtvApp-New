@@ -11,14 +11,15 @@ import SwiftData
 @main
 struct FtvAppApp: App {
     
-    @AppStorage("countWorkouts") var countWorkouts: Int = 0
+    
     
     @StateObject var manager = HealthManager()
+    @StateObject var userManager = UserManager()
     
     
     var body: some Scene {
         WindowGroup {
-            HomeView(manager: manager)
+            HomeView(manager: manager, userManager: userManager)
                 .preferredColorScheme(.dark)
                
         }

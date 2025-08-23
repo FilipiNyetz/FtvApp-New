@@ -6,6 +6,7 @@
 
 import Foundation
 import HealthKit
+import SwiftUI
 
 class HealthManager: ObservableObject, @unchecked Sendable {
     
@@ -17,7 +18,9 @@ class HealthManager: ObservableObject, @unchecked Sendable {
     @Published var workoutsByDay: [Date: [Workout]] = [:]
     @Published var mediaBatimentosCardiacos: Double = 0.0
     @Published var totalWorkoutsCount: Int = 0
+    @AppStorage("currentStreak") var currentStreak: Int = 0
     
+    private let calendar = Calendar.current
     init() {
         //Inicia a classe manager declarando quais serão as variaveis e os tipos de dados solicitados ao HealthKit
         let steps = HKQuantityType(.stepCount)
@@ -52,6 +55,34 @@ class HealthManager: ObservableObject, @unchecked Sendable {
             }
             self.totalWorkoutsCount = self.workouts.count
         }
+    }
+    
+    func updateStreak() {
+        let sortedDays = workoutsByDay.keys.sorted()
+        
+        var streak = 0
+        var previousDate: Date? = nil
+        
+        for day in sortedDays {
+            if let prev = previousDate {
+                let daysBetween = calendar.dateComponents([.day], from: prev, to: day).day ?? 0
+                
+                if daysBetween == 1 {
+                    // Dias consecutivos → aumenta streak
+                    streak += 1
+                } else if daysBetween > 1 {
+                    // Quebrou streak → reinicia
+                    streak = 1
+                }
+                // daysBetween == 0 → mesmo dia, ignora
+            } else {
+                // Primeiro dia → streak inicia em 1
+                streak = 1
+            }
+            previousDate = day
+        }
+        
+        self.currentStreak = streak
     }
     
     func fetchMonthWorkouts(for month: Date) {
@@ -116,8 +147,8 @@ class HealthManager: ObservableObject, @unchecked Sendable {
             return
         }
         
-//        print("Start: \(startDate)")
-//        print("End: \(adjustedEndDate)")
+        //        print("Start: \(startDate)")
+        //        print("End: \(adjustedEndDate)")
         
         DispatchQueue.main.async {
             self.workouts.removeAll()
@@ -153,7 +184,7 @@ class HealthManager: ObservableObject, @unchecked Sendable {
             //percorre todos os workouts e pega um por um
             for workout in workouts {
                 let durationSeconds = workout.duration
-//                print("A data do treino é: \(workout.endDate)")
+                //                print("A data do treino é: \(workout.endDate)")
                 
                 // Calorias
                 let calories: Double
