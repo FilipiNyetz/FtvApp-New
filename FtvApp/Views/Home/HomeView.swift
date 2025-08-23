@@ -72,13 +72,6 @@ struct HomeView: View {
             userManager.countWorkouts = manager.workouts.count
         }
         .navigationBarHidden(true)
-        .onTapGesture {
-            if showCalendar {
-                withAnimation {
-                    showCalendar = false
-                }
-            }
-        }
     }
     
 }

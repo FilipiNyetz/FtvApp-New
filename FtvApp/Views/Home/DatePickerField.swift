@@ -13,8 +13,26 @@ struct DatePickerField: View {
     @ObservedObject var manager: HealthManager
     
     var body: some View {
-        VStack{
-            CalendarScreen(showCalendar: $showCalendar, selectedDate: $selectedDate, manager: manager)
+        ZStack {
+            // Background invisível para detectar toques fora do calendário
+            if showCalendar {
+                Color.clear
+                    .contentShape(Rectangle())
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .onTapGesture {
+                        withAnimation {
+                            showCalendar = false
+                        }
+                    }
+                    .ignoresSafeArea()
+            }
+            
+            VStack{
+                CalendarScreen(showCalendar: $showCalendar, selectedDate: $selectedDate, manager: manager)
+                    .onTapGesture {
+                        // Impede que toques no calendário sejam propagados para o background
+                    }
+            }
         }
     }
 }
