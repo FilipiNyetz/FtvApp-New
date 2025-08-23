@@ -52,6 +52,6 @@ struct CalendarScreen: View {
             Spacer()
         }
         //.padding()
-        .background(Color.black.ignoresSafeArea())
+        .background(Color.clear)
     }
 }
