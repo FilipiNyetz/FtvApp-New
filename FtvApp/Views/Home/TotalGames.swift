@@ -8,11 +8,11 @@
 import SwiftUI
 
 struct TotalGames: View {
-    
+    var manager: HealthManager
     var totalWorkouts: Int
     
     var body: some View {
-        VStack{
+        VStack(alignment: .leading){
             Text("Total de jogos")
                 .font(.headline)
             Text("Jogue suas partidas e conquiste insígnias")
@@ -20,25 +20,9 @@ struct TotalGames: View {
                 .foregroundColor(.gray)
             
             VStack(alignment: .leading, spacing: 8) {
-                let meta = max(totalWorkouts, 1)
-                ProgressView(
-                    value: Double(totalWorkouts),
-                    total: Double(meta)
-                )
-                .progressViewStyle(
-                    LinearProgressViewStyle(tint: .blue)
-                )
-                .frame(height: 12)
-                .cornerRadius(6)
-                HStack {
-                    Text("\(totalWorkouts)")
-                    Spacer()
-                    Text("\(meta)")
-                }
-                .font(.caption)
-                .foregroundColor(.gray)
+                
+                ProgressBarView(manager: manager)
             }
-            .padding()
             .background(Color(.secondarySystemBackground))
             .cornerRadius(12)
         }
@@ -46,6 +30,3 @@ struct TotalGames: View {
         .padding(.vertical)
     }
 }
-
-
-

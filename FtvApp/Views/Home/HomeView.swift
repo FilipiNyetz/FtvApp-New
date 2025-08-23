@@ -33,6 +33,7 @@ struct HomeView: View {
                         }
                         .padding(.top, 16)
                     }
+                    .padding(.horizontal)
                    // .padding(.top, 50)
                     
                     // “Foguinho” logo abaixo do título
@@ -43,6 +44,7 @@ struct HomeView: View {
                             .foregroundColor(.white)
                             .font(.subheadline)
                     }
+                    .padding(.horizontal)
                 }
                 .padding(.horizontal)
                 .padding(.top, 12)
@@ -67,10 +69,11 @@ struct HomeView: View {
                         }
                         
                     }
+                    .padding(.horizontal)
                     
                     Divider()
                     
-                    TotalGames(totalWorkouts: manager.workouts.count)
+                    TotalGames(manager: manager, totalWorkouts: manager.workouts.count)
                 }
                 .padding(.horizontal)
             }
