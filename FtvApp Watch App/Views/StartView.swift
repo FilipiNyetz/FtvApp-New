@@ -9,30 +9,55 @@ import SwiftUI
 import HealthKit
 
 struct StartView: View {
-    
     @StateObject var manager = WorkoutManager()
+    @State private var isWorkoutActive = false
+    @State private var savedWorkout: HKWorkout?
+    @State private var showCalibrator = false
     
-    // O tipo de treino que será exibido na lista.
     var workoutTypes: [HKWorkoutActivityType] = [.soccer]
     
     var body: some View {
         NavigationStack {
-            List(workoutTypes) { workoutType in
-                // NavigationLink para levar à tela de contagem regressiva (StartTraining).
-                NavigationLink(destination: StartTraining(workoutManager: manager, workoutType: workoutType)) {
-                    Text(workoutType.name)
-                        .font(.title3)
+            if isWorkoutActive {
+                SessionPagingView(manager: manager)
+                    .onAppear {
+                        manager.onWorkoutEnded = { workout in
+                            self.savedWorkout = workout
+                        }
+                    }
+                    .sheet(item: $savedWorkout, onDismiss: {
+                        isWorkoutActive = false
+                    }) { workout in
+                        SummaryView(workout: workout)
+                            .environmentObject(manager)
+                    }
+            } else if showCalibrator {
+                CalibratorView {
+                    // Callback após o countdown
+                    manager.startWorkout(workoutType: .soccer)
+                    isWorkoutActive = true
+                    showCalibrator = false
                 }
-            }
-            .listStyle(.carousel)
-            .navigationTitle("Workouts")
-            .onAppear {
-                // Solicita autorização ao HealthKit quando a view aparece.
-                manager.requestAuthorization()
+            } else {
+                List(workoutTypes) { workoutType in
+                    Button {
+                        // Antes de iniciar o treino, abre a calibração
+                        showCalibrator = true
+                    } label: {
+                        Text(workoutType.name)
+                            .font(.title3)
+                    }
+                }
+                .listStyle(.carousel)
+                .navigationTitle("Workouts")
+                .onAppear {
+                    manager.requestAuthorization()
+                }
             }
         }
     }
 }
+
 
 // ✅ Extensão que faltava para HKWorkout
 extension HKWorkout: @retroactive Identifiable {

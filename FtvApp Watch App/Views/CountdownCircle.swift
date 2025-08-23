@@ -8,16 +8,17 @@
 import SwiftUI
 
 struct CountdownCircle: View {
-    let number: Int
-    let progress: CGFloat
-
+    let onComplete: () -> Void
+    let totalSeconds: Int = 3
+    
+    @State private var number: Int = 3
+    @State private var progress: CGFloat = 1.0
+    
     var body: some View {
         ZStack {
-            // Círculo de fundo mais sutil, como na imagem
             Circle()
                 .stroke(Color.white.opacity(0.1), lineWidth: 15)
-
-            // Círculo de progresso com gradiente e espessura ajustados
+            
             Circle()
                 .trim(from: 0, to: progress)
                 .stroke(
@@ -29,13 +30,33 @@ struct CountdownCircle: View {
                     ),
                     style: StrokeStyle(lineWidth: 18, lineCap: .round)
                 )
-                .rotationEffect(.degrees(-90)) // Começa do topo
-
-            // Texto com tamanho e cor ajustados
+                .rotationEffect(.degrees(-90))
+                .animation(.linear(duration: 1), value: progress)
+            
             Text("\(number)")
                 .font(.system(size: 90, weight: .bold))
                 .foregroundColor(.colorPrimal)
         }
-        .frame(width: 150, height: 150) // Frame ligeiramente maior para melhor visualização
+        .frame(width: 150, height: 150)
+        .onAppear {
+            startCountdown()
+        }
+    }
+    
+    private func startCountdown() {
+        number = totalSeconds
+        progress = 1.0
+        
+        Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { timer in
+            if number > 0 {
+                number -= 1
+                withAnimation(.linear(duration: 1)) {
+                    progress = CGFloat(number) / CGFloat(totalSeconds)
+                }
+            } else {
+                timer.invalidate()
+                onComplete()
+            }
+        }
     }
 }

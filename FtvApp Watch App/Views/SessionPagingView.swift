@@ -28,23 +28,23 @@ struct SessionPagingView: View {
         .navigationBarBackButtonHidden(true)
         .tabViewStyle(PageTabViewStyle(indexDisplayMode: isLuminationReduced ? .never : .automatic))
         .onAppear {
-                    // Se o treino já estiver rodando quando a view aparecer,
-                    // vá para a tela de métricas.
-                    if manager.running {
-                        displayMetricsView()
-                    }
-                }
-                // O onChange continua importante para o "resume"
-                .onChange(of: manager.running) { isRunning in
-                    if isRunning {
-                        displayMetricsView()
-                    }
-                }
-                .onChange(of: isLuminationReduced) { isReduced in
-                    if isReduced {
-                        displayMetricsView()
-                    }
-                }
+            // Se o treino já estiver rodando quando a view aparecer,
+            // vá para a tela de métricas.
+            if manager.running {
+                displayMetricsView()
+            }
+        }
+        // O onChange continua importante para o "resume"
+        .onChange(of: manager.running) { isRunning in
+            if isRunning {
+                displayMetricsView()
+            }
+        }
+        .onChange(of: isLuminationReduced) { isReduced in
+            if isReduced {
+                displayMetricsView()
+            }
+        }
     }
     
     private func displayMetricsView() {

@@ -14,7 +14,11 @@ struct HomeWatch: View {
                 .font(.subheadline)
                 .fontWeight(.semibold)
                 .multilineTextAlignment(.center)
-            NavigationLink(destination: calibrator()){
+            NavigationLink(
+                destination: CalibratorView(onCalibrationComplete: {
+                    print("Calibração completa! Iniciando treino...")
+                })
+            ){
                 Image(systemName: "wrench.adjustable.fill")
             }
             .foregroundColor(Color.colorPrimal)
