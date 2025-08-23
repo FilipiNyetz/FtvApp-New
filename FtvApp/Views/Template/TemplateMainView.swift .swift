@@ -57,6 +57,7 @@ struct TemplateMainView: View {
                         
                     }
                     .padding(.horizontal)
+                    //.padding(.top, 40)
                     
                     // Picker
                     Picker("", selection: $selectedBackground) {
@@ -70,14 +71,16 @@ struct TemplateMainView: View {
                         .background(Color.white.opacity(0.15))
                     
                     // Template Preview
-                    ScrollView {
+                    ScrollView{
                         TemplateBodyView(
                             workout: workout,
                             withBackground: selectedBackground == .comFundo
                         )
+                        .padding(.top, selectedBackground == .comFundo ? 12 : 0)
                     }
+
                 }
-                .background(Color.black.ignoresSafeArea())
+                //.background(Color.black.ignoresSafeArea())
                 
                 if showCopiedAlert {
                     CopiedAlertView(isPresented: $showCopiedAlert)
