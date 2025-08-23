@@ -38,8 +38,6 @@ struct WorkoutStatsCard: View {
             
             // Linha de baixo
             HStack {
-                
-                Divider().frame(height: 40).background(Color.white.opacity(0.4))
                 statItem(
                     title: "DISTÂNCIA",
                     value: String(format: "%.1f", workout.distance),
