@@ -60,9 +60,9 @@ struct HomeView: View {
                         .foregroundStyle(.white)
                         
                         
-                        if let workoutsDoDia = manager.workoutsByDay[
+                        if manager.workoutsByDay[
                             Calendar.current.startOfDay(for: selectedDate)
-                        ]{
+                        ] != nil{
                             ButtonDiaryGames(manager: manager, selectedDate: $selectedDate)
                         }
                         
@@ -80,9 +80,6 @@ struct HomeView: View {
             manager.fetchMonthWorkouts(for: selectedDate)
         }
         .navigationBarHidden(true)
-        .onAppear {
-            manager.fetchMonthWorkouts(for: selectedDate)
-        }
     }
     
 }

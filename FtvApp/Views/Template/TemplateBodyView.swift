@@ -101,81 +101,89 @@ struct TemplateBodyView: View {
                 .background(Color.black)
                 .cornerRadius(24)
             } else {
-                // MARK: Layout estilo Sem Fundo
-                VStack(spacing: 40) {
-                    // Altura Máxima
-                    VStack(spacing: 8) {
-                        Text("Altura máx")
-                            .font(.system(size: 16, weight: .medium))
-                            .foregroundStyle(.primary)
-                        HStack(alignment: .firstTextBaseline, spacing: 4) {
-                            Text("40")
-                                .font(.system(size: 48, weight: .bold))
+                ZStack{
+                    Image("SemFundo")
+                        .resizable()
+                        .scaledToFill()
+                        .ignoresSafeArea()
+                        
+                    // MARK: Layout estilo Sem Fundo
+                    VStack(spacing: 30) {
+                        // Altura Máxima
+                        VStack(spacing: 8) {
+                            Text("Altura máx")
+                                .font(.system(size: 16, weight: .medium))
                                 .foregroundStyle(.primary)
-                            Text("cm")
-                                .font(.system(size: 20, weight: .medium))
+                            HStack(alignment: .firstTextBaseline, spacing: 4) {
+                                Text("40")
+                                    .font(.system(size: 48, weight: .bold))
+                                    .foregroundStyle(.primary)
+                                Text("cm")
+                                    .font(.system(size: 20, weight: .medium))
+                                    .foregroundStyle(.secondary)
+                            }
+                        }
+                        
+                        // Calorias
+                        VStack(spacing: 8) {
+                            Text("Calorias")
+                                .font(.system(size: 16, weight: .medium))
+                                .foregroundStyle(.primary)
+                            HStack(alignment: .firstTextBaseline, spacing: 4) {
+                                Text("\(Int(workout.frequencyHeart))")
+                                    .font(.system(size: 48, weight: .bold))
+                                    .foregroundStyle(.primary)
+                                Text("cal")
+                                    .font(.system(size: 20, weight: .medium))
+                                    .foregroundStyle(.primary)
+                            }
+                        }
+                        
+                        // Tempo
+                        VStack(spacing: 8) {
+                            Text("Tempo")
+                                .font(.system(size: 16, weight: .medium))
+                                .foregroundStyle(.primary)
+                            Text(timeFormatter.string(from: TimeInterval(workout.duration)) ?? "00:00:00")
+                                .font(.system(size: 48, weight: .bold, design: .rounded))
+                                .monospacedDigit()
+                                .foregroundStyle(.primary)
+                        }
+                        
+                        // Heatmap Pequeno
+                        VStack(spacing: 20) {
+                            RoundedRectangle(cornerRadius: 12)
+                                .stroke(Color.white.opacity(0.3), lineWidth: 2)
+                                .frame(width: 120, height: 160)
+                                .overlay(
+                                    // Placeholder para heatmap futuro
+                                    VStack(spacing: 8) {
+                                        Image(systemName: "chart.xyaxis.line")
+                                            .font(.title2)
+                                            .foregroundStyle(Color.white.opacity(0.4))
+                                        
+                                        Text("Heatmap")
+                                            .font(.caption2)
+                                            .foregroundStyle(Color.white.opacity(0.4))
+                                    }
+                                )
+                        }
+                        
+                        // Nome do App
+                        VStack(spacing: 8) {
+                            Text("SETE")
+                                .font(.system(size: 32, weight: .bold))
+                                .foregroundStyle(Color.brandGreen)
+                            Text("Futevolei")
+                                .font(.system(size: 14, weight: .semibold))
                                 .foregroundStyle(.secondary)
+                                .tracking(1.5)
                         }
                     }
-                    
-                    // Calorias
-                    VStack(spacing: 8) {
-                        Text("Calorias")
-                            .font(.system(size: 16, weight: .medium))
-                            .foregroundStyle(.primary)
-                        HStack(alignment: .firstTextBaseline, spacing: 4) {
-                            Text("\(Int(workout.frequencyHeart))")
-                                .font(.system(size: 48, weight: .bold))
-                                .foregroundStyle(.primary)
-                            Text("cal")
-                                .font(.system(size: 20, weight: .medium))
-                                .foregroundStyle(.primary)
-                        }
-                    }
-                    
-                    // Tempo
-                    VStack(spacing: 8) {
-                        Text("Tempo")
-                            .font(.system(size: 16, weight: .medium))
-                            .foregroundStyle(.primary)
-                        Text(timeFormatter.string(from: TimeInterval(workout.duration)) ?? "00:00:00")
-                            .font(.system(size: 48, weight: .bold, design: .rounded))
-                            .monospacedDigit()
-                            .foregroundStyle(.primary)
-                    }
-                    
-                    // Heatmap Pequeno
-                    VStack(spacing: 20) {
-                        RoundedRectangle(cornerRadius: 12)
-                            .stroke(Color.white.opacity(0.3), lineWidth: 2)
-                            .frame(width: 120, height: 160)
-                            .overlay(
-                                // Placeholder para heatmap futuro
-                                VStack(spacing: 8) {
-                                    Image(systemName: "chart.xyaxis.line")
-                                        .font(.title2)
-                                        .foregroundStyle(Color.white.opacity(0.4))
-                                    
-                                    Text("Heatmap")
-                                        .font(.caption2)
-                                        .foregroundStyle(Color.white.opacity(0.4))
-                                }
-                            )
-                    }
-                    
-                    // Nome do App
-                    VStack(spacing: 8) {
-                        Text("SETE")
-                            .font(.system(size: 32, weight: .bold))
-                            .foregroundStyle(Color.brandGreen)
-                        Text("Futevolei")
-                            .font(.system(size: 14, weight: .semibold))
-                            .foregroundStyle(.secondary)
-                            .tracking(1.5)
-                    }
+                    .padding(.vertical, 30)
+                    .padding(.horizontal, 20)
                 }
-                .padding(.vertical, 30)
-                .padding(.horizontal, 20)
+                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
             }
         }
     }

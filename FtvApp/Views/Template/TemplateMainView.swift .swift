@@ -75,8 +75,6 @@ struct TemplateMainView: View {
                             workout: workout,
                             withBackground: selectedBackground == .comFundo
                         )
-                        .padding(.vertical, 20)
-                        .padding(.horizontal, 16)
                     }
                 }
                 .background(Color.black.ignoresSafeArea())
