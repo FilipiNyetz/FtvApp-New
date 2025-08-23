@@ -10,14 +10,14 @@ import SwiftUI
 struct MenuView: View {
     
     // ---- Estado da métrica selecionada + lista de métricas ----
-    @State private var selectedMetric: String = "Batimento"
+    @Binding var selectedMetric: String
     
-    private let metrics: [(name: String, icon: String)] = [
-        ("Altura",          "arrow.up.and.down"),
-        ("Velocidade máx",  "speedometer"),
+    let metrics: [(name: String, icon: String)] = [
+        //("Altura",          "arrow.up.and.down"),
+        //("Velocidade máx",  "speedometer"),
         ("Batimento",       "heart"),
         ("Caloria",         "flame"),
-        ("Passos",          "figure.walk"),
+        //("Passos",          "figure.walk"),
         ("Distância",       "location")
     ]
     
@@ -28,26 +28,14 @@ struct MenuView: View {
     
     var body: some View {
         Menu {
-            Button("Altura", systemImage: "arrow.up.and.down"){
-                selectedMetric = "Altura"
-                //currentMetricIcon = "arrow.up.and.down"
+            ForEach(metrics, id: \.name) { metric in
+                Button(metric.name, systemImage: metric.icon)
+                {
+                    selectedMetric = metric.name
+                    //dadosVendas = [VendaMensal]
+                }
             }
-            Button("Batimento", systemImage: "heart"){
-                selectedMetric = "Batimento"
-            }
-            Button("Caloria", systemImage: "flame"){
-                selectedMetric = "Caloria"
-            }
-            Button("Distância", systemImage: "location"){
-                selectedMetric = "Distância"
-            }
-            Button("Passos", systemImage: "figure.walk"){
-                selectedMetric = "Passos"
-            }
-            Button("Velocidade máx", systemImage: "speedometer"){
-                selectedMetric = "Velocidade Máx"
-            }
-        } label: {
+            }label: {
             HStack(spacing: 8) {
                 Image(systemName: currentMetricIcon)
                     .font(.body)
@@ -75,8 +63,4 @@ struct MenuView: View {
         .menuStyle(.button)
         .menuIndicator(.hidden) // usamos nosso chevron
     }
-}
-
-#Preview {
-    MenuView()
 }
