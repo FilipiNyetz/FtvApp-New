@@ -8,72 +8,92 @@
 import SwiftUI
 
 struct jumpdata: View {
+    var workouts: [Workout]
+    var selectedMetric: String
+
     var body: some View {
-        // ---------- Cards Máx / Mín ----------
+        let (minWorkout, maxWorkout) = minMaxForMetric(workouts: workouts, metric: selectedMetric)
+
         HStack(spacing: 12) {
             // Card Máx
-            VStack(alignment: .leading, spacing: 6) {
-                HStack {
-                    Text("MÁX")
-                        .font(.caption)
-                        .foregroundColor(.secondary)
-                    Spacer()
-                    // Aqui colocar a Data que ele conquistou esse dado
-                    Text("12/07/25")
-                        .font(.caption2)
-                        .foregroundColor(.secondary)
+            if let max = maxWorkout {
+                VStack(alignment: .leading, spacing: 6) {
+                    HStack {
+                        Text("MÁX")
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                        Spacer()
+                        Text(dateString(max.dateWorkout))
+                            .font(.caption2)
+                            .foregroundColor(.secondary)
+                    }
+                    HStack(alignment: .firstTextBaseline, spacing: 2) {
+                        Text("\(Int(valueForMetric(max, selectedMetric)))")
+                            .fontWeight(.semibold)
+                            .font(.title)
+                        Text(unitForMetric(selectedMetric))
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                            .padding(.horizontal, 4)
+                    }
                 }
-                HStack(alignment: .firstTextBaseline, spacing: 2) {
-                    // Aqui puxa o maior dado que o usuario teve
-                    Text("40")
-                        .fontWeight(.semibold)
-                        .font(.title)
-                    Text("cm")
-                        .font(.caption)
-                        .foregroundColor(.secondary)
-                        .padding(.horizontal, 4)
-                }
+                .padding(.vertical, 8)
+                .padding(.horizontal, 12)
+                .frame(height: 76)
+                .background(Color.white.opacity(0.05))
+                .cornerRadius(10)
             }
-            .padding(.vertical, 8)
-            .padding(.horizontal, 12)
-            .frame(height: 76)
-            .background(Color.white.opacity(0.05))
-            .cornerRadius(10)
 
             // Card Mín
-            VStack(alignment: .leading, spacing: 6) {
-                HStack {
-                    Text("MÍN")
-                        .font(.caption)
-                        .foregroundColor(.secondary)
-                    Spacer()
-                    
-                    // Aqui colocar a Data que ele conquistou esse dado
-                    Text("08/02/25")
-                        .font(.caption2)
-                        .foregroundColor(.secondary)
+            if let min = minWorkout {
+                VStack(alignment: .leading, spacing: 6) {
+                    HStack {
+                        Text("MÍN")
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                        Spacer()
+                        Text(dateString(min.dateWorkout))
+                            .font(.caption2)
+                            .foregroundColor(.secondary)
+                    }
+                    HStack(alignment: .firstTextBaseline, spacing: 2) {
+                        Text("\(Int(valueForMetric(min, selectedMetric)))")
+                            .fontWeight(.semibold)
+                            .font(.title)
+                        Text(unitForMetric(selectedMetric))
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                            .padding(.horizontal, 4)
+                    }
                 }
-                HStack(alignment: .firstTextBaseline, spacing: 2) {
-                    // Aqui puxa o menor dados que o usuario teve
-                    Text("12")
-                        .fontWeight(.semibold)
-                        .font(.title)
-                    Text("cm")
-                        .font(.caption)
-                        .foregroundColor(.secondary)
-                        .padding(.horizontal, 4)
-                }
+                .padding(.vertical, 8)
+                .padding(.horizontal, 12)
+                .frame(height: 76)
+                .background(Color.white.opacity(0.05))
+                .cornerRadius(10)
             }
-            .padding(.vertical, 8)
-            .padding(.horizontal, 12)
-            .frame(height: 76)
-            .background(Color.white.opacity(0.05))
-            .cornerRadius(10)
+        }
+    }
+
+    // Helpers
+    private func dateString(_ date: Date) -> String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "dd/MM/yy"
+        return formatter.string(from: date)
+    }
+
+    private func unitForMetric(_ metric: String) -> String {
+        switch metric {
+        case "Batimento": return "bpm"
+        case "Caloria": return "kcal"
+        case "Distância": return "m"
+        default: return ""
         }
     }
 }
 
-#Preview {
-    jumpdata()
-        .preferredColorScheme(.dark)
-}
+
+//#Preview {
+//    jumpdata()
+//        .preferredColorScheme(.dark)
+//}

@@ -72,6 +72,12 @@ func valueForMetric(_ workout: Workout, _ selectedMetric: String) -> Double {
     }
 }
 
+func minMaxForMetric(workouts: [Workout], metric: String) -> (min: Workout?, max: Workout?) {
+    let sorted = workouts.sorted { valueForMetric($0, metric) < valueForMetric($1, metric) }
+    return (sorted.first, sorted.last)
+}
+
+
 func xLabel(for date: Date, period: String) -> String {
     let formatter = DateFormatter()
     switch period {

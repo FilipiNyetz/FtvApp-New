@@ -58,7 +58,11 @@ struct EvolutionView: View {
                     //graphic()
                     
                     //Dados selecionados
-                    jumpdata()
+                    jumpdata(
+                        workouts: healthManager.workouts,
+                        selectedMetric: selectedMetric
+                    )
+
                 }
                 
                 .padding()
