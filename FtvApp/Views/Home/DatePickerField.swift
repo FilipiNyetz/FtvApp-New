@@ -9,11 +9,12 @@ import SwiftUI
 
 struct DatePickerField: View {
     @Binding var selectedDate: Date
+    @Binding var showCalendar: Bool
     @ObservedObject var manager: HealthManager
     
     var body: some View {
         VStack{
-            CalendarScreen(selectedDate: $selectedDate, manager: manager)
+            CalendarScreen(showCalendar: $showCalendar, selectedDate: $selectedDate, manager: manager)
         }
     }
 }
