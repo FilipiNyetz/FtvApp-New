@@ -1,8 +1,8 @@
 //
-//  GraphicChart.swift
-//  FtvApp
+// GraphicChart.swift
+// FtvApp
 //
-//  Created by Joao pedro Leonel on 21/08/25.
+// Created by Joao pedro Leonel on 21/08/25.
 //
 
 import SwiftUI
@@ -13,9 +13,10 @@ struct GraphicChart: View {
     var selectedMetric: String
     var period: String
     @Binding var selectedWorkout: Workout?
-    
+
     var body: some View {
         Chart {
+            // Barras do gráfico
             ForEach(data, id: \.id) { workout in
                 BarMark(
                     x: .value("Data", workout.dateWorkout),
@@ -25,7 +26,8 @@ struct GraphicChart: View {
                 .position(by: .value("Tipo", selectedMetric))
                 .opacity(selectedWorkout?.id == workout.id ? 1 : 0.7)
             }
-            
+
+            // Ponto e linha de seleção
             if let workout = selectedWorkout {
                 PointMark(
                     x: .value("Data", workout.dateWorkout),
@@ -33,7 +35,7 @@ struct GraphicChart: View {
                 )
                 .symbolSize(100)
                 .foregroundStyle(.white)
-                
+
                 RuleMark(x: .value("Data", workout.dateWorkout))
                     .foregroundStyle(.white)
                     .lineStyle(StrokeStyle(lineWidth: 1, dash: [4]))
@@ -51,16 +53,42 @@ struct GraphicChart: View {
                     }
             }
         }
-        .chartXScale(domain: xDomain(data: data), range: .plotDimension(padding: 8))
+        // Escala X ajustada pelo período
+        .chartXScale(domain: xDomain(data: data, period: period), range: .plotDimension(padding: 8))
+        // Eixo X com ticks automáticos por período
         .chartXAxis {
-            AxisMarks(values: .stride(by: period == "day" ? .day : .month)){ value in
-                AxisGridLine()
-                AxisTick()
-            } // <- aqui o fix
-            
+            switch period {
+            case "day":
+                AxisMarks(values: .stride(by: .hour, count: 2)) { value in
+                    AxisGridLine()
+                    AxisTick()
+                    AxisValueLabel(format: .dateTime.hour().minute())
+                }
+            case "week":
+                AxisMarks(values: .stride(by: .day, count: 1)) { value in
+                    AxisGridLine()
+                    AxisTick()
+                    AxisValueLabel(format: .dateTime.weekday(.narrow))
+                }
+            case "month":
+                AxisMarks(values: .stride(by: .day, count: 2)) { value in
+                    AxisGridLine()
+                    AxisTick()
+                    AxisValueLabel(format: .dateTime.day())
+                }
+            case "sixmonth", "year":
+                AxisMarks(values: .stride(by: .month, count: 1)) { value in
+                    AxisGridLine()
+                    AxisTick()
+                    AxisValueLabel(format: .dateTime.month(.abbreviated))
+                }
+            default:
+                AxisMarks()
+            }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .padding()
+        // Interação com drag para selecionar barra
         .chartOverlay { proxy in
             GeometryReader { geo in
                 Rectangle().fill(.clear).contentShape(Rectangle())
