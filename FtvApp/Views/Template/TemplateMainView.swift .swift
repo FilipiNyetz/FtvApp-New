@@ -20,11 +20,12 @@ struct TemplateMainView: View {
     let workout: Workout
     
     var body: some View {
-        NavigationStack {
-            ZStack{
+        ZStack {
+            NavigationStack {
                 VStack(spacing: 0) {
                     
-                    HStack{
+                    // Header com título e botão
+                    HStack {
                         VStack(alignment: .leading, spacing: 2) {
                             Text("TEMPLATE")
                                 .font(.title2.bold())
@@ -41,7 +42,9 @@ struct TemplateMainView: View {
                                 viewModel.exportTemplate(workout: workout, withBackground: true)
                             } else {
                                 viewModel.copyTemplateToClipboard(workout: workout)
-                                showCopiedAlert = true
+                                withAnimation {
+                                    showCopiedAlert = true
+                                }
                             }
                         } label: {
                             ZStack {
@@ -57,7 +60,7 @@ struct TemplateMainView: View {
                         
                     }
                     .padding(.horizontal)
-                    //.padding(.top, 40)
+                    .padding(.top)
                     
                     // Picker
                     Picker("", selection: $selectedBackground) {
@@ -71,20 +74,21 @@ struct TemplateMainView: View {
                         .background(Color.white.opacity(0.15))
                     
                     // Template Preview
-                    ScrollView{
+                    ScrollView {
                         TemplateBodyView(
                             workout: workout,
-                            withBackground: selectedBackground == .comFundo
+                            withBackground: selectedBackground == .comFundo,
+                            isPreview: true
                         )
                         .padding(.top, selectedBackground == .comFundo ? 12 : 0)
                     }
-
                 }
-                //.background(Color.black.ignoresSafeArea())
+                .background(Color.black.ignoresSafeArea())
                 
-                if showCopiedAlert {
-                    CopiedAlertView(isPresented: $showCopiedAlert)
-                }
+            }
+            
+            if showCopiedAlert {
+                CopiedAlertView(isPresented: $showCopiedAlert)
             }
             
         }

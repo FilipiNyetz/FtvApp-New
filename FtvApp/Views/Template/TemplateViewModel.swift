@@ -14,9 +14,10 @@ import UniformTypeIdentifiers
 class TemplateViewModel: ObservableObject {
     @Published var showShare = false
     @Published var renderedImage: UIImage?
+    @Published var isPreview = true
     
     func exportTemplate(workout: Workout, withBackground: Bool) {
-        let templateView = TemplateBodyView(workout: workout, withBackground: withBackground)
+        let templateView = TemplateBodyView(workout: workout, withBackground: withBackground, isPreview: false)
         
         let renderer = ImageRenderer(content: templateView)
         renderer.scale = UIScreen.main.scale
@@ -29,16 +30,21 @@ class TemplateViewModel: ObservableObject {
     }
     
     func copyTemplateToClipboard(workout: Workout) {
-        let templateView = TemplateBodyView(workout: workout, withBackground: false)
-        
-        let renderer = ImageRenderer(content: templateView)
-        renderer.scale = UIScreen.main.scale
-        renderer.isOpaque = false
-        
-        if let uiImage = renderer.uiImage {
-            UIPasteboard.general.image = uiImage
-            let impact = UIImpactFeedbackGenerator(style: .medium)
-            impact.impactOccurred()
+        Task {
+            let templateView = TemplateBodyView(
+                workout: workout,
+                withBackground: false,
+                isPreview: false
+            )
+
+            let renderer = ImageRenderer(content: templateView)
+            renderer.scale = UIScreen.main.scale
+            renderer.isOpaque = false 
+
+            if let uiImage = renderer.uiImage {
+                UIPasteboard.general.image = uiImage
+                UIImpactFeedbackGenerator(style: .medium).impactOccurred()
+            }
         }
     }
 }
