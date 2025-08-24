@@ -51,8 +51,6 @@ struct HomeView: View {
                                        Calendar.current.startOfDay(for: selectedDate)
                                    ] != nil{
                                        ButtonDiaryGames(manager: manager, selectedDate: $selectedDate)
-                                   }else{
-                                       WorkoutStatsCard(workout: manager.workouts[manager.workouts.endIndex - 1])
                                    }
                                }
                                

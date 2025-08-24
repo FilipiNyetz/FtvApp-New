@@ -100,57 +100,40 @@ struct CalendarView: View {
     }
     
     private var monthGrid: some View {
-            let days = getDaysInMonth()
-            let today = Date()
+        let days = getDaysInMonth()
+        let today = Date()
+        
+        return LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 7), spacing: 2) {
+            ForEach(0..<getLeadingBlanks(), id: \.self) { _ in
+                Color.clear.frame(height: 22)
+            }
             
-            return LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 7), spacing: 2) {
-                ForEach(0..<getLeadingBlanks(), id: \.self) { _ in Color.clear.frame(height: 22) }
+            ForEach(days, id: \.self) { day in
+                let isFuture = day > today && !day.isSameDay(as: today)
+                let hasWorkout = manager.workoutsByDay[Calendar.current.startOfDay(for: day)]?.isEmpty == false
                 
-                ForEach(days, id: \.self) { day in
-                    let isFuture = day > today && !day.isSameDay(as: today)
-                    let hasWorkout = manager.workoutsByDay[Calendar.current.startOfDay(for: day)]?.isEmpty == false
-                    
-                    DayCell(
-                        date: day,
-                        isToday: day.isSameDay(as: today),
-                        isSelected: day.isSameDay(as: selectedDate),
-                        isFuture: isFuture,
-                        hasWorkout: hasWorkout
-                    )
-                    .onTapGesture {
-                        if !isFuture { selectedDate = day }
+                DayCell(
+                    date: day,
+                    isToday: day.isSameDay(as: today),
+                    isSelected: day.isSameDay(as: selectedDate),
+                    isFuture: isFuture,
+                    hasWorkout: hasWorkout
+                )
+                .foregroundColor(
+                    (!hasWorkout && !day.isSameDay(as: today)) ? .gray : .primary
+                )
+                .onTapGesture {
+                    if !isFuture && hasWorkout {
+                        selectedDate = day
                     }
                 }
+                .allowsHitTesting(hasWorkout) // desabilita interação se não tiver treino
             }
         }
+    }
+
     
-//    private var gameSection: some View {
-//        Group {
-//            if selectedDayHasGames, let gameTimes = selectedDayInfo?.gameTimes {
-//
-//                VStack(alignment: .leading, spacing: 8) {
-//                    NavigationLink(destination: GamesView()) {
-//                        HStack {
-//                            Text("Meus Jogos")
-//                                .font(.title3)
-//
-//                            Spacer()
-//
-//                            Image(systemName: "chevron.right")
-//                        }
-//                        .background(Color(.secondarySystemBackground))
-//                        .cornerRadius(12)
-//                    }
-//                    .buttonStyle(PlainButtonStyle())
-//                }
-//                .padding()
-//                .background(Color(.secondarySystemBackground))
-//                .cornerRadius(12)
-//                .frame(height: 56)
-//                .transition(.opacity.combined(with: .move(edge: .top)))
-//            }
-//        }
-//    }
+
     // MARK: - Funções auxiliares
     
     private var monthTitle: String {

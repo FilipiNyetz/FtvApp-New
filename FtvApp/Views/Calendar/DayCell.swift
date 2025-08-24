@@ -29,18 +29,34 @@ struct DayCell: View {
                         .fill(Color.brandGreen.opacity(0.1))
                         .frame(width: 32, height: 32)
                 }
-
-                Text(date.dayNumber())
-                    .font(.system(size: 15, weight: .semibold))
-                    .foregroundStyle(textColor)
-                    .frame(width: 32, height: 32)
+                if hasWorkout {
+                    Text(date.dayNumber())
+                        .font(.system(size: 15, weight: .semibold))
+                        .foregroundStyle(textColor)
+                        .frame(width: 32, height: 32)
+                }else{
+                    Text(date.dayNumber())
+                        .font(.system(size: 15, weight: .semibold))
+                        .foregroundStyle(.gray)
+                        .frame(width: 32, height: 32)
+                }
+                
                 
                 // Bolinha indicando treino concluído
-                Circle()
-                    .fill(Color.brandGreen.opacity(0.8))
-                    .frame(width: 6, height: 6)
-                    .opacity(hasWorkout ? 1 : 0)
-                    .padding(.top, 24)
+                if(isToday && isSelected){
+                    Circle()
+                        .fill(Color.black)
+                        .frame(width: 6, height: 6)
+                        .opacity(hasWorkout ? 1 : 0)
+                        .padding(.top, 24)
+                }else{
+                    Circle()
+                        .fill(Color.brandGreen.opacity(0.8))
+                        .frame(width: 6, height: 6)
+                        .opacity(hasWorkout ? 1 : 0)
+                        .padding(.top, 24)  
+                }
+                
             }
         }
         .frame(maxWidth: .infinity, minHeight: 44)
