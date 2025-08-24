@@ -44,12 +44,19 @@ struct HomeView: View {
                                    .foregroundStyle(.white)
                                }
                                
-                               
-                               if manager.workoutsByDay[
-                                   Calendar.current.startOfDay(for: selectedDate)
-                               ] != nil{
-                                   ButtonDiaryGames(manager: manager, selectedDate: $selectedDate)
+                               if manager.workouts.isEmpty {
+                                   CardWithoutWorkout()
+                               }else{
+                                   if manager.workoutsByDay[
+                                       Calendar.current.startOfDay(for: selectedDate)
+                                   ] != nil{
+                                       ButtonDiaryGames(manager: manager, selectedDate: $selectedDate)
+                                   }else{
+                                       WorkoutStatsCard(workout: manager.workouts[manager.workouts.endIndex - 1])
+                                   }
                                }
+                               
+                              
                                
                            }.padding()
                        }

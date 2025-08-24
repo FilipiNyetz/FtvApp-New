@@ -12,17 +12,20 @@ struct TotalGames: View {
     var totalWorkouts: Int
     
     var body: some View {
-        VStack(alignment: .leading){
-            Text("Total de jogos")
-                .font(.headline)
-            Text("Jogue suas partidas e conquiste insígnias")
-                .font(.subheadline)
-                .foregroundColor(.gray)
+        VStack(alignment: .leading, spacing: 16){
+            VStack(alignment: .leading, spacing: 4){
+                Text("Total de jogos")
+                    .font(.headline)
+                Text("Jogue suas partidas e conquiste insígnias")
+                    .font(.subheadline)
+                    .foregroundColor(.gray)
+            }
             
             VStack(alignment: .leading, spacing: 8) {
                 
                 ProgressBarView(manager: manager)
             }
+            
             .background(Color(.secondarySystemBackground))
             .cornerRadius(12)
         }
