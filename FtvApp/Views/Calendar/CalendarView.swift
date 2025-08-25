@@ -99,7 +99,7 @@ struct CalendarView: View {
         }
     }
     
-    private var monthGrid: some View {
+    var monthGrid: some View {
         let days = getDaysInMonth()
         let today = Date()
         
@@ -109,28 +109,30 @@ struct CalendarView: View {
             }
             
             ForEach(days, id: \.self) { day in
-                let isFuture = day > today && !day.isSameDay(as: today)
+                let isToday = day.isSameDay(as: today)
+                let isFuture = day > today && !isToday
                 let hasWorkout = manager.workoutsByDay[Calendar.current.startOfDay(for: day)]?.isEmpty == false
                 
                 DayCell(
                     date: day,
-                    isToday: day.isSameDay(as: today),
+                    isToday: isToday,
                     isSelected: day.isSameDay(as: selectedDate),
                     isFuture: isFuture,
                     hasWorkout: hasWorkout
                 )
                 .foregroundColor(
-                    (!hasWorkout && !day.isSameDay(as: today)) ? .gray : .primary
+                    (!hasWorkout && !isToday) ? .gray : .primary
                 )
                 .onTapGesture {
-                    if !isFuture && hasWorkout {
+                    if !isFuture && (hasWorkout || isToday) {
                         selectedDate = day
                     }
                 }
-                .allowsHitTesting(hasWorkout) // desabilita interação se não tiver treino
+                .allowsHitTesting(hasWorkout || isToday) // HOJE sempre clicável
             }
         }
     }
+
 
     
 

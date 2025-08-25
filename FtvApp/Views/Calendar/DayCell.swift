@@ -29,15 +29,15 @@ struct DayCell: View {
                         .fill(Color.brandGreen.opacity(0.1))
                         .frame(width: 32, height: 32)
                 }
-                if hasWorkout {
+                if !hasWorkout && !isToday{
                     Text(date.dayNumber())
                         .font(.system(size: 15, weight: .semibold))
-                        .foregroundStyle(textColor)
+                        .foregroundStyle(.gray)
                         .frame(width: 32, height: 32)
                 }else{
                     Text(date.dayNumber())
                         .font(.system(size: 15, weight: .semibold))
-                        .foregroundStyle(.gray)
+                        .foregroundStyle(textColor)
                         .frame(width: 32, height: 32)
                 }
                 

@@ -1,235 +1,183 @@
-//  HealthManager.swift
-//  BeActiv
-//
-//  Created by Filipi Romão on 10/08/25.
-//
-
 import Foundation
 import HealthKit
 import SwiftUI
 
 class HealthManager: ObservableObject, @unchecked Sendable {
     
-    //Instancia a classe que controla do DB do healthKit, criando o objeto capaz de acessar e gerenciar os dados no healthKit
     let healthStore = HKHealthStore()
     
-    //Variavel que aramazena um array de workouts e pode ser acessada pela view
     @Published var workouts: [Workout] = []
     @Published var workoutsByDay: [Date: [Workout]] = [:]
-    @Published var mediaBatimentosCardiacos: Double = 0.0
     @Published var totalWorkoutsCount: Int = 0
-    @AppStorage("currentStreak") var currentStreak: Int = 0
+    @Published var currentStreak: Int = 0
+    @AppStorage("streakUser") private var storedStreak: Int = 0
     
+    private var dayChangeTimer: Timer?
     private let calendar = Calendar.current
+    
     init() {
-        //Inicia a classe manager declarando quais serão as variaveis e os tipos de dados solicitados ao HealthKit
+        self.currentStreak = storedStreak
+        requestAuthorization()
+    }
+    
+    private func requestAuthorization() {
         let steps = HKQuantityType(.stepCount)
         let calories = HKQuantityType(.activeEnergyBurned)
         let typeWorkouts = HKObjectType.workoutType()
-        let hearthRate = HKQuantityType(.heartRate)
+        let heartRate = HKQuantityType(.heartRate)
         let distance = HKQuantityType(.distanceWalkingRunning)
         
-        //Seta um array com todos os valores que precisam ser solicitados para permissao do usuario
-        let healthTypes: Set = [
-            steps, calories, typeWorkouts, hearthRate, distance,
-        ]
+        let healthTypes: Set = [steps, calories, typeWorkouts, heartRate, distance]
         
         Task {
             do {
-                //Realiza um pedido para o usuario permitir compartilhar os dados
-                try await healthStore.requestAuthorization(
-                    toShare: healthTypes,
-                    read: healthTypes
-                )
-                
+                try await healthStore.requestAuthorization(toShare: healthTypes, read: healthTypes)
             } catch {
-                print("Error fetching data")
+                print("Error fetching data: \(error)")
             }
         }
     }
+    
+    func startDayChangeTimer() {
+        let now = Date()
+        let tomorrow = calendar.date(byAdding: .day, value: 1, to: calendar.startOfDay(for: now))!
+        let interval = tomorrow.timeIntervalSince(now)
+        
+        dayChangeTimer?.invalidate()
+        dayChangeTimer = Timer.scheduledTimer(withTimeInterval: interval, repeats: false) { [weak self] _ in
+            Task { @MainActor in
+                self?.calculateStreak()
+                self?.startDayChangeTimer()
+            }
+        }
+    }
+    
+    // Atualiza workouts agrupados por dia e recalcula streak
+    @MainActor
     func updateWorkoutsByDay() {
-        let calendar = Calendar.current
-        DispatchQueue.main.async {
-            self.workoutsByDay = Dictionary(grouping: self.workouts) { workout in
-                calendar.startOfDay(for: workout.dateWorkout)
-            }
-            self.totalWorkoutsCount = self.workouts.count
+        let grouped = Dictionary(grouping: workouts) { workout in
+            calendar.startOfDay(for: workout.dateWorkout)
         }
+        
+        self.workoutsByDay = grouped
+        self.totalWorkoutsCount = workouts.count
+        
+        calculateStreak()
     }
     
-    func updateStreak() {
-        let sortedDays = workoutsByDay.keys.sorted()
+    // Calcula streak baseada em dias únicos de treino
+    @MainActor
+    func calculateStreak() {
+        let todaySOD = calendar.startOfDay(for: Date())
+        let days = Set(workoutsByDay.keys.map { calendar.startOfDay(for: $0) })
+        guard !days.isEmpty else {
+            currentStreak = 0
+            storedStreak = 0
+            return
+        }
         
+        guard let lastDay = days.max() else {
+            currentStreak = 0
+            storedStreak = 0
+            return
+        }
+        
+        // Zera streak se houver gap >= 2 dias
+        let gap = calendar.dateComponents([.day], from: lastDay, to: todaySOD).day ?? 0
+        if gap >= 2 {
+            currentStreak = 0
+            storedStreak = 0
+            return
+        }
+        
+        // Conta dias consecutivos
         var streak = 0
-        var previousDate: Date? = nil
-        
-        for day in sortedDays {
-            if let prev = previousDate {
-                let daysBetween = calendar.dateComponents([.day], from: prev, to: day).day ?? 0
-                
-                if daysBetween == 1 {
-                    // Dias consecutivos → aumenta streak
-                    streak += 1
-                } else if daysBetween > 1 {
-                    // Quebrou streak → reinicia
-                    streak = 1
-                }
-                // daysBetween == 0 → mesmo dia, ignora
-            } else {
-                // Primeiro dia → streak inicia em 1
-                streak = 1
-            }
-            previousDate = day
+        var cursor = lastDay
+        while days.contains(cursor) {
+            streak += 1
+            guard let prev = calendar.date(byAdding: .day, value: -1, to: cursor) else { break }
+            cursor = prev
         }
         
-        self.currentStreak = streak
+        currentStreak = streak
+        storedStreak = streak
     }
     
+    // Chama fetch de workouts do mês
     func fetchMonthWorkouts(for month: Date) {
-        var calendar = Calendar.current
-        calendar.timeZone = TimeZone.current
         let startOfMonth = calendar.date(from: calendar.dateComponents([.year, .month], from: month))!
         let range = calendar.range(of: .day, in: .month, for: month)!
         let endOfMonth = calendar.date(byAdding: .day, value: range.count, to: startOfMonth)!
         
-        self.fetchDataWorkout(endDate: endOfMonth, period: "month")
-        // Depois que ele popular ⁠ workouts ⁠, organiza:
-        DispatchQueue.main.async {
-            self.workoutsByDay = Dictionary(grouping: self.workouts) { workout in
-                calendar.startOfDay(for: workout.dateWorkout)
-            }
-        }
+        fetchDataWorkout(endDate: endOfMonth, period: "month")
     }
     
-    
     func fetchDataWorkout(endDate: Date, period: String) {
-        let calendar = Calendar.current
+        // lógica de data
         let startDate: Date
         let adjustedEndDate: Date
-        
         switch period {
         case "day":
-            // Começo do dia
             startDate = calendar.startOfDay(for: endDate)
-            // Fim do dia (adiciona 1 dia e subtrai 1 segundo)
-            adjustedEndDate = calendar.date(
-                byAdding: .day,
-                value: 1,
-                to: startDate
-            )!
-                .addingTimeInterval(-1)
-            
+            adjustedEndDate = calendar.date(byAdding: .day, value: 1, to: startDate)!.addingTimeInterval(-1)
         case "week":
             adjustedEndDate = endDate
-            startDate = calendar.date(
-                byAdding: .weekOfYear,
-                value: -1,
-                to: adjustedEndDate
-            )!
-            
+            startDate = calendar.date(byAdding: .weekOfYear, value: -1, to: adjustedEndDate)!
         case "month":
             adjustedEndDate = endDate
-            startDate = calendar.date(
-                byAdding: .month,
-                value: -1,
-                to: adjustedEndDate
-            )!
-            
+            startDate = calendar.date(byAdding: .month, value: -1, to: adjustedEndDate)!
         case "year":
             adjustedEndDate = endDate
-            startDate = calendar.date(
-                byAdding: .year,
-                value: -1,
-                to: adjustedEndDate
-            )!
-            
-        default:
-            return
+            startDate = calendar.date(byAdding: .year, value: -1, to: adjustedEndDate)!
+        default: return
         }
         
-        //        print("Start: \(startDate)")
-        //        print("End: \(adjustedEndDate)")
-        
-        DispatchQueue.main.async {
-            self.workouts.removeAll()
-        }
+        DispatchQueue.main.async { self.workouts.removeAll() }
         
         let workoutType = HKObjectType.workoutType()
-        
-        // Predicados para semana e tipo de treino(filtros)
-        let timePredicate = HKQuery.predicateForSamples(
-            withStart: startDate,
-            end: adjustedEndDate
-        )
+        let timePredicate = HKQuery.predicateForSamples(withStart: startDate, end: adjustedEndDate)
         let workoutPredicate = HKQuery.predicateForWorkouts(with: .soccer)
-        let predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [
-            timePredicate, workoutPredicate,
-        ])
+        let predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [timePredicate, workoutPredicate])
         
-        // Query principal de workouts, baseando se nos filtros
-        let query = HKSampleQuery(
-            sampleType: workoutType,
-            predicate: predicate,
-            limit: 50,
-            sortDescriptors: nil
-        ) { _, samples, error in
-            
-            //Verifica se recebeu de fato um array de HKWorkout e desempacota para garantir que existe e é do tipo certo. Verifica tambem se nao existe erros
-            print(samples?.count ?? 0)
+        let query = HKSampleQuery(sampleType: workoutType, predicate: predicate, limit: 50, sortDescriptors: nil) { _, samples, error in
             guard let workouts = samples as? [HKWorkout], error == nil else {
-                print("Erro ao buscar workouts da semana")
+                print("Erro ao buscar workouts: \(error?.localizedDescription ?? "desconhecido")")
                 return
             }
             
-            //percorre todos os workouts e pega um por um
+            var newWorkouts: [Workout] = []
+            let group = DispatchGroup()
+            
             for workout in workouts {
-                let durationSeconds = workout.duration
-                //                print("A data do treino é: \(workout.endDate)")
+                group.enter()
                 
-                // Calorias
-                let calories: Double
-                if #available(iOS 18.0, *) {
-                    if let stats = workout.statistics(for: HKQuantityType(.activeEnergyBurned)) {
-                        calories = stats.sumQuantity()?.doubleValue(for: .kilocalorie()) ?? 0
-                    } else {
-                        calories = 0
-                    }
-                } else {
-                    calories = workout.totalEnergyBurned?.doubleValue(for: .kilocalorie()) ?? 0
-                }
-                
-                // Distância
-                let distance =
-                workout.totalDistance?.doubleValue(for: .meter()) ?? 0
-                
-                //Declara a variavel para armazenar a media dos BPM duante todo o workout, inicia com 0
-                //Chama a funcao para receber o retorno dela
-                
-                queryFrequenciaCardiaca(
-                    workout: workout,
-                    healthStore: self.healthStore
-                ) { mediumFrequencyHeartRate in
-                    //Declara o sumário do treino, que é uma Struct do tipo Workout, então possui um id, um idWorkoutType, uma duracao, calorias, distancia e frequencyHeart. Dessa forma passa todos os dados necessários para conformar com o Workout
-                    let workoutSummary = Workout(
+                self.queryFrequenciaCardiaca(workout: workout, healthStore: self.healthStore) { bpm in
+                    let summary = Workout(
                         id: UUID(),
-                        idWorkoutType: Int(
-                            workout.workoutActivityType.rawValue
-                        ),
-                        duration: durationSeconds,
-                        calories: Int(calories),
-                        distance: Int(distance),
-                        frequencyHeart: mediumFrequencyHeartRate,
+                        idWorkoutType: Int(workout.workoutActivityType.rawValue),
+                        duration: workout.duration,
+                        calories: Int(workout.totalEnergyBurned?.doubleValue(for: .kilocalorie()) ?? 0),
+                        distance: Int(workout.totalDistance?.doubleValue(for: .meter()) ?? 0),
+                        frequencyHeart: bpm,
                         dateWorkout: workout.endDate
                     )
-                    
-                    DispatchQueue.main.async {
-                        self.workouts.append(workoutSummary)
-                        self.updateWorkoutsByDay()
-                    }
+                    newWorkouts.append(summary)
+                    group.leave()
                 }
-                
+            }
+            
+            group.notify(queue: .main) {
+                self.workouts = newWorkouts.sorted { $0.dateWorkout < $1.dateWorkout }
+                self.updateWorkoutsByDay() // só chama após todos os workouts serem carregados
             }
         }
+        
         healthStore.execute(query)
+    }
+    
+    // Placeholder para consulta de BPM
+    private func queryFrequenciaCardiaca(workout: HKWorkout, healthStore: HKHealthStore, completion: @escaping (Double) -> Void) {
+        // Aqui você faz sua lógica real de frequência cardíaca
+        completion(0)
     }
 }

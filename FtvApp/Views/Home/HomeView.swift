@@ -75,7 +75,10 @@ struct HomeView: View {
         .onAppear {
             manager.fetchMonthWorkouts(for: selectedDate)
             userManager.countWorkouts = manager.workouts.count
+            manager.startDayChangeTimer()
         }
+        
+        
         .navigationBarHidden(true)
     }
     

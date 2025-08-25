@@ -49,9 +49,9 @@ struct MetricsView: View {
                 )
                 
                 // Saltos
-                Text("Ú: \(String(format: "%.0f", jumpDetector.lastJumpHeight * 100)) cm")
-                
-                Text("MKA: \(String(format: "%.0f", jumpDetector.bestJumpHeight * 100)) cm")
+//                Text("Ú: \(String(format: "%.0f", jumpDetector.lastJumpHeight * 100)) cm")
+//                
+//                Text("MKA: \(String(format: "%.0f", jumpDetector.bestJumpHeight * 100)) cm")
             }
             .font(
                 .system(.title, design: .rounded)
@@ -62,12 +62,12 @@ struct MetricsView: View {
             .ignoresSafeArea(edges: .bottom)
             .scenePadding()
         }
-        .onAppear {
-            jumpDetector.start()
-        }
-        .onDisappear {
-            jumpDetector.stop()
-        }
+//        .onAppear {
+//            jumpDetector.start()
+//        }
+//        .onDisappear {
+//            jumpDetector.stop()
+//        }
     }
 }
 

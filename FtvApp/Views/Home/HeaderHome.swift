@@ -9,6 +9,7 @@ import SwiftUI
 
 struct HeaderHome: View {
     @ObservedObject var manager: HealthManager
+    
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
             HStack {
