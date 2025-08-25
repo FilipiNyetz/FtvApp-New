@@ -10,6 +10,23 @@ import SwiftUI
 struct HeaderHome: View {
     @ObservedObject var manager: HealthManager
     
+    var nivelFogo: Int {
+        let s = manager.currentStreak
+        
+        switch s {
+        case 0: return 0
+        case 1: return 1
+        case 2...3: return 2
+        case 4...7: return 3
+        case 8...15: return 4
+        default: return 5
+        }
+    }
+    
+    var imageFogoNum: String {
+        "Fogo\(nivelFogo)"
+    }
+    
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
             HStack {
@@ -32,16 +49,21 @@ struct HeaderHome: View {
                 .padding(.top, 16)
             }
             .padding(.horizontal)
-           // .padding(.top, 50)
             
-            // “Foguinho” logo abaixo do título
-            HStack(spacing: 6) {
-                Image(systemName: "flame.fill")
-                    .foregroundColor(.brandGreen)
-                Text("\(manager.currentStreak)")  // valor dinâmico se quiser
+            // Foguinho evolutivo por streak
+            HStack(spacing: 8) {
+                Image(imageFogoNum)
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 24, height: 24)
+                    .transition(.scale.combined(with: .opacity))
+                    .animation(.easeInOut(duration: 0.25), value: nivelFogo)
+                
+                Text("\(manager.currentStreak) semana\(manager.currentStreak == 1 ? "" : "s")")
                     .foregroundColor(.white)
-                    .font(.subheadline)
-            }
+                    .font(.subheadline.weight(.semibold))
+                    .accessibilityLabel("Streak de \(manager.currentStreak) semanas")
+            } 
             .padding(.horizontal)
         }
         .padding(.horizontal)
@@ -50,4 +72,3 @@ struct HeaderHome: View {
         .background(Color.black)
     }
 }
-
