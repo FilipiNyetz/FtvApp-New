@@ -16,7 +16,7 @@ struct SplashScreen: View {
                 Image("LogoS") // Substitua por sua imagem de logo
                     .resizable()
                     .scaledToFit()
-                    .frame(width: 100, height: 100)
+                    .frame(width: 150, height: 150)
                 
                 Spacer()
             }

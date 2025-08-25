@@ -5,63 +5,90 @@
 //  Created by Gustavo Souto Pereira on 14/08/25.
 //
 
-import SwiftUI
 import HealthKit
+import SwiftUI
 
 struct StartView: View {
-    
+
     @StateObject var manager = WorkoutManager()
     @State private var isWorkoutActive = false
     @State private var isCountingDown = false
     @State private var savedWorkout: HKWorkout?
     @State private var selectedWorkoutType: HKWorkoutActivityType? = nil
-    
+
     var workoutTypes: [HKWorkoutActivityType] = [.soccer]
-    
+
     var body: some View {
         NavigationStack {
             if isWorkoutActive {
                 SessionPagingView(manager: manager)
                     .onAppear {
-                        // Callback para mostrar summary
                         manager.onWorkoutEnded = { workout in
                             self.savedWorkout = workout
                         }
                     }
-                    .sheet(item: $savedWorkout, onDismiss: {
-                        isWorkoutActive = false
-                    }) { workout in
+                    .sheet(
+                        item: $savedWorkout,
+                        onDismiss: {
+                            isWorkoutActive = false
+                        }
+                    ) { workout in
                         SummaryView(workout: workout)
                             .environmentObject(manager)
                     }
-            } else if isCountingDown, let workoutType = selectedWorkoutType  { // Se a contagem regressiva estiver ativa
+            } else if isCountingDown, let workoutType = selectedWorkoutType {
                 CountdownScreen(onCountdownFinished: {
                     self.isCountingDown = false
                     manager.startWorkout(workoutType: workoutType)
                     isWorkoutActive = true
                 })
-            }else {
-                List(workoutTypes) { workoutType in
-                    Button {
-                        self.selectedWorkoutType = workoutType
-                        self.isCountingDown = true
+            } else {
+                //criar a logica de onboarding
+                ZStack{
+                    Image("LogoS")
+                        .resizable()
+                        .scaledToFill()
+                        .opacity(0.25)
+                        .ignoresSafeArea()
+                    
+                    LinearGradient(
+                     gradient: Gradient(colors: [.gradiente1, .gradiente2, .gradiente2,  .gradiente2]),
+                            startPoint: .bottomLeading,
+                            endPoint: .topTrailing
+                        )
+                    .opacity(0.85)
+                        .ignoresSafeArea()
+                    
+                    VStack(spacing: 12) {
 
-                        
-                    } label: {
-                        HStack {
-                            Image(systemName: "figure.run.circle.fill")
-                                .font(.title2)
-                                .foregroundStyle(.green)
-                            Text(workoutType.name)
-                                .font(.title3.weight(.semibold))
-                                .foregroundStyle(.white)
+                        //Text("Seu desempenho será registrado em tempo real")
+                        Text("Bem vindo ao SETE, vamos registrar sua performance e evoluir seu jogo")
+                            .font(.title3)
+                            .fontWeight(.medium)
+                            .fontDesign(.rounded)
+                            .multilineTextAlignment(.center)
+                            .foregroundStyle(.white)
+                            .padding(.bottom, 12)
+
+
+                        Button(action: {
+                            self.selectedWorkoutType = .soccer
+                            self.isCountingDown = true
+                        }) {
+                            Text("Iniciar")
+                                .font(.headline)
+                                .fontWeight(.bold)
+                                .foregroundStyle(.black)
+                                .frame(maxWidth: .infinity)
+                                .frame(height: 60)
+                                .background(Color.colorPrimal)
+                                .clipShape(RoundedRectangle(cornerRadius: 20))
                         }
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .padding(.vertical, 8)
+                        .buttonStyle(.plain)
                     }
+                    .padding(.horizontal)
                 }
-                .listStyle(.carousel)
-                .navigationTitle("Escolha o treino")
+
 
                 .onAppear {
                     manager.requestAuthorization()
@@ -77,7 +104,7 @@ extension HKWorkout: @retroactive Identifiable {
 
 extension HKWorkoutActivityType: @retroactive Identifiable {
     public var id: UInt { rawValue }
-    
+
     var name: String {
         switch self {
         case .soccer: return "Futevôlei"
