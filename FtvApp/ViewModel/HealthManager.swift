@@ -66,6 +66,7 @@ class HealthManager: ObservableObject, @unchecked Sendable {
     func updateWorkoutsByDay() {
         let grouped = Dictionary(grouping: workouts) { workout in
             calendar.startOfDay(for: workout.dateWorkout)
+            
         }
         
         self.workoutsByDay = grouped
@@ -170,6 +171,7 @@ class HealthManager: ObservableObject, @unchecked Sendable {
         default: return
         }
         
+        // Limpa workouts antes de buscar
         DispatchQueue.main.async { self.workouts.removeAll() }
         
         let workoutType = HKObjectType.workoutType()
@@ -183,13 +185,8 @@ class HealthManager: ObservableObject, @unchecked Sendable {
                 return
             }
             
-            var newWorkouts: [Workout] = []
-            let group = DispatchGroup()
-            
             for workout in workouts {
-                group.enter()
-                
-                self.queryFrequenciaCardiaca(workout: workout, healthStore: self.healthStore) { bpm in
+                queryFrequenciaCardiaca(workout: workout, healthStore: self.healthStore) { bpm in
                     let summary = Workout(
                         id: UUID(),
                         idWorkoutType: Int(workout.workoutActivityType.rawValue),
@@ -199,23 +196,21 @@ class HealthManager: ObservableObject, @unchecked Sendable {
                         frequencyHeart: bpm,
                         dateWorkout: workout.endDate
                     )
-                    newWorkouts.append(summary)
-                    group.leave()
+                    
+                    DispatchQueue.main.async {
+                        self.workouts.append(summary)
+                        // Ordena sempre que adicionar
+                        self.workouts.sort { $0.dateWorkout < $1.dateWorkout }
+                        // Atualiza agrupamento por dia
+                        self.updateWorkoutsByDay()
+                    }
                 }
-            }
-            
-            group.notify(queue: .main) {
-                self.workouts = newWorkouts.sorted { $0.dateWorkout < $1.dateWorkout }
-                self.updateWorkoutsByDay() // só chama após todos os workouts serem carregados
             }
         }
         
         healthStore.execute(query)
     }
+
     
-    // Placeholder para consulta de BPM
-    private func queryFrequenciaCardiaca(workout: HKWorkout, healthStore: HKHealthStore, completion: @escaping (Double) -> Void) {
-        // Aqui você faz sua lógica real de frequência cardíaca
-        completion(0)
-    }
+    
 }
