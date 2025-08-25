@@ -53,31 +53,31 @@ struct GraphicChart: View {
                     }
             }
         }
-        // Escala X ajustada pelo período
+        // Escala X ajustada pelo período (agora sempre visível mesmo sem dados)
         .chartXScale(domain: xDomain(data: data, period: period), range: .plotDimension(padding: 8))
-        // Eixo X com ticks automáticos por período
+        // Eixo X com ticks por período
         .chartXAxis {
             switch period {
             case "day":
-                AxisMarks(values: .stride(by: .hour, count: 2)) { value in
+                AxisMarks(values: .stride(by: .hour, count: 2)) {
                     AxisGridLine()
                     AxisTick()
                     AxisValueLabel(format: .dateTime.hour().minute())
                 }
             case "week":
-                AxisMarks(values: .stride(by: .day, count: 1)) { value in
+                AxisMarks(values: .stride(by: .day, count: 1)) {
                     AxisGridLine()
                     AxisTick()
                     AxisValueLabel(format: .dateTime.weekday(.narrow))
                 }
             case "month":
-                AxisMarks(values: .stride(by: .day, count: 2)) { value in
+                AxisMarks(values: .stride(by: .day, count: 2)) {
                     AxisGridLine()
                     AxisTick()
                     AxisValueLabel(format: .dateTime.day())
                 }
             case "sixmonth", "year":
-                AxisMarks(values: .stride(by: .month, count: 1)) { value in
+                AxisMarks(values: .stride(by: .month, count: 1)) {
                     AxisGridLine()
                     AxisTick()
                     AxisValueLabel(format: .dateTime.month(.abbreviated))
@@ -90,7 +90,7 @@ struct GraphicChart: View {
         .padding()
         // Interação com drag para selecionar barra
         .chartOverlay { proxy in
-            GeometryReader { geo in
+            GeometryReader { _ in
                 Rectangle().fill(.clear).contentShape(Rectangle())
                     .gesture(
                         DragGesture()

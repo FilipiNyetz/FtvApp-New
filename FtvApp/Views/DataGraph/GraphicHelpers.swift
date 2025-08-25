@@ -8,16 +8,22 @@
 import Foundation
 
 func dataForChart(healthManager: HealthManager, period: String, selectedMetric: String) -> [Workout] {
+    let calendar = Calendar.current
     switch period {
     case "day":
-        // Todos os treinos do dia (sem agregação; filtragem por dia deve ser feita em outro lugar)
-        return healthManager.workouts
+        // Apenas treinos do dia atual (sem agregação)
+        let start = calendar.startOfDay(for: Date())
+        let end = calendar.date(byAdding: .day, value: 1, to: start)!
+        return healthManager.workouts.filter { $0.dateWorkout >= start && $0.dateWorkout < end }
+
     case "week", "month":
         // Uma média por dia (caso haja mais de um treino no mesmo dia)
         return aggregateByDay(workouts: healthManager.workouts, selectedMetric: selectedMetric)
+
     case "sixmonth", "year":
         // Uma média por mês
         return aggregateByMonth(workouts: healthManager.workouts, selectedMetric: selectedMetric)
+
     default:
         return healthManager.workouts
     }
@@ -65,10 +71,10 @@ func aggregateByMonth(workouts: [Workout], selectedMetric: String) -> [Workout] 
 
 func valueForMetric(_ workout: Workout, _ selectedMetric: String) -> Double {
     switch selectedMetric {
-    case "Caloria": return Double(workout.calories)
+    case "Caloria":   return Double(workout.calories)
     case "Distância": return Double(workout.distance)
     case "Batimento": return Double(workout.frequencyHeart)
-    default: return 0
+    default:          return 0
     }
 }
 
@@ -90,37 +96,71 @@ func xLabel(for date: Date, period: String) -> String {
 }
 
 func updateSelection(for date: Date, in data: [Workout], selectedWorkout: inout Workout?) {
-    let closest = data.min(by: { abs($0.dateWorkout.timeIntervalSince(date)) < abs($1.dateWorkout.timeIntervalSince(date)) })
+    let closest = data.min { abs($0.dateWorkout.timeIntervalSince(date)) < abs($1.dateWorkout.timeIntervalSince(date)) }
     selectedWorkout = closest
 }
 
 func xDomain(data: [Workout], period: String) -> ClosedRange<Date> {
+    let calendar = Calendar.current
+
+    // Quando não há dados, ainda assim mostramos um domínio "cheio" para o período selecionado
+    if data.isEmpty {
+        let now = Date()
+        switch period {
+        case "day":
+            let start = calendar.startOfDay(for: now)
+            let end   = calendar.date(byAdding: .day, value: 1, to: start) ?? now
+            return start...end
+        case "week":
+            let startOfWeek = calendar.date(from: calendar.dateComponents([.yearForWeekOfYear, .weekOfYear], from: now)) ?? now
+            let endOfWeek   = calendar.date(byAdding: .day, value: 7, to: startOfWeek) ?? now
+            return startOfWeek...endOfWeek
+        case "month":
+            let startOfMonth = calendar.date(from: calendar.dateComponents([.year, .month], from: now)) ?? now
+            let endOfMonth   = calendar.date(byAdding: .month, value: 1, to: startOfMonth) ?? now
+            return startOfMonth...endOfMonth
+        case "sixmonth":
+            let anchorMonth  = calendar.date(from: calendar.dateComponents([.year, .month], from: now)) ?? now
+            let start6       = calendar.date(byAdding: .month, value: -5, to: anchorMonth) ?? now
+            let end6         = calendar.date(byAdding: .month, value: 1, to: anchorMonth) ?? now
+            return start6...end6
+        case "year":
+            let startOfYear = calendar.date(from: calendar.dateComponents([.year], from: now)) ?? now
+            let endOfYear   = calendar.date(byAdding: .year, value: 1, to: startOfYear) ?? now
+            return startOfYear...endOfYear
+        default:
+            return now...now
+        }
+    }
+
+    // Com dados: usa min/max e normaliza para o período
     guard let min = data.map({ $0.dateWorkout }).min(),
           let max = data.map({ $0.dateWorkout }).max() else {
         let today = Date()
-        return today ... today
+        return today...today
     }
-    let calendar = Calendar.current
+
     switch period {
     case "day":
         let start = calendar.startOfDay(for: min)
-        let end = calendar.date(byAdding: .day, value: 1, to: start) ?? max
+        let end   = calendar.date(byAdding: .day, value: 1, to: start) ?? max
         return start...end
     case "week":
         let startOfWeek = calendar.date(from: calendar.dateComponents([.yearForWeekOfYear, .weekOfYear], from: min)) ?? min
-        let endOfWeek = calendar.date(byAdding: .day, value: 7, to: startOfWeek) ?? max
+        let endOfWeek   = calendar.date(byAdding: .day, value: 7, to: startOfWeek) ?? max
         return startOfWeek...endOfWeek
     case "month":
         let startOfMonth = calendar.date(from: calendar.dateComponents([.year, .month], from: min)) ?? min
-        let endOfMonth = calendar.date(byAdding: .month, value: 1, to: startOfMonth) ?? max
+        let endOfMonth   = calendar.date(byAdding: .month, value: 1, to: startOfMonth) ?? max
         return startOfMonth...endOfMonth
     case "sixmonth":
-        let startOf6Months = calendar.date(byAdding: .month, value: -5, to: calendar.date(from: calendar.dateComponents([.year, .month], from: max)) ?? max) ?? min
-        let endOf6Months = calendar.date(byAdding: .month, value: 1, to: calendar.date(from: calendar.dateComponents([.year, .month], from: max)) ?? max) ?? max
-        return startOf6Months...endOf6Months
+        let anchorMonth  = calendar.date(from: calendar.dateComponents([.year, .month], from: max)) ?? max
+        let start6       = calendar.date(byAdding: .month, value: -5, to: anchorMonth) ?? min
+        let end6         = calendar.date(byAdding: .month, value: 1, to: anchorMonth) ?? max
+        return start6...end6
     case "year":
         let startOfYear = calendar.date(from: calendar.dateComponents([.year], from: min)) ?? min
-        let endOfYear = calendar.date(byAdding: .year, value: 1, to: startOfYear) ?? max
+        let endOfYear   = calendar.date(byAdding: .year, value: 1, to: startOfYear) ?? max
         return startOfYear...endOfYear
     default:
         return min...max
