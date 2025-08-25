@@ -38,12 +38,21 @@ struct StartView: View {
                         manager.startWorkout(workoutType: workoutType)
                         isWorkoutActive = true
                     } label: {
-                        Text(workoutType.name)
-                            .font(.title3)
+                        HStack {
+                            Image(systemName: "figure.run.circle.fill")
+                                .font(.title2)
+                                .foregroundStyle(.green)
+                            Text(workoutType.name)
+                                .font(.title3.weight(.semibold))
+                                .foregroundStyle(.white)
+                        }
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding(.vertical, 8)
                     }
                 }
                 .listStyle(.carousel)
-                .navigationTitle("Workouts")
+                .navigationTitle("Escolha o treino")
+
                 .onAppear {
                     manager.requestAuthorization()
                 }
@@ -52,7 +61,6 @@ struct StartView: View {
     }
 }
 
-// ✅ Extensão que faltava para HKWorkout
 extension HKWorkout: @retroactive Identifiable {
     public var id: UUID { self.uuid }
 }

@@ -19,34 +19,50 @@ struct MetricsView: View {
                     elapsedTime: workoutManager.elapsedTime,
                     showSubseconds: context.cadence == .live
                 )
-                .foregroundStyle(.yellow)
+                .font(.largeTitle)
+                .fontWeight(.medium)
+                .fontDesign(.rounded)
+                .foregroundStyle(Color.colorPrimal)
+                
+                HStack(alignment: .firstTextBaseline)  {
+                    Text(workoutManager.heartRate.formatted(.number.precision(.fractionLength(0))))
 
-                Text(
-                    Measurement(
-                        value: workoutManager.activeEnergy,
-                        unit: UnitEnergy.kilocalories
-                    ).formatted(
-                        .measurement(
-                            width: .abbreviated,
-                            usage: .workout,
-                            numberFormatStyle: .number.precision(.fractionLength(0))
-                        )
+                    Image(systemName: "heart.fill")
+                        .foregroundColor(.red)
+                        .font(.subheadline)
+                        .alignmentGuide(.firstTextBaseline) { d in d[.bottom] + 2 }
+                }
+
+                HStack(alignment: .firstTextBaseline) {
+                    Text(
+                        Measurement(
+                            value: workoutManager.activeEnergy,
+                            unit: UnitEnergy.kilocalories
+                        ).value.formatted(.number.precision(.fractionLength(0)))
                     )
-                )
+                    
+                    Text("Calorias")
+                        .font(.caption2) // bem pequeno
+                        .textCase(.uppercase) // deixa maiúsculo
+                        .foregroundColor(.colorSecond) // cor secundária
+                        .alignmentGuide(.firstTextBaseline) { d in d[.bottom] + 0.5 }
+                }
 
-                Text(workoutManager.heartRate.formatted(.number.precision(.fractionLength(0))) + " bpm")
-
-                Text(
-                    Measurement(
-                        value: workoutManager.distance,
-                        unit: UnitLength.meters
-                    ).formatted(
-                        .measurement(
-                            width: .abbreviated,
-                            usage: .road
+                HStack(alignment: .firstTextBaseline){
+                    Text(
+                            workoutManager.distance.formatted(
+                                .number.precision(.fractionLength(0))
+                            )
                         )
-                    )
-                )
+                    
+                    Text("Distância")
+                        .font(.caption2) // bem pequeno
+                        .textCase(.uppercase) // deixa maiúsculo
+                        .foregroundColor(.colorSecond) // cor secundária
+                        .alignmentGuide(.firstTextBaseline) { d in d[.bottom] + 0.5 }
+                    
+                }
+                
                 
                 // Saltos
 //                Text("Ú: \(String(format: "%.0f", jumpDetector.lastJumpHeight * 100)) cm")

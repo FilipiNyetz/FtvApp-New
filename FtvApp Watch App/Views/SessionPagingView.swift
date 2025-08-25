@@ -24,7 +24,7 @@ struct SessionPagingView: View {
             MetricsView(workoutManager: manager)
                 .tag(Tab.metrics)
         }
-        .navigationTitle("Futevôlei")
+        //.navigationTitle("Futevôlei")
         .navigationBarBackButtonHidden(true)
         .tabViewStyle(PageTabViewStyle(indexDisplayMode: isLuminationReduced ? .never : .automatic))
         .onAppear {

@@ -52,7 +52,7 @@ struct ControlsView: View {
                 } label: {
                     Image(systemName: "forward.fill")
                 }
-                .tint(.green)
+                .tint(.colorPrimal)
                 .font(.title2)
                 Text("Próxima partida")
             }

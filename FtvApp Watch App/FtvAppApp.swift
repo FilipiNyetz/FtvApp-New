@@ -17,7 +17,7 @@ struct FtvApp_Watch_AppApp: App {
     
     var body: some Scene {
         WindowGroup {
-            StartView(manager: manager)
+            MainView()
         }
     }
 }
