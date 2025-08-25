@@ -12,7 +12,7 @@ class HealthManager: ObservableObject, @unchecked Sendable {
     @Published var currentStreak: Int = 0
     @AppStorage("streakUser") private var storedStreak: Int = 0
     
-    private var dayChangeTimer: Timer?
+    var weekChangeTimer: Timer?
     private let calendar = Calendar.current
     
     init() {
@@ -38,19 +38,28 @@ class HealthManager: ObservableObject, @unchecked Sendable {
         }
     }
     
-    func startDayChangeTimer() {
-        let now = Date()
-        let tomorrow = calendar.date(byAdding: .day, value: 1, to: calendar.startOfDay(for: now))!
-        let interval = tomorrow.timeIntervalSince(now)
+    
+    func startWeekChangeTimer() {
+        weekChangeTimer?.invalidate() // se já existir, cancela
         
-        dayChangeTimer?.invalidate()
-        dayChangeTimer = Timer.scheduledTimer(withTimeInterval: interval, repeats: false) { [weak self] _ in
+        let now = Date()
+        let calendar = Calendar.current
+        
+        // Descobre o início da próxima semana
+        guard let nextWeek = calendar.nextDate(after: now, matching: DateComponents(weekday: calendar.firstWeekday), matchingPolicy: .nextTime) else {
+            return
+        }
+        
+        let interval = nextWeek.timeIntervalSince(now)
+        
+        weekChangeTimer = Timer.scheduledTimer(withTimeInterval: interval, repeats: false) { [weak self] _ in
             Task { @MainActor in
                 self?.calculateStreak()
-                self?.startDayChangeTimer()
+                self?.startWeekChangeTimer()
             }
         }
     }
+    
     
     // Atualiza workouts agrupados por dia e recalcula streak
     @MainActor
@@ -68,40 +77,69 @@ class HealthManager: ObservableObject, @unchecked Sendable {
     // Calcula streak baseada em dias únicos de treino
     @MainActor
     func calculateStreak() {
-        let todaySOD = calendar.startOfDay(for: Date())
-        let days = Set(workoutsByDay.keys.map { calendar.startOfDay(for: $0) })
-        guard !days.isEmpty else {
+        let today = Date()
+        
+        // Pegar apenas os dias únicos com treino
+        let workoutDays = Set(workoutsByDay.keys.map { calendar.startOfDay(for: $0) })
+        guard !workoutDays.isEmpty else {
             currentStreak = 0
             storedStreak = 0
             return
         }
         
-        guard let lastDay = days.max() else {
-            currentStreak = 0
-            storedStreak = 0
-            return
+        // Converter para semanas únicas (ano + semana)
+        var weeks: [(year: Int, week: Int)] = []
+        for day in workoutDays {
+            let year = calendar.component(.yearForWeekOfYear, from: day)
+            let weekOfYear = calendar.component(.weekOfYear, from: day)
+            let weekKey = (year, weekOfYear)
+            if !weeks.contains(where: { $0 == weekKey }) {
+                weeks.append(weekKey)
+            }
         }
         
-        // Zera streak se houver gap >= 2 dias
-        let gap = calendar.dateComponents([.day], from: lastDay, to: todaySOD).day ?? 0
-        if gap >= 2 {
-            currentStreak = 0
-            storedStreak = 0
-            return
+        // Ordenar semanas cronologicamente
+        weeks.sort {
+            if $0.year == $1.year {
+                return $0.week < $1.week
+            }
+            return $0.year < $1.year
         }
         
-        // Conta dias consecutivos
+        // Calcular streak
         var streak = 0
-        var cursor = lastDay
-        while days.contains(cursor) {
-            streak += 1
-            guard let prev = calendar.date(byAdding: .day, value: -1, to: cursor) else { break }
-            cursor = prev
+        var lastWeek: (year: Int, week: Int)? = nil
+        
+        for week in weeks {
+            if let last = lastWeek {
+                if (week.year == last.year && week.week == last.week + 1) ||
+                    (week.year == last.year + 1 && last.week == 52 && week.week == 1) {
+                    // semana consecutiva
+                    streak += 1
+                } else {
+                    // quebrou sequência → reinicia streak
+                    streak = 1
+                }
+            } else {
+                streak = 1
+            }
+            lastWeek = week
+        }
+        
+        // ⚠️ Se já passou uma semana inteira sem treino, zera streak
+        if let last = lastWeek {
+            let currentYear = calendar.component(.yearForWeekOfYear, from: today)
+            let currentWeek = calendar.component(.weekOfYear, from: today)
+            if (currentYear == last.year && currentWeek > last.week + 1) ||
+                (currentYear > last.year && !(last.week == 52 && currentWeek == 1)) {
+                streak = 0
+            }
         }
         
         currentStreak = streak
         storedStreak = streak
     }
+    
     
     // Chama fetch de workouts do mês
     func fetchMonthWorkouts(for month: Date) {
