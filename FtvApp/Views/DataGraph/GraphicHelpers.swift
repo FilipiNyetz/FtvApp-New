@@ -57,7 +57,7 @@ func dataForChart(healthManager: HealthManager, period: String, selectedMetric: 
         return scoped
 
     case "week", "month":
-        // Agrega por dia, mas somente dentro da janela
+        // Agrega por dia, dentro da janela
         return aggregateByDay(workouts: scoped, selectedMetric: selectedMetric)
 
     case "sixmonth", "year":
@@ -118,16 +118,37 @@ func valueForMetric(_ workout: Workout, _ selectedMetric: String) -> Double {
     }
 }
 
-func xLabel(for date: Date, period: String) -> String {
-    let formatter = DateFormatter()
+// Rótulos do eixo X em pt-BR (3 letras p/ semana/mês)
+func localizedXAxisLabel(for date: Date, period: String) -> String {
+    let loc = Locale(identifier: "pt_BR")
+    var df = DateFormatter()
+    df.locale = loc
+    df.calendar = Calendar(identifier: .gregorian)
+
     switch period {
-    case "day":                formatter.dateFormat = "HH:mm"
-    case "week":               formatter.dateFormat = "E"
-    case "month":              formatter.dateFormat = "d"
-    case "sixmonth", "year":   formatter.dateFormat = "MMM"
-    default:                   formatter.dateFormat = "d/M"
+    case "day":
+        df.dateFormat = "HH:mm"
+        return df.string(from: date)
+    case "week":
+        let idx = Calendar.current.component(.weekday, from: date) - 1 // 0...6
+        let sym = df.shortWeekdaySymbols[idx] // ex: "dom."
+        return String(sym.replacingOccurrences(of: ".", with: "").prefix(3)) // "dom"
+    case "month":
+        df.dateFormat = "d"
+        return df.string(from: date)
+    case "sixmonth", "year":
+        let idx = Calendar.current.component(.month, from: date) - 1 // 0...11
+        let sym = df.shortMonthSymbols[idx] // ex: "jan"
+        return String(sym.replacingOccurrences(of: ".", with: "").prefix(3)) // "jan"
+    default:
+        df.dateFormat = "d/M"
+        return df.string(from: date)
     }
-    return formatter.string(from: date)
+}
+
+// Usado no balão (annotation)
+func xLabelPtBR(for date: Date, period: String) -> String {
+    localizedXAxisLabel(for: date, period: period)
 }
 
 func updateSelection(for date: Date, in data: [Workout], selectedWorkout: inout Workout?) {
@@ -135,8 +156,7 @@ func updateSelection(for date: Date, in data: [Workout], selectedWorkout: inout 
     selectedWorkout = closest
 }
 
-// Domínio sempre sincronizado com a janela do período.
-// Bump de +1s no fim evita clipping da última barra.
+// Domínio sempre = janela do período (+1s evita clipping da última barra)
 func xDomain(data: [Workout], period: String) -> ClosedRange<Date> {
     let cal = Calendar.current
     var range = currentRange(for: period)

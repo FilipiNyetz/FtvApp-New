@@ -16,7 +16,7 @@ struct GraphicChart: View {
 
     var body: some View {
         Chart {
-            // Barras do gráfico
+            // Barras
             ForEach(data, id: \.id) { workout in
                 BarMark(
                     x: .value("Data", workout.dateWorkout),
@@ -27,7 +27,7 @@ struct GraphicChart: View {
                 .opacity(selectedWorkout?.id == workout.id ? 1 : 0.7)
             }
 
-            // Ponto e linha de seleção
+            // Seleção
             if let workout = selectedWorkout {
                 PointMark(
                     x: .value("Data", workout.dateWorkout),
@@ -41,7 +41,7 @@ struct GraphicChart: View {
                     .lineStyle(StrokeStyle(lineWidth: 1, dash: [4]))
                     .annotation(position: .top) {
                         VStack(spacing: 4) {
-                            Text(xLabel(for: workout.dateWorkout, period: period))
+                            Text(xLabelPtBR(for: workout.dateWorkout, period: period))
                                 .font(.caption2)
                             Text("\(valueForMetric(workout, selectedMetric), specifier: "%.0f")")
                                 .font(.caption)
@@ -53,10 +53,9 @@ struct GraphicChart: View {
                     }
             }
         }
-        // Domínio do X sempre = janela do período (com bump)
         .chartXScale(domain: xDomain(data: data, period: period), range: .plotDimension(padding: 8))
 
-        // Eixo X (mantém as tuas customizações/rotação)
+        // Eixo X com rótulos pt-BR (3 letras)
         .chartXAxis {
             switch period {
             case "day":
@@ -65,7 +64,7 @@ struct GraphicChart: View {
                     AxisTick()
                     AxisValueLabel {
                         if let date = value.as(Date.self) {
-                            Text(date, format: .dateTime.hour().minute())
+                            Text(localizedXAxisLabel(for: date, period: period))
                                 .font(.caption2)
                                 .rotationEffect(.degrees(-45))
                                 .fixedSize()
@@ -81,10 +80,7 @@ struct GraphicChart: View {
                     AxisTick()
                     AxisValueLabel {
                         if let date = value.as(Date.self) {
-                            let text = period == "week"
-                                ? date.formatted(.dateTime.weekday(.abbreviated))
-                                : date.formatted(.dateTime.day())
-                            Text(text)
+                            Text(localizedXAxisLabel(for: date, period: period))
                                 .font(.caption2)
                                 .rotationEffect(.degrees(-45))
                                 .fixedSize()
@@ -100,7 +96,7 @@ struct GraphicChart: View {
                     AxisTick()
                     AxisValueLabel {
                         if let date = value.as(Date.self) {
-                            Text(date, format: .dateTime.month(.abbreviated))
+                            Text(localizedXAxisLabel(for: date, period: period))
                                 .font(.caption2)
                                 .rotationEffect(.degrees(-45))
                                 .fixedSize()
@@ -114,11 +110,8 @@ struct GraphicChart: View {
                 AxisMarks()
             }
         }
-
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .padding()
-
-        // Interação com drag para selecionar barra
         .chartOverlay { proxy in
             GeometryReader { _ in
                 Rectangle().fill(.clear).contentShape(Rectangle())

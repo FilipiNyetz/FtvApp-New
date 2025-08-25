@@ -8,34 +8,27 @@
 import SwiftUI
 
 struct MenuView: View {
-    
-    // ---- Estado da métrica selecionada + lista de métricas ----
+
     @Binding var selectedMetric: String
-    
+
     let metrics: [(name: String, icon: String)] = [
-        //("Altura",          "arrow.up.and.down"),
-        //("Velocidade máx",  "speedometer"),
-        ("Batimento",       "heart"),
-        ("Caloria",         "flame"),
-        //("Passos",          "figure.walk"),
-        ("Distância",       "location")
+        ("Batimento", "heart"),
+        ("Caloria",   "flame"),
+        ("Distância", "location")
     ]
-    
-    // Ícone da métrica atual
+
     private var currentMetricIcon: String {
         metrics.first(where: { $0.name == selectedMetric })?.icon ?? "arrow.up.and.down"
     }
-    
+
     var body: some View {
         Menu {
             ForEach(metrics, id: \.name) { metric in
-                Button(metric.name, systemImage: metric.icon)
-                {
+                Button(metric.name, systemImage: metric.icon) {
                     selectedMetric = metric.name
-                    //dadosVendas = [VendaMensal]
                 }
             }
-            }label: {
+        } label: {
             HStack(spacing: 8) {
                 Image(systemName: currentMetricIcon)
                     .font(.body)
@@ -50,7 +43,7 @@ struct MenuView: View {
             }
             .padding(.vertical, 8)
             .padding(.horizontal, 12)
-            .frame(maxWidth: 160, alignment: .leading) // <<< largura controlada
+            .frame(maxWidth: 160, alignment: .leading)
             .background(
                 RoundedRectangle(cornerRadius: 12, style: .continuous)
                     .fill(Color.white.opacity(0.10))
@@ -61,6 +54,6 @@ struct MenuView: View {
             )
         }
         .menuStyle(.button)
-        .menuIndicator(.hidden) // usamos nosso chevron
+        .menuIndicator(.hidden)
     }
 }
