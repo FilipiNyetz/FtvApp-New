@@ -64,6 +64,7 @@ struct EvolutionView: View {
                         period: periodKey,
                         selectedWorkout: $selectedWorkout
                     )
+                    .frame(height: 300) // <-- aumente aqui (250, 300, 350…)
                     .id(selectedSelection)
 
                     // Cards Máx / Mín conforme métrica selecionada

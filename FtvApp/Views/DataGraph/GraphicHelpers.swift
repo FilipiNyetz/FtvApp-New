@@ -121,7 +121,7 @@ func valueForMetric(_ workout: Workout, _ selectedMetric: String) -> Double {
 // Rótulos do eixo X em pt-BR (3 letras p/ semana/mês)
 func localizedXAxisLabel(for date: Date, period: String) -> String {
     let loc = Locale(identifier: "pt_BR")
-    var df = DateFormatter()
+    let df = DateFormatter()
     df.locale = loc
     df.calendar = Calendar(identifier: .gregorian)
 

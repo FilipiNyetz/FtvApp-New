@@ -13,7 +13,7 @@ struct GraphicChart: View {
     var selectedMetric: String
     var period: String
     @Binding var selectedWorkout: Workout?
-
+    
     var body: some View {
         Chart {
             // Barras
@@ -26,7 +26,7 @@ struct GraphicChart: View {
                 .position(by: .value("Tipo", selectedMetric))
                 .opacity(selectedWorkout?.id == workout.id ? 1 : 0.7)
             }
-
+            
             // Seleção
             if let workout = selectedWorkout {
                 PointMark(
@@ -35,7 +35,7 @@ struct GraphicChart: View {
                 )
                 .symbolSize(100)
                 .foregroundStyle(.white)
-
+                
                 RuleMark(x: .value("Data", workout.dateWorkout))
                     .foregroundStyle(.white)
                     .lineStyle(StrokeStyle(lineWidth: 1, dash: [4]))
@@ -54,7 +54,7 @@ struct GraphicChart: View {
             }
         }
         .chartXScale(domain: xDomain(data: data, period: period), range: .plotDimension(padding: 8))
-
+        
         // Eixo X com rótulos pt-BR (3 letras)
         .chartXAxis {
             switch period {
@@ -67,13 +67,14 @@ struct GraphicChart: View {
                             Text(localizedXAxisLabel(for: date, period: period))
                                 .font(.caption2)
                                 .rotationEffect(.degrees(-45))
-                                .fixedSize()
+                                .fixedSize(horizontal: true, vertical: false)  // <-- evita truncar/ellipsis
+                                .frame(minWidth: 24)                           // <-- dá largura mínima pro "ter"
                                 .offset(x: -6, y: 6)
                                 .multilineTextAlignment(.trailing)
                         }
                     }
                 }
-
+                
             case "week", "month":
                 AxisMarks(values: .stride(by: .day, count: period == "week" ? 1 : 2)) { value in
                     AxisGridLine()
@@ -83,13 +84,14 @@ struct GraphicChart: View {
                             Text(localizedXAxisLabel(for: date, period: period))
                                 .font(.caption2)
                                 .rotationEffect(.degrees(-45))
-                                .fixedSize()
+                                .fixedSize(horizontal: true, vertical: false)  // <-- evita truncar/ellipsis
+                                .frame(minWidth: 24)                           // <-- dá largura mínima pro "ter"
                                 .offset(x: -6, y: 6)
                                 .multilineTextAlignment(.trailing)
                         }
                     }
                 }
-
+                
             case "sixmonth", "year":
                 AxisMarks(values: .stride(by: .month, count: 1)) { value in
                     AxisGridLine()
@@ -99,13 +101,13 @@ struct GraphicChart: View {
                             Text(localizedXAxisLabel(for: date, period: period))
                                 .font(.caption2)
                                 .rotationEffect(.degrees(-45))
-                                .fixedSize()
+                                .fixedSize(horizontal: true, vertical: false)  // <-- evita truncar/ellipsis
                                 .offset(y: 8)
                                 .multilineTextAlignment(.center)
                         }
                     }
                 }
-
+                
             default:
                 AxisMarks()
             }
