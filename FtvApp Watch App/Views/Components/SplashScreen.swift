@@ -10,14 +10,17 @@ import SwiftUI
 struct SplashScreen: View {
     var body: some View {
         VStack {
-            Image("AppLogo") // Substitua por sua imagem de logo
-                .resizable()
-                .scaledToFit()
-                .frame(width: 100, height: 100)
-            Text("SETE") // Nome do seu aplicativo
-                .foregroundStyle(Color.colorPrimal)
-                .font(.title)
-                .fontWeight(.bold)
+            HStack{
+                Spacer()
+                
+                Image("LogoS") // Substitua por sua imagem de logo
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 100, height: 100)
+                
+                Spacer()
+            }
+
         }
     }
 }

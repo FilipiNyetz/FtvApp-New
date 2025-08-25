@@ -9,16 +9,32 @@ import SwiftUI
 
 struct MainView: View {
     @State private var isLoading = true
+    @State private var splashOpacity: Double = 1.0
+    @State private var startViewOpacity: Double = 0.0
 
     var body: some View {
-        if isLoading {
+        ZStack {
             SplashScreen()
-                .task {
-                    try? await Task.sleep(for: .seconds(2)) // Atraso de 2 segundos
-                    isLoading = false
-                }
-        } else {
-            StartView()
+                .opacity(isLoading ? splashOpacity : 0)
+
+            if !isLoading {
+                StartView()
+                    .opacity(startViewOpacity)
+            }
+        }
+        .task {
+            // Wait for the splash screen duration
+            try? await Task.sleep(for: .seconds(2))
+
+            // Animate splash screen fade out and start view fade in
+            withAnimation(.easeInOut(duration: 1.0)) {
+                splashOpacity = 0.0
+                startViewOpacity = 1.0
+            }
+
+            // Wait for the animation to complete before changing the state
+            try? await Task.sleep(for: .seconds(1.0))
+            isLoading = false
         }
     }
 }

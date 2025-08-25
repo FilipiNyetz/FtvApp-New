@@ -12,7 +12,9 @@ struct StartView: View {
     
     @StateObject var manager = WorkoutManager()
     @State private var isWorkoutActive = false
+    @State private var isCountingDown = false
     @State private var savedWorkout: HKWorkout?
+    @State private var selectedWorkoutType: HKWorkoutActivityType? = nil
     
     var workoutTypes: [HKWorkoutActivityType] = [.soccer]
     
@@ -32,11 +34,19 @@ struct StartView: View {
                         SummaryView(workout: workout)
                             .environmentObject(manager)
                     }
-            } else {
+            } else if isCountingDown, let workoutType = selectedWorkoutType  { // Se a contagem regressiva estiver ativa
+                CountdownScreen(onCountdownFinished: {
+                    self.isCountingDown = false
+                    manager.startWorkout(workoutType: workoutType)
+                    isWorkoutActive = true
+                })
+            }else {
                 List(workoutTypes) { workoutType in
                     Button {
-                        manager.startWorkout(workoutType: workoutType)
-                        isWorkoutActive = true
+                        self.selectedWorkoutType = workoutType
+                        self.isCountingDown = true
+
+                        
                     } label: {
                         HStack {
                             Image(systemName: "figure.run.circle.fill")
