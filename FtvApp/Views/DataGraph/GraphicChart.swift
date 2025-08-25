@@ -53,41 +53,71 @@ struct GraphicChart: View {
                     }
             }
         }
-        // Escala X ajustada pelo período (agora sempre visível mesmo sem dados)
+        // Domínio do X sempre = janela do período (com bump)
         .chartXScale(domain: xDomain(data: data, period: period), range: .plotDimension(padding: 8))
-        // Eixo X com ticks por período
+
+        // Eixo X (mantém as tuas customizações/rotação)
         .chartXAxis {
             switch period {
             case "day":
-                AxisMarks(values: .stride(by: .hour, count: 2)) {
+                AxisMarks(values: .stride(by: .hour, count: 2)) { value in
                     AxisGridLine()
                     AxisTick()
-                    AxisValueLabel(format: .dateTime.hour().minute())
+                    AxisValueLabel {
+                        if let date = value.as(Date.self) {
+                            Text(date, format: .dateTime.hour().minute())
+                                .font(.caption2)
+                                .rotationEffect(.degrees(-45))
+                                .fixedSize()
+                                .offset(x: -6, y: 6)
+                                .multilineTextAlignment(.trailing)
+                        }
+                    }
                 }
-            case "week":
-                AxisMarks(values: .stride(by: .day, count: 1)) {
+
+            case "week", "month":
+                AxisMarks(values: .stride(by: .day, count: period == "week" ? 1 : 2)) { value in
                     AxisGridLine()
                     AxisTick()
-                    AxisValueLabel(format: .dateTime.weekday(.narrow))
+                    AxisValueLabel {
+                        if let date = value.as(Date.self) {
+                            let text = period == "week"
+                                ? date.formatted(.dateTime.weekday(.abbreviated))
+                                : date.formatted(.dateTime.day())
+                            Text(text)
+                                .font(.caption2)
+                                .rotationEffect(.degrees(-45))
+                                .fixedSize()
+                                .offset(x: -6, y: 6)
+                                .multilineTextAlignment(.trailing)
+                        }
+                    }
                 }
-            case "month":
-                AxisMarks(values: .stride(by: .day, count: 2)) {
-                    AxisGridLine()
-                    AxisTick()
-                    AxisValueLabel(format: .dateTime.day())
-                }
+
             case "sixmonth", "year":
-                AxisMarks(values: .stride(by: .month, count: 1)) {
+                AxisMarks(values: .stride(by: .month, count: 1)) { value in
                     AxisGridLine()
                     AxisTick()
-                    AxisValueLabel(format: .dateTime.month(.abbreviated))
+                    AxisValueLabel {
+                        if let date = value.as(Date.self) {
+                            Text(date, format: .dateTime.month(.abbreviated))
+                                .font(.caption2)
+                                .rotationEffect(.degrees(-45))
+                                .fixedSize()
+                                .offset(y: 8)
+                                .multilineTextAlignment(.center)
+                        }
+                    }
                 }
+
             default:
                 AxisMarks()
             }
         }
+
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .padding()
+
         // Interação com drag para selecionar barra
         .chartOverlay { proxy in
             GeometryReader { _ in

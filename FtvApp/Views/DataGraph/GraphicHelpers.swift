@@ -7,25 +7,65 @@
 
 import Foundation
 
-func dataForChart(healthManager: HealthManager, period: String, selectedMetric: String) -> [Workout] {
-    let calendar = Calendar.current
+// Janela do período atual (ancorada em "hoje")
+func currentRange(for period: String, now: Date = Date()) -> ClosedRange<Date> {
+    let cal = Calendar.current
     switch period {
     case "day":
-        // Apenas treinos do dia atual (sem agregação)
-        let start = calendar.startOfDay(for: Date())
-        let end = calendar.date(byAdding: .day, value: 1, to: start)!
-        return healthManager.workouts.filter { $0.dateWorkout >= start && $0.dateWorkout < end }
+        let start = cal.startOfDay(for: now)
+        let end = cal.date(byAdding: .day, value: 1, to: start)!
+        return start...end
 
-    case "week", "month":
-        // Uma média por dia (caso haja mais de um treino no mesmo dia)
-        return aggregateByDay(workouts: healthManager.workouts, selectedMetric: selectedMetric)
+    case "week":
+        let start = cal.date(from: cal.dateComponents([.yearForWeekOfYear, .weekOfYear], from: now))!
+        let end   = cal.date(byAdding: .day, value: 7, to: start)!
+        return start...end
 
-    case "sixmonth", "year":
-        // Uma média por mês
-        return aggregateByMonth(workouts: healthManager.workouts, selectedMetric: selectedMetric)
+    case "month":
+        let start = cal.date(from: cal.dateComponents([.year, .month], from: now))!
+        let end   = cal.date(byAdding: .month, value: 1, to: start)!
+        return start...end
+
+    case "sixmonth":
+        let anchor = cal.date(from: cal.dateComponents([.year, .month], from: now))!
+        let start  = cal.date(byAdding: .month, value: -5, to: anchor)!
+        let end    = cal.date(byAdding: .month, value: 1, to: anchor)!
+        return start...end
+
+    case "year":
+        let start = cal.date(from: cal.dateComponents([.year], from: now))!
+        let end   = cal.date(byAdding: .year, value: 1, to: start)!
+        return start...end
 
     default:
-        return healthManager.workouts
+        return now...now
+    }
+}
+
+// Filtra treinos que caem dentro da janela
+func filter(_ workouts: [Workout], in range: ClosedRange<Date>) -> [Workout] {
+    workouts.filter { range.contains($0.dateWorkout) }
+}
+
+func dataForChart(healthManager: HealthManager, period: String, selectedMetric: String) -> [Workout] {
+    let range = currentRange(for: period)
+    let scoped = filter(healthManager.workouts, in: range)
+
+    switch period {
+    case "day":
+        // Sem agregação: só treinos do dia atual
+        return scoped
+
+    case "week", "month":
+        // Agrega por dia, mas somente dentro da janela
+        return aggregateByDay(workouts: scoped, selectedMetric: selectedMetric)
+
+    case "sixmonth", "year":
+        // Agrega por mês, dentro da janela
+        return aggregateByMonth(workouts: scoped, selectedMetric: selectedMetric)
+
+    default:
+        return scoped
     }
 }
 
@@ -81,16 +121,11 @@ func valueForMetric(_ workout: Workout, _ selectedMetric: String) -> Double {
 func xLabel(for date: Date, period: String) -> String {
     let formatter = DateFormatter()
     switch period {
-    case "day":
-        formatter.dateFormat = "HH:mm"
-    case "week":
-        formatter.dateFormat = "E"
-    case "month":
-        formatter.dateFormat = "d"
-    case "sixmonth", "year":
-        formatter.dateFormat = "MMM"
-    default:
-        formatter.dateFormat = "d/M"
+    case "day":                formatter.dateFormat = "HH:mm"
+    case "week":               formatter.dateFormat = "E"
+    case "month":              formatter.dateFormat = "d"
+    case "sixmonth", "year":   formatter.dateFormat = "MMM"
+    default:                   formatter.dateFormat = "d/M"
     }
     return formatter.string(from: date)
 }
@@ -100,69 +135,13 @@ func updateSelection(for date: Date, in data: [Workout], selectedWorkout: inout 
     selectedWorkout = closest
 }
 
+// Domínio sempre sincronizado com a janela do período.
+// Bump de +1s no fim evita clipping da última barra.
 func xDomain(data: [Workout], period: String) -> ClosedRange<Date> {
-    let calendar = Calendar.current
-
-    // Quando não há dados, ainda assim mostramos um domínio "cheio" para o período selecionado
-    if data.isEmpty {
-        let now = Date()
-        switch period {
-        case "day":
-            let start = calendar.startOfDay(for: now)
-            let end   = calendar.date(byAdding: .day, value: 1, to: start) ?? now
-            return start...end
-        case "week":
-            let startOfWeek = calendar.date(from: calendar.dateComponents([.yearForWeekOfYear, .weekOfYear], from: now)) ?? now
-            let endOfWeek   = calendar.date(byAdding: .day, value: 7, to: startOfWeek) ?? now
-            return startOfWeek...endOfWeek
-        case "month":
-            let startOfMonth = calendar.date(from: calendar.dateComponents([.year, .month], from: now)) ?? now
-            let endOfMonth   = calendar.date(byAdding: .month, value: 1, to: startOfMonth) ?? now
-            return startOfMonth...endOfMonth
-        case "sixmonth":
-            let anchorMonth  = calendar.date(from: calendar.dateComponents([.year, .month], from: now)) ?? now
-            let start6       = calendar.date(byAdding: .month, value: -5, to: anchorMonth) ?? now
-            let end6         = calendar.date(byAdding: .month, value: 1, to: anchorMonth) ?? now
-            return start6...end6
-        case "year":
-            let startOfYear = calendar.date(from: calendar.dateComponents([.year], from: now)) ?? now
-            let endOfYear   = calendar.date(byAdding: .year, value: 1, to: startOfYear) ?? now
-            return startOfYear...endOfYear
-        default:
-            return now...now
-        }
+    let cal = Calendar.current
+    var range = currentRange(for: period)
+    if let bumpedEnd = cal.date(byAdding: .second, value: 1, to: range.upperBound) {
+        range = range.lowerBound...bumpedEnd
     }
-
-    // Com dados: usa min/max e normaliza para o período
-    guard let min = data.map({ $0.dateWorkout }).min(),
-          let max = data.map({ $0.dateWorkout }).max() else {
-        let today = Date()
-        return today...today
-    }
-
-    switch period {
-    case "day":
-        let start = calendar.startOfDay(for: min)
-        let end   = calendar.date(byAdding: .day, value: 1, to: start) ?? max
-        return start...end
-    case "week":
-        let startOfWeek = calendar.date(from: calendar.dateComponents([.yearForWeekOfYear, .weekOfYear], from: min)) ?? min
-        let endOfWeek   = calendar.date(byAdding: .day, value: 7, to: startOfWeek) ?? max
-        return startOfWeek...endOfWeek
-    case "month":
-        let startOfMonth = calendar.date(from: calendar.dateComponents([.year, .month], from: min)) ?? min
-        let endOfMonth   = calendar.date(byAdding: .month, value: 1, to: startOfMonth) ?? max
-        return startOfMonth...endOfMonth
-    case "sixmonth":
-        let anchorMonth  = calendar.date(from: calendar.dateComponents([.year, .month], from: max)) ?? max
-        let start6       = calendar.date(byAdding: .month, value: -5, to: anchorMonth) ?? min
-        let end6         = calendar.date(byAdding: .month, value: 1, to: anchorMonth) ?? max
-        return start6...end6
-    case "year":
-        let startOfYear = calendar.date(from: calendar.dateComponents([.year], from: min)) ?? min
-        let endOfYear   = calendar.date(byAdding: .year, value: 1, to: startOfYear) ?? max
-        return startOfYear...endOfYear
-    default:
-        return min...max
-    }
+    return range
 }
