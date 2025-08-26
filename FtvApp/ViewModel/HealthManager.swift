@@ -164,7 +164,7 @@ class HealthManager: ObservableObject, @unchecked Sendable {
         let timePredicate = HKQuery.predicateForSamples(withStart: .distantPast, end: endDate)
         
         let workoutPredicate = HKQuery.predicateForWorkouts(with: .soccer)
-                let predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [timePredicate, workoutPredicate])
+        let predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [timePredicate, workoutPredicate])
         let sortDescriptor = NSSortDescriptor(key: HKSampleSortIdentifierEndDate, ascending: true)
         
         let query = HKSampleQuery(
@@ -222,9 +222,9 @@ class HealthManager: ObservableObject, @unchecked Sendable {
         
         healthStore.execute(query)
     }
-
-
-
+    
+    
+    
     
     // MARK: - Fetch por período (mantida!)
     func fetchDataWorkout(endDate: Date, period: String) {
@@ -248,6 +248,9 @@ class HealthManager: ObservableObject, @unchecked Sendable {
         case "month":
             adjustedEndDate = endDate
             startDate = calendar.date(byAdding: .month, value: -1, to: adjustedEndDate)!
+        case "sixmonth":
+            adjustedEndDate = endDate
+            startDate = calendar.date(byAdding: .month, value: -6, to: adjustedEndDate)!
         case "year":
             adjustedEndDate = endDate
             startDate = calendar.date(byAdding: .year, value: -1, to: adjustedEndDate)!
@@ -262,8 +265,9 @@ class HealthManager: ObservableObject, @unchecked Sendable {
         
         let query = HKSampleQuery(sampleType: workoutType,
                                   predicate: predicate,
-                                  limit: 50,
-                                  sortDescriptors: nil) { _, samples, error in
+                                  limit: HKObjectQueryNoLimit,
+                                  sortDescriptors: [NSSortDescriptor(key: HKSampleSortIdentifierEndDate, ascending: true)]
+                                  ) { _, samples, error in
             guard let workouts = samples as? [HKWorkout], error == nil else {
                 print("Erro ao buscar workouts: \(error?.localizedDescription ?? "desconhecido")")
                 return

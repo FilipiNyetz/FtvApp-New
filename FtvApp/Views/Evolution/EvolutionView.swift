@@ -88,11 +88,9 @@ struct EvolutionView: View {
             .navigationBarTitleDisplayMode(.inline)
             .background(.gray.opacity(0.1))
             .foregroundColor(.white)
+            // Carrega tudo ao entrar; o gráfico agrega por período em memória
             .onAppear {
-                healthManager.fetchDataWorkout(endDate: Date(), period: Period(selection: selectedSelection))
-            }
-            .onChange(of: selectedSelection) { _, newSelection in
-                healthManager.fetchDataWorkout(endDate: Date(), period: Period(selection: newSelection))
+                healthManager.fetchAllWorkouts()
             }
         }
     }
