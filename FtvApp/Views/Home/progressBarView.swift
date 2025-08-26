@@ -45,7 +45,7 @@ struct ProgressBarView: View {
                 }
                 .frame(width: 220, height: 16)
                 .padding(.bottom, -4)
-                Text("\(manager.workouts.count)")
+                Text("\(manager.totalWorkoutsCount)")
                     .font(.footnote)
                     .foregroundStyle(Color.textGray)
                     .fontWeight(.medium)

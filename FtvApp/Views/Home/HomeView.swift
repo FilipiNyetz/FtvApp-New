@@ -73,7 +73,7 @@ struct HomeView: View {
         }
         .ignoresSafeArea(edges: .top)
         .onAppear {
-            manager.fetchMonthWorkouts(for: selectedDate)
+            manager.fetchAllWorkouts(until: Date())
             userManager.countWorkouts = manager.workouts.count
             manager.startWeekChangeTimer()
         }
@@ -83,4 +83,3 @@ struct HomeView: View {
     }
     
 }
-
