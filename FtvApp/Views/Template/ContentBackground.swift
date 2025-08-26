@@ -84,7 +84,7 @@ struct ContentBackground: View {
                 .frame(maxWidth: .infinity)
             }
             
-            // Placeholder Heatmap
+            // Placeholder Heatmap com Logo
             ZStack {
                 RoundedRectangle(cornerRadius: 12).fill(card)
                 
@@ -107,6 +107,13 @@ struct ContentBackground: View {
                     )
                     Spacer()
                 }
+                
+                // Logo centralizada no heatmap (AUMENTADA)
+                Image("logo7S")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 180, height: 180)
+                    .opacity(0.8)
             }
             .frame(height: 360)
             .clipShape(RoundedRectangle(cornerRadius: 12))
