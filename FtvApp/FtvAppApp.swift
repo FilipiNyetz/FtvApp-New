@@ -10,6 +10,8 @@ import SwiftData
 
 @main
 struct FtvAppApp: App {
+    @StateObject var manager = HealthManager()
+    @StateObject var userManager = UserManager()
     
     var body: some Scene {
         WindowGroup {

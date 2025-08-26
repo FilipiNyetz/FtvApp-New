@@ -1,17 +1,27 @@
 {
   "images" : [
     {
+<<<<<<< HEAD
       "filename" : "logo7S.png",
+=======
+>>>>>>> 1e4685b804ffe3ba49b037347c49233c50406aac
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
+<<<<<<< HEAD
       "filename" : "logo7S 1.png",
+=======
+      "filename" : "Logo7S.png",
+>>>>>>> 1e4685b804ffe3ba49b037347c49233c50406aac
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
+<<<<<<< HEAD
       "filename" : "logo7S 2.png",
+=======
+>>>>>>> 1e4685b804ffe3ba49b037347c49233c50406aac
       "idiom" : "universal",
       "scale" : "3x"
     }
