@@ -13,7 +13,7 @@ struct ProgressBarView: View {
                 }else{
                     Image(userManager.bagdeNames[0])
                         .resizable()
-                        .frame(width: 48, height: 48)
+                        .frame(width: 45, height: 50)
                 }
                     
                 Text("\(manager.workouts.count)")
@@ -65,7 +65,7 @@ struct ProgressBarView: View {
                 }else{
                     Image(userManager.bagdeNames[1])
                         .resizable()
-                        .frame(width: 48, height: 48)
+                        .frame(width: 45, height: 50)
                 }
                 Text("\(userManager.goalBadge)")
                     .font(.footnote)
