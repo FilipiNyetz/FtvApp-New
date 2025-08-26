@@ -12,59 +12,53 @@ struct HomeView: View {
     
     var body: some View {
         NavigationStack {
-           
-            ZStack{
-                
+            ZStack {
                 Color.gradiente2.ignoresSafeArea(edges: .all)
+                
                 VStack(spacing: 0) {
-                    
-                    // HEADER PRETO PERSONALIZADO
-                    HeaderHome(manager:manager)
+                    // HEADER
+                    HeaderHome(manager: manager)
                     
                     // CONTEÚDO
                     ScrollView {
-                       ZStack {
-                           LinearGradient(
-                            gradient: Gradient(colors: [.gradiente1, .gradiente2, .gradiente2,  .gradiente2]),
-                                   startPoint: .bottomLeading,
-                                   endPoint: .topTrailing
-                               )
-                               .ignoresSafeArea()
-                           VStack(alignment: .leading, spacing: 20) {
-                               ZStack{
-                                   VStack{
-                                       DatePickerField(
-                                           selectedDate: $selectedDate,
-                                           showCalendar: $showCalendar,
-                                           manager: manager
-                                       )
-                                       //.padding(.top)
-                                       .background(Color.clear)
-                                   }
-                                   .foregroundStyle(.white)
-                               }
-                               
-                               if manager.workouts.isEmpty {
-                                   CardWithoutWorkout()
-                               }else{
-                                   if manager.workoutsByDay[
-                                       Calendar.current.startOfDay(for: selectedDate)
-                                   ] != nil{
-                                       ButtonDiaryGames(manager: manager, selectedDate: $selectedDate)
-                                   }
-                               }
-                               
-                              
-                               
-                           }.padding()
-                       }
-                        
+                        ZStack {
+                            LinearGradient(
+                                gradient: Gradient(colors: [.gradiente1, .gradiente2, .gradiente2, .gradiente2]),
+                                startPoint: .bottomLeading,
+                                endPoint: .topTrailing
+                            )
+                            .ignoresSafeArea()
+                            
+                            VStack(alignment: .leading, spacing: 20) {
+                                // DATE PICKER
+                                DatePickerField(
+                                    selectedDate: $selectedDate,
+                                    showCalendar: $showCalendar,
+                                    manager: manager
+                                )
+                                .foregroundStyle(.white)
+                                
+                                if let workoutsDoDia = manager.workoutsByDay[
+                                    Calendar.current.startOfDay(for: selectedDate)
+                                ], !workoutsDoDia.isEmpty {
+                                    ButtonDiaryGames(manager: manager, selectedDate: $selectedDate)
+                                } else {
+                                    CardWithoutWorkout()
+                                }
+                            }
+                            .padding()
+                        }
                         
                         Divider()
                             .padding(.top, -8)
                         
-                        VStack{
-                            TotalGames(manager: manager, totalWorkouts: manager.workouts.count)
+                        // 🔹 Sempre mostra o total de treinos
+                        VStack {
+                            TotalGames(
+                                manager: manager,
+                                userManager: userManager,
+                                totalWorkouts: manager.totalWorkoutsCount
+                            )
                         }
                     }
                     .padding(.horizontal)
@@ -74,12 +68,8 @@ struct HomeView: View {
         .ignoresSafeArea(edges: .top)
         .onAppear {
             manager.fetchAllWorkouts(until: Date())
-            userManager.countWorkouts = manager.workouts.count
             manager.startWeekChangeTimer()
         }
-        
-        
         .navigationBarHidden(true)
     }
-    
 }

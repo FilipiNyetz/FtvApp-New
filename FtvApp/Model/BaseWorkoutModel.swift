@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Workout: Identifiable{
+struct Workout: Identifiable, Hashable{
     let id: UUID
     let idWorkoutType: Int
     let duration: TimeInterval

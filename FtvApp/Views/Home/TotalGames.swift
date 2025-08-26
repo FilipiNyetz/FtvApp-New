@@ -9,6 +9,7 @@ import SwiftUI
 
 struct TotalGames: View {
     var manager: HealthManager
+    @ObservedObject var userManager: UserManager
     var totalWorkouts: Int
     
     var body: some View {
@@ -23,7 +24,7 @@ struct TotalGames: View {
             
             VStack(alignment: .leading, spacing: 8) {
                 
-                ProgressBarView(manager: manager)
+                ProgressBarView(manager: manager, userManager: userManager)
             }
             
             .background(Color(.secondarySystemBackground))

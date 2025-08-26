@@ -152,35 +152,46 @@ class HealthManager: ObservableObject, @unchecked Sendable {
     
     // MARK: - Fetch histórico completo
     func fetchAllWorkouts(until endDate: Date = Date()) {
+        
+        // Limpa arrays antes da busca
         DispatchQueue.main.async {
             self.workouts.removeAll()
             self.newWorkouts.removeAll()
             self.totalWorkoutsCount = 0
         }
+        
         let workoutType = HKObjectType.workoutType()
         let timePredicate = HKQuery.predicateForSamples(withStart: .distantPast, end: endDate)
+        
         let workoutPredicate = HKQuery.predicateForWorkouts(with: .soccer)
-        let predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [timePredicate, workoutPredicate])
+                let predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [timePredicate, workoutPredicate])
+        let sortDescriptor = NSSortDescriptor(key: HKSampleSortIdentifierEndDate, ascending: true)
         
-        
-        let query = HKSampleQuery(sampleType: workoutType,
-                                  predicate: predicate,
-                                  limit: HKObjectQueryNoLimit,
-                                  sortDescriptors: nil) { _, samples, error in
+        let query = HKSampleQuery(
+            sampleType: workoutType,
+            predicate: predicate,
+            limit: HKObjectQueryNoLimit,
+            sortDescriptors: [sortDescriptor]
+        ) { _, samples, error in
             guard let workouts = samples as? [HKWorkout], error == nil else {
                 print("Erro ao buscar workouts: \(error?.localizedDescription ?? "desconhecido")")
                 return
             }
             
+            if workouts.isEmpty {
+                print("Nenhum treino encontrado")
+            }
             
             let group = DispatchGroup()
+            var tempWorkouts: [Workout] = []
+            let tempQueue = DispatchQueue(label: "tempWorkoutsQueue") // fila serial para evitar race conditions
             
             for workout in workouts {
                 group.enter()
                 
                 queryFrequenciaCardiaca(workout: workout, healthStore: self.healthStore) { bpm in
                     let summary = Workout(
-                        id: UUID(),
+                        id: workout.uuid, // UUID do HealthKit garante unicidade
                         idWorkoutType: Int(workout.workoutActivityType.rawValue),
                         duration: workout.duration,
                         calories: Int(workout.totalEnergyBurned?.doubleValue(for: .kilocalorie()) ?? 0),
@@ -188,20 +199,32 @@ class HealthManager: ObservableObject, @unchecked Sendable {
                         frequencyHeart: bpm,
                         dateWorkout: workout.endDate
                     )
-                    self.newWorkouts.append(summary)
-                    group.leave()
+                    
+                    tempQueue.async {
+                        tempWorkouts.append(summary)
+                        group.leave()
+                    }
                 }
             }
             
             group.notify(queue: .main) {
-                self.workouts = self.newWorkouts.sorted { $0.dateWorkout < $1.dateWorkout }
-                self.totalWorkoutsCount = self.workouts.count // ⚡ atualiza o total corretamente
+                // Remove duplicados pelo mesmo id (HealthKit UUID)
+                let uniqueWorkouts = Array(Dictionary(grouping: tempWorkouts, by: { $0.id }).values.map { $0.first! })
+                
+                self.newWorkouts = uniqueWorkouts.sorted { $0.dateWorkout < $1.dateWorkout }
+                self.workouts = self.newWorkouts
+                self.totalWorkoutsCount = self.workouts.count
+                
                 self.updateWorkoutsByDay(filtered: self.workouts)
+                
             }
         }
         
         healthStore.execute(query)
     }
+
+
+
     
     // MARK: - Fetch por período (mantida!)
     func fetchDataWorkout(endDate: Date, period: String) {
