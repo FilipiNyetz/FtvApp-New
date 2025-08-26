@@ -94,7 +94,7 @@ struct EvolutionView: View {
                         HStack(spacing: 4) {
                             Image(systemName: "chevron.left")
                                 .font(.system(size: 16, weight: .medium))
-                            Text("Seus jogos")
+                            Text("Seus jKKogos")
                                 .font(.system(size: 17))
                         }
                         .foregroundColor(Color("ColorPrimal"))

@@ -19,7 +19,17 @@ struct SessionPagingView: View {
     
     var body: some View {
         TabView(selection: $selection) {
-            ControlsView(manager: manager)
+            ControlsView(
+                manager: manager, 
+                onNextMatch: {
+                    // Navega para MetricsView quando "Próxima partida" é clicada
+                    displayMetricsView()
+                },
+                onResume: {
+                    // Navega para MetricsView quando "Retomar" é clicado
+                    displayMetricsView()
+                }
+            )
                 .tag(Tab.controls)
             MetricsView(workoutManager: manager)
                 .tag(Tab.metrics)
@@ -28,20 +38,16 @@ struct SessionPagingView: View {
         .navigationBarBackButtonHidden(true)
         .tabViewStyle(PageTabViewStyle(indexDisplayMode: isLuminationReduced ? .never : .automatic))
         .onAppear {
-            // Se o treino já estiver rodando quando a view aparecer,
-            // vá para a tela de métricas.
             if manager.running {
                 displayMetricsView()
             }
         }
         // O onChange continua importante para o "resume"
-        .onChange(of: manager.running) { isRunning in
-            if isRunning {
-                displayMetricsView()
-            }
+        .onChange(of: manager.running) { _, _ in
+            displayMetricsView()
         }
-        .onChange(of: isLuminationReduced) { isReduced in
-            if isReduced {
+        .onChange(of: isLuminationReduced) { oldValue, newValue in
+            if newValue {
                 displayMetricsView()
             }
         }

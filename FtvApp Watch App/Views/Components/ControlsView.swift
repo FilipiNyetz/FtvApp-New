@@ -10,6 +10,8 @@ import SwiftUI
 struct ControlsView: View {
     
     @ObservedObject var manager: WorkoutManager
+    var onNextMatch: (() -> Void)?
+    var onResume: (() -> Void)?
     
     var body: some View {
         VStack(spacing: 15){
@@ -30,6 +32,8 @@ struct ControlsView: View {
                             manager.pause()
                         } else if manager.session?.state == .paused {
                             manager.resume()
+                            // ✨ NOVA FUNCIONALIDADE: Navega para MetricsView ao retomar
+                            onResume?()
                         }
                     } label: {
                         Image(
@@ -48,6 +52,8 @@ struct ControlsView: View {
                 Button {
                     manager.endWorkout(shouldShowSummary: false) {
                         self.manager.startWorkout(workoutType: .soccer)
+                        // Chama o callback para navegar para MetricsView
+                        self.onNextMatch?()
                     }
                 } label: {
                     Image(systemName: "forward.fill")
