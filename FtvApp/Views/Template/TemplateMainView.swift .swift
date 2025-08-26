@@ -48,7 +48,7 @@ struct TemplateMainView: View {
                             }
                         } label: {
                             ZStack {
-                                Circle().fill(Color.brandGreen)
+                                Circle().fill(Color.colorPrimal)
                                 Image(systemName: selectedBackground == .comFundo ? "square.and.arrow.up" : "doc.on.doc")
                                     .font(.headline.weight(.bold))
                                     .foregroundStyle(.black)

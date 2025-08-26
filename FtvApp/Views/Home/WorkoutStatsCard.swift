@@ -52,7 +52,7 @@ struct WorkoutStatsCard: View {
                     .foregroundColor(.black)
                     .padding(.vertical, 10)
                     .padding(.horizontal, 20)
-                    .background(Color.brandGreen)
+                    .background(Color.colorPrimal)
                     .cornerRadius(12)
             }
         }

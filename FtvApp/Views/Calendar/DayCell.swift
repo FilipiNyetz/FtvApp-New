@@ -22,11 +22,11 @@ struct DayCell: View {
             ZStack {
                 if isToday && isSelected {
                     Circle()
-                        .fill(Color.brandGreen)
+                        .fill(Color.colorPrimal)
                         .frame(width: 32, height: 32)
                 } else if isSelected && !isToday {
                     Circle()
-                        .fill(Color.brandGreen.opacity(0.1))
+                        .fill(Color.colorPrimal.opacity(0.1))
                         .frame(width: 32, height: 32)
                 }
                 if !hasWorkout && !isToday{
@@ -51,7 +51,7 @@ struct DayCell: View {
                         .padding(.top, 24)
                 }else{
                     Circle()
-                        .fill(Color.brandGreen.opacity(0.8))
+                        .fill(Color.colorPrimal.opacity(0.8))
                         .frame(width: 6, height: 6)
                         .opacity(hasWorkout ? 1 : 0)
                         .padding(.top, 24)  
@@ -65,8 +65,8 @@ struct DayCell: View {
 
     private var textColor: Color {
         if isToday && isSelected { return .black }
-        else if isSelected && !isToday { return .brandGreen }
-        else if isToday && !isSelected { return .brandGreen }
+        else if isSelected && !isToday { return .colorPrimal }
+        else if isToday && !isSelected { return .colorPrimal }
         else if isFuture && !isSelected { return .gray }
         else { return .primary }
     }

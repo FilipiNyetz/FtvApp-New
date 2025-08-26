@@ -38,7 +38,7 @@ struct HeaderHome: View {
                 
                 NavigationLink(destination: EvolutionView()) {
                     Circle()
-                        .fill(Color.brandGreen)
+                        .fill(Color.colorPrimal)
                         .frame(width: 40, height: 40)
                         .overlay(
                             Image(systemName: "chart.bar")

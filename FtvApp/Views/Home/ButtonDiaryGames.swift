@@ -53,7 +53,6 @@ struct ButtonDiaryGames: View {
                     .padding()
             }
         }
-        // 🔑 Agora sim funciona corretamente
         .onChange(of: selectedDate) { _ in
             opcaoDeTreinoParaMostrarCard = 0
         }
