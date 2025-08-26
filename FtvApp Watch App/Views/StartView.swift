@@ -48,8 +48,9 @@ struct StartView: View {
                     Image("LogoS")
                         .resizable()
                         .scaledToFill()
-                        .opacity(0.25)
+                        .opacity(0.50)
                         .ignoresSafeArea()
+                        .scaleEffect(0.7)
                     
                     LinearGradient(
                      gradient: Gradient(colors: [.gradiente1, .gradiente2, .gradiente2,  .gradiente2]),

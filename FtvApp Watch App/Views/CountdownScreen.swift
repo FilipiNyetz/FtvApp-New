@@ -8,6 +8,7 @@
 // CountdownScreen.swift
 
 import SwiftUI
+import WatchKit
 
 struct CountdownScreen: View {
     @State private var countdownNumber: Int = 0 // Inicia com 0 para o estado "Preparar"
@@ -57,6 +58,9 @@ struct CountdownScreen: View {
                 countdownNumber = -1
             }
             try? await Task.sleep(for: .seconds(0.5))
+            
+            // Feedback háptico quando o treino inicia
+            WKInterfaceDevice.current().play(.start)
             
             // Finaliza a contagem
             onCountdownFinished()
