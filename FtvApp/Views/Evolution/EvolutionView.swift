@@ -8,7 +8,8 @@ import SwiftUI
 import Charts
 
 struct EvolutionView: View {
-
+    @Environment(\.dismiss) private var dismiss
+    
     @State private var selectedSelection = "M"
     @State private var selectedMetric: String = "Batimento"
     @StateObject var healthManager = HealthManager()
@@ -16,7 +17,7 @@ struct EvolutionView: View {
 
     var body: some View {
 
-        NavigationView {
+        NavigationStack {
             ScrollView {
                 VStack(spacing: 20) {
 
@@ -80,12 +81,26 @@ struct EvolutionView: View {
                     )
                 )
 
-                Divider()
-
                 suggestions()
                     .padding()
             }
             .navigationBarTitleDisplayMode(.inline)
+            .navigationBarBackButtonHidden(true)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Button(action: {
+                        dismiss()
+                    }) {
+                        HStack(spacing: 4) {
+                            Image(systemName: "chevron.left")
+                                .font(.system(size: 16, weight: .medium))
+                            Text("Seus jogos")
+                                .font(.system(size: 17))
+                        }
+                        .foregroundColor(Color("ColorPrimal"))
+                    }
+                }
+            }
             .background(.gray.opacity(0.1))
             .foregroundColor(.white)
             // Carrega tudo ao entrar; o gráfico agrega por período em memória

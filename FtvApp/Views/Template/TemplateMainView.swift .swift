@@ -14,6 +14,7 @@ enum ShareBg: String, CaseIterable {
 }
 
 struct TemplateMainView: View {
+    @Environment(\.dismiss) private var dismiss
     @StateObject private var viewModel = TemplateViewModel()
     @State private var selectedBackground: ShareBg = .comFundo
     @State private var showCopiedAlert = false
@@ -70,9 +71,6 @@ struct TemplateMainView: View {
                     .pickerStyle(.segmented)
                     .padding(12)
                     
-                    Divider()
-                        .background(Color.white.opacity(0.15))
-                    
                     // Template Preview
                     ScrollView {
                         TemplateBodyView(
@@ -84,6 +82,22 @@ struct TemplateMainView: View {
                     }
                 }
                 .background(Color.black.ignoresSafeArea())
+                .navigationBarBackButtonHidden(true)
+                .toolbar {
+                    ToolbarItem(placement: .navigationBarLeading) {
+                        Button(action: {
+                            dismiss()
+                        }) {
+                            HStack(spacing: 4) {
+                                Image(systemName: "chevron.left")
+                                    .font(.system(size: 16, weight: .medium))
+                                Text("Seus jogos")
+                                    .font(.system(size: 17))
+                            }
+                            .foregroundColor(Color("ColorPrimal"))
+                        }
+                    }
+                }
                 
             }
             

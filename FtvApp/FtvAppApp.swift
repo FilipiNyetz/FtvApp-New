@@ -10,8 +10,11 @@ import SwiftData
 
 @main
 struct FtvAppApp: App {
-    @StateObject var manager = HealthManager()
-    @StateObject var userManager = UserManager()
+    
+    init() {
+        // Configuração mínima da navigation bar
+        UINavigationBar.appearance().tintColor = UIColor(named: "ColorPrimal") ?? UIColor.systemGreen
+    }
     
     var body: some Scene {
         WindowGroup {
