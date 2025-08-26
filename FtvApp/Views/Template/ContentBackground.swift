@@ -10,11 +10,11 @@ import SwiftUI
 struct ContentBackground: View {
     let card = Color.white.opacity(0.06)
     let stroke = Color.white.opacity(0.16)
-    
+
     let badgeImage: String
     let totalWorkouts: Int
     let currentStreak: Int
-    
+
     var timeFormatter: DateComponentsFormatter {
         let formatter = DateComponentsFormatter()
         formatter.allowedUnits = [.hour, .minute, .second]
@@ -22,9 +22,9 @@ struct ContentBackground: View {
         formatter.zeroFormattingBehavior = .pad
         return formatter
     }
-    
+
     let workout: Workout
-    
+
     // Lógica dos níveis de fogo (igual ao HeaderHome)
     var nivelFogo: Int {
         switch currentStreak {
@@ -35,12 +35,11 @@ struct ContentBackground: View {
         default: return 5
         }
     }
-    
+
     var imageFogoNum: String {
         "Fogo\(nivelFogo)"
     }
-   
-    
+
     var body: some View {
         VStack(spacing: 24) {
             // Top Metrics (streak, tempo, insignia)
@@ -53,13 +52,13 @@ struct ContentBackground: View {
                     systemImage: false
                 )
                 .frame(maxWidth: .infinity)
-                
+
                 // Coluna Central
                 VStack(spacing: 4) {
                     Text("TEMPO")
                         .font(.caption2)
                         .fontWeight(.semibold)
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(.white)
                     Text(
                         timeFormatter.string(
                             from: TimeInterval(workout.duration)
@@ -72,7 +71,7 @@ struct ContentBackground: View {
                     .foregroundStyle(.white)
                 }
                 .frame(maxWidth: .infinity)
-                
+
                 // Coluna Direita
                 metric(
                     icon: badgeImage,
@@ -83,46 +82,15 @@ struct ContentBackground: View {
                 )
                 .frame(maxWidth: .infinity)
             }
-            
-            // Placeholder Heatmap com Logo
-            ZStack {
-                RoundedRectangle(cornerRadius: 12).fill(card)
-                
-                // Linhas guia do heatmap
-                VStack(spacing: 0) {
-                    Spacer()
-                    Rectangle().fill(stroke).frame(height: 1).opacity(
-                        0.6
-                    )
-                    Spacer()
-                    Rectangle().fill(stroke).frame(height: 1).opacity(
-                        0.6
-                    )
-                    Spacer()
-                }
-                HStack(spacing: 0) {
-                    Spacer()
-                    Rectangle().fill(stroke).frame(width: 1).opacity(
-                        0.6
-                    )
-                    Spacer()
-                }
-                
-                // Logo centralizada no heatmap (AUMENTADA)
-                Image("logo7S")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 180, height: 180)
-                    .opacity(0.8)
-            }
-            .frame(height: 360)
-            .clipShape(RoundedRectangle(cornerRadius: 12))
-            .overlay(
-                RoundedRectangle(cornerRadius: 12)
-                    .stroke(Color.white.opacity(0.08), lineWidth: 1)
-            )
-            .padding(.horizontal, 12)
-            
+
+            // Logo centralizada no heatmap (AUMENTADA)
+            Image("logo7S")
+                .resizable()
+                .scaledToFit()
+                .frame(width: 180, height: 180)
+                .opacity(0.8)
+                .padding(50)
+
             // Bottom Metrics
             HStack {
                 metric(
@@ -131,38 +99,32 @@ struct ContentBackground: View {
                     unit: "bpm",
                     label: "BATIMENTO",
                     systemImage: true
-                    
+
                 )
                 .frame(maxWidth: .infinity)
-                
+
                 metric(
                     icon: "flame.fill",
                     value: "\(workout.calories)",
                     unit: "cal",
                     label: "CALORIAS",
                     systemImage: true
-                    
+
                 )
                 .frame(maxWidth: .infinity)
             }
-            
+
             // Nome do App
             VStack(spacing: 4) {
                 Text("SETE")
                     .font(.title2)
                     .fontWeight(.bold)
                     .foregroundStyle(Color.colorPrimal)
-                Text("FUTEVÔLEI")
-                    .font(.caption)
-                    .fontWeight(.semibold)
-                    .foregroundStyle(.secondary)
-                    .kerning(1.5)
             }
-            
+
         }
         .background(Color.black)
         .cornerRadius(24)
         .padding(.top, 12)
     }
 }
-

@@ -305,7 +305,7 @@ func metric(icon: String, value: String, unit: String, label: String, systemImag
                     Text(unit)
                         .font(.subheadline)
                         .fontWeight(.semibold)
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(.white)
                         .padding(.top, 4)
                 }
             }
@@ -314,7 +314,7 @@ func metric(icon: String, value: String, unit: String, label: String, systemImag
                 Text(label)
                     .font(.caption)
                     .fontWeight(.semibold)
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(.white)
             }
         }
     }
