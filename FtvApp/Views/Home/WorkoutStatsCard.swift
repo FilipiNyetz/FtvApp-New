@@ -3,7 +3,7 @@ import SwiftUI
 struct WorkoutStatsCard: View {
     
     @ObservedObject var userManager: UserManager
-    
+    @ObservedObject var healthManager: HealthManager
     
     let workout: Workout
     let totalWorkouts: Int
@@ -52,7 +52,7 @@ struct WorkoutStatsCard: View {
             }
             
             if userManager.bagdeNames.isEmpty{
-                NavigationLink(destination: TemplateMainView(workout: workout, badgeImage: "1stGoal")) {
+                NavigationLink(destination: TemplateMainView(workout: workout, totalWorkouts: totalWorkouts, currentStreak: healthManager.currentStreak, badgeImage: "1stGoal")) {
                     Text("Gerar Template")
                         .font(.headline)
                         .foregroundColor(.black)
@@ -62,7 +62,7 @@ struct WorkoutStatsCard: View {
                         .cornerRadius(12)
                 }
             }else{
-                NavigationLink(destination: TemplateMainView(workout: workout, badgeImage: userManager.bagdeNames[0])) {
+                NavigationLink(destination: TemplateMainView(workout: workout, totalWorkouts: totalWorkouts, currentStreak: healthManager.currentStreak, badgeImage: userManager.bagdeNames[0])) {
                     Text("Gerar Template")
                         .font(.headline)
                         .foregroundColor(.black)

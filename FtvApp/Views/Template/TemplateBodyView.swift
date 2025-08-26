@@ -16,11 +16,15 @@ struct TemplateBodyView: View {
     let stroke = Color.white.opacity(0.16)
     
     var badgeImage: String
+    let totalWorkouts: Int
+    let currentStreak: Int
     
-    init(workout: Workout, withBackground: Bool,badgeImage: String,isPreview: Bool = true) {
+    init(workout: Workout, withBackground: Bool, badgeImage: String, totalWorkouts: Int, currentStreak: Int, isPreview: Bool = true) {
         self.workout = workout
         self.withBackground = withBackground
         self.badgeImage = badgeImage
+        self.totalWorkouts = totalWorkouts
+        self.currentStreak = currentStreak
         self.isPreview = isPreview
     }
     
@@ -35,7 +39,7 @@ struct TemplateBodyView: View {
     var body: some View {
         Group {
             if withBackground {
-                ContentBackground(badgeImage: badgeImage,workout: workout)
+                ContentBackground(badgeImage: badgeImage, totalWorkouts: totalWorkouts, currentStreak: currentStreak, workout: workout)
             } else {
                 contentNoBackground
             }

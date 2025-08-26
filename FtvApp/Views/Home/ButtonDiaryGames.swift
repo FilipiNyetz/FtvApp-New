@@ -17,6 +17,7 @@ struct ButtonDiaryGames: View {
                         workouts: workoutsDoDia,
                         selectedIndex: opcaoDeTreinoParaMostrarCard,
                         userManager: userManager,
+                        healthManager: manager,
                         totalWorkouts: totalWorkouts
                     )
                 }
@@ -65,11 +66,12 @@ struct WorkoutCardView: View {
     let workouts: [Workout]
     let selectedIndex: Int
     @ObservedObject var userManager: UserManager
+    @ObservedObject var healthManager: HealthManager
     let totalWorkouts: Int
     
     var body: some View {
         if selectedIndex < workouts.count {
-            WorkoutStatsCard(userManager: userManager,workout: workouts[selectedIndex], totalWorkouts: totalWorkouts)
+            WorkoutStatsCard(userManager: userManager, healthManager: healthManager, workout: workouts[selectedIndex], totalWorkouts: totalWorkouts)
         }
     }
 }

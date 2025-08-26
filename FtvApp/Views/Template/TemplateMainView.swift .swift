@@ -19,6 +19,8 @@ struct TemplateMainView: View {
     @State private var selectedBackground: ShareBg = .comFundo
     @State private var showCopiedAlert = false
     let workout: Workout
+    let totalWorkouts: Int
+    let currentStreak: Int
     let badgeImage: String
     
     var body: some View {
@@ -41,9 +43,9 @@ struct TemplateMainView: View {
                         
                         Button {
                             if selectedBackground == .comFundo {
-                                viewModel.exportTemplate(workout: workout, withBackground: true)
+                                viewModel.exportTemplate(workout: workout, withBackground: true, badgeImage: badgeImage, totalWorkouts: totalWorkouts, currentStreak: currentStreak)
                             } else {
-                                viewModel.copyTemplateToClipboard(workout: workout)
+                                viewModel.copyTemplateToClipboard(workout: workout, badgeImage: badgeImage, totalWorkouts: totalWorkouts, currentStreak: currentStreak)
                                 withAnimation {
                                     showCopiedAlert = true
                                 }
@@ -78,6 +80,8 @@ struct TemplateMainView: View {
                             workout: workout,
                             withBackground: selectedBackground == .comFundo,
                             badgeImage: badgeImage,
+                            totalWorkouts: totalWorkouts,
+                            currentStreak: currentStreak,
                             isPreview: true
                             
                         )

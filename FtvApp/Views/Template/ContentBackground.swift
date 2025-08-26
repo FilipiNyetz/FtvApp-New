@@ -11,7 +11,9 @@ struct ContentBackground: View {
     let card = Color.white.opacity(0.06)
     let stroke = Color.white.opacity(0.16)
     
-    let badgeImage:String
+    let badgeImage: String
+    let totalWorkouts: Int
+    let currentStreak: Int
     
     var timeFormatter: DateComponentsFormatter {
         let formatter = DateComponentsFormatter()
@@ -22,6 +24,21 @@ struct ContentBackground: View {
     }
     
     let workout: Workout
+    
+    // Lógica dos níveis de fogo (igual ao HeaderHome)
+    var nivelFogo: Int {
+        switch currentStreak {
+        case 0...1: return 1
+        case 2...3: return 2
+        case 4...7: return 3
+        case 8...15: return 4
+        default: return 5
+        }
+    }
+    
+    var imageFogoNum: String {
+        "Fogo\(nivelFogo)"
+    }
    
     
     var body: some View {
@@ -29,11 +46,11 @@ struct ContentBackground: View {
             // Top Metrics (streak, tempo, insignia)
             HStack {
                 metric(
-                    icon: "flame.fill",
-                    value: "20",
+                    icon: imageFogoNum,
+                    value: "\(currentStreak)",
                     unit: "",
                     label: "",
-                    systemImage: true
+                    systemImage: false
                 )
                 .frame(maxWidth: .infinity)
                 
@@ -59,7 +76,7 @@ struct ContentBackground: View {
                 // Coluna Direita
                 metric(
                     icon: badgeImage,
-                    value: "100",
+                    value: "\(totalWorkouts)",
                     unit: "",
                     label: "",
                     systemImage: false
