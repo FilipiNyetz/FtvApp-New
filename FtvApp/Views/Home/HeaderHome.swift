@@ -38,10 +38,11 @@ struct HeaderHome: View {
                 NavigationLink(destination: EvolutionView()) {
                     Circle()
                         .fill(Color.colorPrimal)
-                        .frame(width: 40, height: 40)
+                        .frame(width: 54, height: 54)
                         .overlay(
                             Image(systemName: "chart.bar")
-                                .font(.subheadline)
+                                .font(.title2)
+                                .fontWeight(.semibold)
                                 .foregroundStyle(.black)
                         )
                 }
