@@ -32,7 +32,7 @@ struct ProgressBarView: View {
                             .cornerRadius(8)
                         
                         // Progresso
-                        let progress = min(Double(manager.workouts.count) / Double(goal), 1.0)
+                        let progress = min(Double(manager.workouts.count) / Double(userManager.goalBadge), 1.0)
                         
                         RoundedRectangle(cornerRadius: 8, style: .continuous)
                             .frame(
@@ -67,7 +67,7 @@ struct ProgressBarView: View {
                         .resizable()
                         .frame(width: 48, height: 48)
                 }
-                Text("\(goal)")
+                Text("\(userManager.goalBadge)")
                     .font(.footnote)
                     .foregroundStyle(Color.textGray)
                     .fontWeight(.medium)
