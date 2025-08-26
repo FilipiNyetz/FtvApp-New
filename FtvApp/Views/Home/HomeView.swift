@@ -61,7 +61,9 @@ struct HomeView: View {
                                     // Se houver treinos para a data selecionada
                                     ButtonDiaryGames(
                                         manager: manager,
-                                        selectedDate: $selectedDate
+                                        userManager: userManager,
+                                        selectedDate: $selectedDate,
+                                        totalWorkouts: manager.totalWorkoutsCount
                                     )
                                 } else {
                                     // Se não houver treinos para a data selecionada, mas a história de treinos existe

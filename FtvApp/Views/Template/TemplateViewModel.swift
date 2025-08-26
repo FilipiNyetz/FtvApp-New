@@ -17,7 +17,7 @@ class TemplateViewModel: ObservableObject {
     @Published var isPreview = true
     
     func exportTemplate(workout: Workout, withBackground: Bool) {
-        let templateView = TemplateBodyView(workout: workout, withBackground: withBackground, isPreview: false)
+        let templateView = TemplateBodyView(workout: workout, withBackground: withBackground, badgeImage: "1stGoal", isPreview: false)
         
         let renderer = ImageRenderer(content: templateView)
         renderer.scale = UIScreen.main.scale
@@ -34,6 +34,7 @@ class TemplateViewModel: ObservableObject {
             let templateView = TemplateBodyView(
                 workout: workout,
                 withBackground: false,
+                badgeImage: "1stGoal",
                 isPreview: false
             )
 

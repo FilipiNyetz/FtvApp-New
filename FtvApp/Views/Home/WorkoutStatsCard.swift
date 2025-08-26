@@ -1,7 +1,12 @@
 import SwiftUI
 
 struct WorkoutStatsCard: View {
+    
+    @ObservedObject var userManager: UserManager
+    
+    
     let workout: Workout
+    let totalWorkouts: Int
     
     var timeFormatter: DateComponentsFormatter {
         let formatter = DateComponentsFormatter()
@@ -31,8 +36,8 @@ struct WorkoutStatsCard: View {
             }
             
             Text(timeFormatter.string(from: TimeInterval(workout.duration)) ?? "00:00:00")
-                        .font(.system(size: 28, weight: .medium, design: .rounded))
-                        .foregroundColor(.white)
+                .font(.system(size: 28, weight: .medium, design: .rounded))
+                .foregroundColor(.white)
                 .font(.system(size: 28, weight: .medium, design: .rounded))
                 .foregroundColor(.white)
             
@@ -46,21 +51,38 @@ struct WorkoutStatsCard: View {
                 )
             }
             
-            NavigationLink(destination: TemplateMainView(workout: workout)) {
-                Text("Gerar Template")
-                    .font(.headline)
-                    .foregroundColor(.black)
-                    .padding(.vertical, 10)
-                    .padding(.horizontal, 20)
-                    .background(Color.colorPrimal)
-                    .cornerRadius(12)
+            if userManager.bagdeNames.isEmpty{
+                NavigationLink(destination: TemplateMainView(workout: workout, badgeImage: "1stGoal")) {
+                    Text("Gerar Template")
+                        .font(.headline)
+                        .foregroundColor(.black)
+                        .padding(.vertical, 10)
+                        .padding(.horizontal, 20)
+                        .background(Color.colorPrimal)
+                        .cornerRadius(12)
+                }
+            }else{
+                NavigationLink(destination: TemplateMainView(workout: workout, badgeImage: userManager.bagdeNames[0])) {
+                    Text("Gerar Template")
+                        .font(.headline)
+                        .foregroundColor(.black)
+                        .padding(.vertical, 10)
+                        .padding(.horizontal, 20)
+                        .background(Color.colorPrimal)
+                        .cornerRadius(12)
+                }
             }
+            
+            
         }
         .padding()
         .background(
             RoundedRectangle(cornerRadius: 12)
                 .fill(Color(.secondarySystemBackground))
         )
+        .onAppear {
+            userManager.setBadgeTotalWorkout(totalWorkouts: totalWorkouts)
+        }
     }
     
     private func statItem(
@@ -93,4 +115,5 @@ struct WorkoutStatsCard: View {
         }
         .frame(maxWidth: .infinity)
     }
+    
 }

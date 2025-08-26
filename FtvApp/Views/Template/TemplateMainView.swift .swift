@@ -19,6 +19,7 @@ struct TemplateMainView: View {
     @State private var selectedBackground: ShareBg = .comFundo
     @State private var showCopiedAlert = false
     let workout: Workout
+    let badgeImage: String
     
     var body: some View {
         ZStack {
@@ -28,7 +29,7 @@ struct TemplateMainView: View {
                     // Header com título e botão
                     HStack {
                         VStack(alignment: .leading, spacing: 2) {
-                            Text("TEMPLATE")
+                            Text("Compartilhar")
                                 .font(.title2.bold())
                                 .foregroundColor(.white)
                             Text("Compartilhe com seus amigos")
@@ -76,7 +77,9 @@ struct TemplateMainView: View {
                         TemplateBodyView(
                             workout: workout,
                             withBackground: selectedBackground == .comFundo,
+                            badgeImage: badgeImage,
                             isPreview: true
+                            
                         )
                         .padding(.top, selectedBackground == .comFundo ? 12 : 0)
                     }

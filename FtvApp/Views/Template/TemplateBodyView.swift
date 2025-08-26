@@ -12,12 +12,15 @@ struct TemplateBodyView: View {
     let workout: Workout
     let withBackground: Bool
     var isPreview: Bool = true
-    private let card = Color.white.opacity(0.06)
-    private let stroke = Color.white.opacity(0.16)
+    let card = Color.white.opacity(0.06)
+    let stroke = Color.white.opacity(0.16)
     
-    init(workout: Workout, withBackground: Bool, isPreview: Bool = true) {
+    var badgeImage: String
+    
+    init(workout: Workout, withBackground: Bool,badgeImage: String,isPreview: Bool = true) {
         self.workout = workout
         self.withBackground = withBackground
+        self.badgeImage = badgeImage
         self.isPreview = isPreview
     }
     
@@ -32,7 +35,7 @@ struct TemplateBodyView: View {
     var body: some View {
         Group {
             if withBackground {
-                contentBackground
+                ContentBackground(badgeImage: badgeImage,workout: workout)
             } else {
                 contentNoBackground
             }
@@ -41,124 +44,122 @@ struct TemplateBodyView: View {
     }
     
     // MARK: - Com Fundo
-    var contentBackground: some View {
-        VStack(spacing: 24) {
-            // Top Metrics (streak, tempo, insignia)
-            HStack {
-                metric(
-                    icon: "flame.fill",
-                    value: "20",
-                    unit: "",
-                    label: ""
-                )
-                .frame(maxWidth: .infinity)
-                
-                // Coluna Central
-                VStack(spacing: 4) {
-                    Text("TEMPO")
-                        .font(.caption2)
-                        .fontWeight(.semibold)
-                        .foregroundStyle(.secondary)
-                    Text(
-                        timeFormatter.string(
-                            from: TimeInterval(workout.duration)
-                        ) ?? "00:00:00"
-                    )
-                    .font(.title2)
-                    .fontWeight(.bold)
-                    .fontDesign(.rounded)
-                    .monospacedDigit()
-                    .foregroundStyle(.white)
-                }
-                .frame(maxWidth: .infinity)
-                
-                // Coluna Direita
-                metric(
-                    icon: "medal.fill",
-                    value: "100",
-                    unit: "",
-                    label: ""
-                )
-                .frame(maxWidth: .infinity)
-            }
-            
-            // Placeholder Heatmap
-            ZStack {
-                RoundedRectangle(cornerRadius: 12).fill(card)
-                
-                // Linhas guia do heatmap
-                VStack(spacing: 0) {
-                    Spacer()
-                    Rectangle().fill(stroke).frame(height: 1).opacity(
-                        0.6
-                    )
-                    Spacer()
-                    Rectangle().fill(stroke).frame(height: 1).opacity(
-                        0.6
-                    )
-                    Spacer()
-                }
-                HStack(spacing: 0) {
-                    Spacer()
-                    Rectangle().fill(stroke).frame(width: 1).opacity(
-                        0.6
-                    )
-                    Spacer()
-                }
-            }
-            .frame(height: 360)
-            .clipShape(RoundedRectangle(cornerRadius: 12))
-            .overlay(
-                RoundedRectangle(cornerRadius: 12)
-                    .stroke(Color.white.opacity(0.08), lineWidth: 1)
-            )
-            .padding(.horizontal, 12)
-            
-            // Bottom Metrics
-            HStack {
-                metric(
-                    icon: "arrow.up.arrow.down",
-                    value: "40",
-                    unit: "cm",
-                    label: "ALTURA MÁX"
-                )
-                .frame(maxWidth: .infinity)
-                
-                metric(
-                    icon: "heart.fill",
-                    value: "\(Int(workout.frequencyHeart))",
-                    unit: "bpm",
-                    label: "BATIMENTO"
-                )
-                .frame(maxWidth: .infinity)
-                
-                metric(
-                    icon: "flame.fill",
-                    value: "\(workout.calories)",
-                    unit: "cal",
-                    label: "CALORIAS"
-                )
-                .frame(maxWidth: .infinity)
-            }
-            
-            // Nome do App
-            VStack(spacing: 4) {
-                Text("SETE")
-                    .font(.title2)
-                    .fontWeight(.bold)
-                    .foregroundStyle(Color.colorPrimal)
-                Text("FUTEVÔLEI")
-                    .font(.caption)
-                    .fontWeight(.semibold)
-                    .foregroundStyle(.secondary)
-                    .kerning(1.5)
-            }
-            
-        }
-        .background(Color.black)
-        .cornerRadius(24)
-        .padding(.top, 12)
-    }
+//    var contentBackground: some View {
+//        VStack(spacing: 24) {
+//            // Top Metrics (streak, tempo, insignia)
+//            HStack {
+//                metric(
+//                    icon: "flame.fill",
+//                    value: "20",
+//                    unit: "",
+//                    label: "",
+//                    systemImage: true
+//                )
+//                .frame(maxWidth: .infinity)
+//                
+//                // Coluna Central
+//                VStack(spacing: 4) {
+//                    Text("TEMPO")
+//                        .font(.caption2)
+//                        .fontWeight(.semibold)
+//                        .foregroundStyle(.secondary)
+//                    Text(
+//                        timeFormatter.string(
+//                            from: TimeInterval(workout.duration)
+//                        ) ?? "00:00:00"
+//                    )
+//                    .font(.title2)
+//                    .fontWeight(.bold)
+//                    .fontDesign(.rounded)
+//                    .monospacedDigit()
+//                    .foregroundStyle(.white)
+//                }
+//                .frame(maxWidth: .infinity)
+//                
+//                // Coluna Direita
+//                metric(
+//                    icon: "1stGoal",
+//                    value: "100",
+//                    unit: "",
+//                    label: "",
+//                    systemImage: false
+//                )
+//                .frame(maxWidth: .infinity)
+//            }
+//            
+//            // Placeholder Heatmap
+//            ZStack {
+//                RoundedRectangle(cornerRadius: 12).fill(card)
+//                
+//                // Linhas guia do heatmap
+//                VStack(spacing: 0) {
+//                    Spacer()
+//                    Rectangle().fill(stroke).frame(height: 1).opacity(
+//                        0.6
+//                    )
+//                    Spacer()
+//                    Rectangle().fill(stroke).frame(height: 1).opacity(
+//                        0.6
+//                    )
+//                    Spacer()
+//                }
+//                HStack(spacing: 0) {
+//                    Spacer()
+//                    Rectangle().fill(stroke).frame(width: 1).opacity(
+//                        0.6
+//                    )
+//                    Spacer()
+//                }
+//            }
+//            .frame(height: 360)
+//            .clipShape(RoundedRectangle(cornerRadius: 12))
+//            .overlay(
+//                RoundedRectangle(cornerRadius: 12)
+//                    .stroke(Color.white.opacity(0.08), lineWidth: 1)
+//            )
+//            .padding(.horizontal, 12)
+//            
+//            // Bottom Metrics
+//            HStack {
+//                metric(
+//                    icon: "heart.fill",
+//                    value: "\(Int(workout.frequencyHeart))",
+//                    unit: "bpm",
+//                    label: "BATIMENTO",
+//                    systemImage: true
+//                    
+//                )
+//                .frame(maxWidth: .infinity)
+//                
+//                metric(
+//                    icon: "flame.fill",
+//                    value: "\(workout.calories)",
+//                    unit: "cal",
+//                    label: "CALORIAS",
+//                    systemImage: true
+//                    
+//                )
+//                .frame(maxWidth: .infinity)
+//            }
+//            
+//            // Nome do App
+//            VStack(spacing: 4) {
+//                Text("SETE")
+//                    .font(.title2)
+//                    .fontWeight(.bold)
+//                    .foregroundStyle(Color.colorPrimal)
+//                Text("FUTEVÔLEI")
+//                    .font(.caption)
+//                    .fontWeight(.semibold)
+//                    .foregroundStyle(.secondary)
+//                    .kerning(1.5)
+//            }
+//            
+//        }
+//        .background(Color.black)
+//        .cornerRadius(24)
+//        .padding(.top, 12)
+//    }
     
     // MARK: - Sem Fundo (Transparente)
     var contentNoBackground: some View {
@@ -272,13 +273,18 @@ struct TemplateBodyView: View {
     }
     
     @ViewBuilder
-    func metric(icon: String, value: String, unit: String, label: String)
+func metric(icon: String, value: String, unit: String, label: String, systemImage: Bool)
     -> some View
     {
         VStack(spacing: 6) {
             HStack(spacing: 4) {
-                Image(systemName: icon)
-                    .foregroundStyle(Color.colorPrimal)
+                if systemImage {
+                    Image(systemName: icon)
+                        .foregroundStyle(Color.colorPrimal)
+                }else{
+                    Image(icon)
+                }
+                
                 
                 if !value.isEmpty {
                     Text(value)
