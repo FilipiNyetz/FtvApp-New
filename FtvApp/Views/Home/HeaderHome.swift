@@ -46,7 +46,7 @@ struct HeaderHome: View {
                                 .foregroundStyle(.black)
                         )
                 }
-                .padding(.top, 16)
+                .padding(.top, 28)
             }
             .padding(.horizontal)
             
@@ -61,7 +61,7 @@ struct HeaderHome: View {
                 
                 Text("\(manager.currentStreak) semana\(manager.currentStreak == 1 ? "" : "s")")
                     .foregroundColor(.white)
-                    .font(.subheadline.weight(.semibold))
+                    .font(.headline.weight(.semibold))
                     .accessibilityLabel("Streak de \(manager.currentStreak) semanas")
             } 
             .padding(.horizontal)
