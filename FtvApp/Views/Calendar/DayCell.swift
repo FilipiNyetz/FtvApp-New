@@ -23,11 +23,11 @@ struct DayCell: View {
                 if isToday && isSelected {
                     Circle()
                         .fill(Color.colorPrimal)
-                        .frame(width: 32, height: 32)
+                        .frame(width: 34, height: 34)
                 } else if isSelected && !isToday {
                     Circle()
                         .fill(Color.colorPrimal.opacity(0.1))
-                        .frame(width: 32, height: 32)
+                        .frame(width: 34, height: 34)
                 }
                 if !hasWorkout && !isToday{
                     Text(date.dayNumber())
