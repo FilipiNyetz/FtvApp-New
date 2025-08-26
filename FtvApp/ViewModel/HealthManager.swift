@@ -190,11 +190,22 @@ class HealthManager: ObservableObject, @unchecked Sendable {
                 group.enter()
                 
                 queryFrequenciaCardiaca(workout: workout, healthStore: self.healthStore) { bpm in
+                    
+                    
+                    let energyType = HKQuantityType.quantityType(forIdentifier: .activeEnergyBurned)!
+                    
+                    // Valor padrão caso não consiga calcular
+                    var calories = 0.0
+                    
+                    if let totalEnergy = workout.statistics(for: energyType)?.sumQuantity() {
+                        calories = totalEnergy.doubleValue(for: .kilocalorie())
+                    }
+                    
                     let summary = Workout(
                         id: workout.uuid, // UUID do HealthKit garante unicidade
                         idWorkoutType: Int(workout.workoutActivityType.rawValue),
                         duration: workout.duration,
-                        calories: Int(workout.totalEnergyBurned?.doubleValue(for: .kilocalorie()) ?? 0),
+                        calories: Int(calories),
                         distance: Int(workout.totalDistance?.doubleValue(for: .meter()) ?? 0),
                         frequencyHeart: bpm,
                         dateWorkout: workout.endDate
@@ -219,7 +230,7 @@ class HealthManager: ObservableObject, @unchecked Sendable {
                     self.updateWorkoutsByDay(filtered: self.workouts)
                 }
             }
-
+            
         }
         
         healthStore.execute(query)
@@ -269,7 +280,7 @@ class HealthManager: ObservableObject, @unchecked Sendable {
                                   predicate: predicate,
                                   limit: HKObjectQueryNoLimit,
                                   sortDescriptors: [NSSortDescriptor(key: HKSampleSortIdentifierEndDate, ascending: true)]
-                                  ) { _, samples, error in
+        ) { _, samples, error in
             guard let workouts = samples as? [HKWorkout], error == nil else {
                 print("Erro ao buscar workouts: \(error?.localizedDescription ?? "desconhecido")")
                 return
@@ -281,11 +292,21 @@ class HealthManager: ObservableObject, @unchecked Sendable {
                 group.enter()
                 
                 queryFrequenciaCardiaca(workout: workout, healthStore: self.healthStore) { bpm in
+                    
+                    let energyType = HKQuantityType.quantityType(forIdentifier: .activeEnergyBurned)!
+                    
+                    // Valor padrão caso não consiga calcular
+                    var calories = 0.0
+                    
+                    if let totalEnergy = workout.statistics(for: energyType)?.sumQuantity() {
+                        calories = totalEnergy.doubleValue(for: .kilocalorie())
+                    }
+                    
                     let summary = Workout(
                         id: UUID(),
                         idWorkoutType: Int(workout.workoutActivityType.rawValue),
                         duration: workout.duration,
-                        calories: Int(workout.totalEnergyBurned?.doubleValue(for: .kilocalorie()) ?? 0),
+                        calories: Int(calories),
                         distance: Int(workout.totalDistance?.doubleValue(for: .meter()) ?? 0),
                         frequencyHeart: bpm,
                         dateWorkout: workout.endDate
