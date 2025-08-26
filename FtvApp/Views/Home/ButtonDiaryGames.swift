@@ -53,7 +53,7 @@ struct ButtonDiaryGames: View {
                     .padding()
             }
         }
-        .onChange(of: selectedDate) { _ in
+        .onChange(of: selectedDate) { 
             opcaoDeTreinoParaMostrarCard = 0
         }
     }

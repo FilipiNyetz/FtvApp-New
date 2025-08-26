@@ -208,16 +208,18 @@ class HealthManager: ObservableObject, @unchecked Sendable {
             }
             
             group.notify(queue: .main) {
-                // Remove duplicados pelo mesmo id (HealthKit UUID)
-                let uniqueWorkouts = Array(Dictionary(grouping: tempWorkouts, by: { $0.id }).values.map { $0.first! })
-                
-                self.newWorkouts = uniqueWorkouts.sorted { $0.dateWorkout < $1.dateWorkout }
-                self.workouts = self.newWorkouts
-                self.totalWorkoutsCount = self.workouts.count
-                
-                self.updateWorkoutsByDay(filtered: self.workouts)
-                
+                Task { @MainActor in
+                    // Remove duplicados pelo mesmo id (HealthKit UUID)
+                    let uniqueWorkouts = Array(Dictionary(grouping: tempWorkouts, by: { $0.id }).values.map { $0.first! })
+                    
+                    self.newWorkouts = uniqueWorkouts.sorted { $0.dateWorkout < $1.dateWorkout }
+                    self.workouts = self.newWorkouts
+                    self.totalWorkoutsCount = self.workouts.count
+                    
+                    self.updateWorkoutsByDay(filtered: self.workouts)
+                }
             }
+
         }
         
         healthStore.execute(query)
@@ -294,9 +296,11 @@ class HealthManager: ObservableObject, @unchecked Sendable {
             }
             
             group.notify(queue: .main) {
-                self.workouts = self.newWorkouts.sorted { $0.dateWorkout < $1.dateWorkout }
-                self.totalWorkoutsCount = self.workouts.count // ⚡ atualiza o total corretamente
-                self.updateWorkoutsByDay(filtered: self.workouts)
+                Task { @MainActor in
+                    self.workouts = self.newWorkouts.sorted { $0.dateWorkout < $1.dateWorkout }
+                    self.totalWorkoutsCount = self.workouts.count
+                    self.updateWorkoutsByDay(filtered: self.workouts)
+                }
             }
         }
         
