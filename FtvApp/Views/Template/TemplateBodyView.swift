@@ -199,7 +199,7 @@ struct TemplateBodyView: View {
                             .fontWeight(.bold)
                             .foregroundStyle(.white)
                         HStack(alignment: .firstTextBaseline, spacing: 4) {
-                            Text("\(Int(workout.frequencyHeart))")
+                            Text("\(workout.calories)")
                                 .font(.largeTitle)
                                 .fontWeight(.heavy)
                                 .foregroundStyle(.white)
