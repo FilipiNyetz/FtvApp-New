@@ -53,7 +53,7 @@ struct CardWithoutWorkout: View {
                     Image(systemName: "arrow.up.and.down")
                     Image(systemName: "heart.fill")
                     Image(systemName: "flame.fill")
-                    Image(systemName: "mappin")
+                    Image(systemName: "location.fill")
                 }
                 .frame(width: 30, height: 30)
                 .foregroundStyle(.colorPrimal)
