@@ -20,34 +20,22 @@ func queryFrequenciaCardiaca(
         return
     }
     
-    let hrPredicate = HKQuery.predicateForObjects(from: workout)
+    let predicate = HKQuery.predicateForSamples(withStart: workout.startDate, end: workout.endDate)
     
-    let hrQuery = HKSampleQuery(
-        sampleType: heartRateType,
-        predicate: hrPredicate,
-        limit: HKObjectQueryNoLimit,
-        sortDescriptors: nil
-    ) { _, samples, error in
-        
-        guard error == nil else {
-            print("Erro ao buscar frequências cardíacas: \(error!.localizedDescription)")
+    let query = HKStatisticsQuery(
+        quantityType: heartRateType,
+        quantitySamplePredicate: predicate,
+        options: .discreteAverage
+    ) { _, result, error in
+        if let error = error {
+            print("Erro ao buscar frequência cardíaca: \(error.localizedDescription)")
             completionHandler(0)
             return
         }
         
-        guard let hrSamples = samples as? [HKQuantitySample], !hrSamples.isEmpty else {
-            completionHandler(0)
-            return
-        }
-        
-        let total = hrSamples.reduce(0.0) { partial, sample in
-            let bpm = sample.quantity.doubleValue(for: HKUnit.count().unitDivided(by: .minute()))
-            return partial + bpm
-        }
-        
-        let media = total / Double(hrSamples.count)
-        completionHandler(media)
+        let bpm = result?.averageQuantity()?.doubleValue(for: HKUnit.count().unitDivided(by: .minute())) ?? 0
+        completionHandler(bpm) // Chamado apenas uma vez por treino
     }
     
-    healthStore.execute(hrQuery)
+    healthStore.execute(query)
 }

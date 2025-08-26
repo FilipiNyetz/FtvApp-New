@@ -14,8 +14,7 @@ struct HeaderHome: View {
         let s = manager.currentStreak
         
         switch s {
-        case 0: return 0
-        case 1: return 1
+        case 0...1: return 1
         case 2...3: return 2
         case 4...7: return 3
         case 8...15: return 4
@@ -38,7 +37,7 @@ struct HeaderHome: View {
                 
                 NavigationLink(destination: EvolutionView()) {
                     Circle()
-                        .fill(Color.brandGreen)
+                        .fill(Color.colorPrimal)
                         .frame(width: 40, height: 40)
                         .overlay(
                             Image(systemName: "chart.bar")

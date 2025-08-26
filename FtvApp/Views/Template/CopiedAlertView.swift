@@ -15,7 +15,7 @@ struct CopiedAlertView: View {
             VStack(spacing: 20) {
                 Image(systemName: "checkmark.circle.fill")
                     .font(.system(size: 50))
-                    .foregroundColor(.brandGreen)
+                    .foregroundColor(.colorPrimal)
 
                 Text("Imagem Copiada para a Área de Transferência")
                     .font(.headline)

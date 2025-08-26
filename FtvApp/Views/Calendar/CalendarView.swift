@@ -54,7 +54,8 @@ struct CalendarView: View {
         }
         .background(
             RoundedRectangle(cornerRadius: 16)
-                .fill(Color.cardBackground)
+                .fill(Color.darkGrayBackground)
+            //trocar a cor aqui caso nao seja essa 
         )
     }
     

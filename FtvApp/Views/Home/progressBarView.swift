@@ -2,14 +2,20 @@ import SwiftUI
 
 struct ProgressBarView: View {
     @ObservedObject var manager: HealthManager
+    @ObservedObject var userManager: UserManager
     let goal: Int = 20 // meta inicial
     
     var body: some View {
         HStack {
             VStack {
-                Image("medalhaInicial")
-                    .resizable()
-                    .frame(width: 48, height: 48)
+                if userManager.bagdeNames.isEmpty{
+                    Image("1stGoal")
+                }else{
+                    Image(userManager.bagdeNames[0])
+                        .resizable()
+                        .frame(width: 48, height: 48)
+                }
+                    
                 Text("\(manager.workouts.count)")
                     .font(.footnote)
                     .foregroundStyle(Color.textGray)
@@ -26,7 +32,7 @@ struct ProgressBarView: View {
                             .cornerRadius(8)
                         
                         // Progresso
-                        let progress = min(Double(manager.workouts.count) / Double(goal), 1.0)
+                        let progress = min(Double(manager.workouts.count) / Double(userManager.goalBadge), 1.0)
                         
                         RoundedRectangle(cornerRadius: 8, style: .continuous)
                             .frame(
@@ -54,10 +60,14 @@ struct ProgressBarView: View {
             } // largura fixa da barra
             
             VStack {
-                Image("medalhaFinal")
-                    .resizable()
-                    .frame(width: 48, height: 48)
-                Text("\(goal)")
+                if userManager.bagdeNames.isEmpty{
+                    Image("1stGoal")
+                }else{
+                    Image(userManager.bagdeNames[1])
+                        .resizable()
+                        .frame(width: 48, height: 48)
+                }
+                Text("\(userManager.goalBadge)")
                     .font(.footnote)
                     .foregroundStyle(Color.textGray)
                     .fontWeight(.medium)
@@ -69,5 +79,12 @@ struct ProgressBarView: View {
             startPoint: .top,
             endPoint: .bottom
         ))// tamanho fixo da HStack toda
+        .onAppear(){
+            userManager.setBadgeTotalWorkout(totalWorkouts: manager.totalWorkoutsCount)
+        }
+        .onChange(of: manager.totalWorkoutsCount) {
+            userManager.setBadgeTotalWorkout(totalWorkouts: manager.totalWorkoutsCount)
+        }
     }
+        
 }

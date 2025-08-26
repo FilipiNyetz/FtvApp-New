@@ -146,7 +146,7 @@ struct TemplateBodyView: View {
                 Text("SETE")
                     .font(.title2)
                     .fontWeight(.bold)
-                    .foregroundStyle(Color.brandGreen)
+                    .foregroundStyle(Color.colorPrimal)
                 Text("FUTEVÔLEI")
                     .font(.caption)
                     .fontWeight(.semibold)
@@ -256,7 +256,7 @@ struct TemplateBodyView: View {
                         Text("SETE")
                             .font(.largeTitle)
                             .fontWeight(.heavy)
-                            .foregroundStyle(Color.brandGreen)
+                            .foregroundStyle(Color.colorPrimal)
                         Text("Futevolei")
                             .font(.footnote)
                             .fontWeight(.semibold)
@@ -278,7 +278,7 @@ struct TemplateBodyView: View {
         VStack(spacing: 6) {
             HStack(spacing: 4) {
                 Image(systemName: icon)
-                    .foregroundStyle(Color.brandGreen)
+                    .foregroundStyle(Color.colorPrimal)
                 
                 if !value.isEmpty {
                     Text(value)
