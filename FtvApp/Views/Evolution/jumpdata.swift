@@ -9,7 +9,7 @@ struct jumpdata: View {
 
         HStack(spacing: 12) {
             // Card Máx
-            statCard(
+            StatCard(
                 title: "MÁX",
                 value: stats.maxValueText,
                 unit: stats.unit,
@@ -17,7 +17,7 @@ struct jumpdata: View {
             )
 
             // Card Mín
-            statCard(
+            StatCard(
                 title: "MÍN",
                 value: stats.minValueText,
                 unit: stats.unit,
@@ -26,36 +26,7 @@ struct jumpdata: View {
         }
     }
 
-    // MARK: - Views
-
-    @ViewBuilder
-    private func statCard(title: String, value: String, unit: String, dateText: String) -> some View {
-        VStack(alignment: .leading, spacing: 6) {
-            HStack {
-                Text(title)
-                    .font(.footnote)
-                    .foregroundColor(.secondary)
-                Spacer()
-                Text(dateText) 
-                    .font(.caption)
-                    .foregroundColor(.secondary)
-            }
-            HStack(alignment: .firstTextBaseline, spacing: 2) {
-                Text(value)
-                    .fontWeight(.semibold)
-                    .font(.title)
-                Text(unit)
-                    .font(.footnote)
-                    .foregroundColor(.secondary)
-                    .padding(.horizontal, 4)
-            }
-        }
-        .padding(.vertical, 8)
-        .padding(.horizontal, 12)
-        .frame(height: 76)
-        .background(Color.white.opacity(0.05))
-        .cornerRadius(10)
-    }
+   
 
     // MARK: - Lógica
 

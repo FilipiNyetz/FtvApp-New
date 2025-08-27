@@ -35,7 +35,17 @@ struct SugestaoCard: View {
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding()
-        .background(.gray.opacity(0.2))
+        .background(
+            RoundedRectangle(cornerRadius: 10)
+                .fill(
+                    Color.gray.opacity(0.2)
+                )
+                .overlay(
+                    RoundedRectangle(cornerRadius: 10)
+                        .stroke(Color.backgroundProgressBar,lineWidth: 0.3)
+                )
+        )
+//        .background(.gray.opacity(0.2))
         .cornerRadius(10)
     }
 }
