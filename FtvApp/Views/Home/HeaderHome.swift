@@ -60,10 +60,10 @@ struct HeaderHome: View {
                     .animation(.easeInOut(duration: 0.25), value: nivelFogo)
                 
                 Text("\(manager.currentStreak) semana\(manager.currentStreak == 1 ? "" : "s")")
-                    .foregroundColor(.white)
+                    .foregroundColor(Color("textlightgray"))
                     .font(.headline.weight(.semibold))
                     .accessibilityLabel("Streak de \(manager.currentStreak) semanas")
-            } 
+            }
             .padding(.horizontal)
         }
         .padding(.horizontal)

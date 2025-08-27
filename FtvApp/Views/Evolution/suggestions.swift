@@ -33,7 +33,7 @@ struct suggestions: View {
             )
 
             SugestaoCard(
-                icone: "figure.run",
+                icone: "mappin.and.ellipse",
                 titulo: "Estratégia",
                 descricao: "Jogue mais partidas focando em prever a jogada adversária."
             )
