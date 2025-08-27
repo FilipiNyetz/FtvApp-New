@@ -49,9 +49,7 @@ struct CalendarScreen: View {
                 .transition(.move(edge: .leading).combined(with: .opacity))
             }
             
-            Spacer()
         }
-        //.padding()
         .background(Color.clear)
     }
 }
