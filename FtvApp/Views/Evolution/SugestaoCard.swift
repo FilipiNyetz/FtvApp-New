@@ -30,6 +30,7 @@ struct SugestaoCard: View {
                 .font(.subheadline)
                 .foregroundColor(.white)
                 .foregroundColor(.secondary)
+                .fontWeight(.regular)
             
         }
         .frame(maxWidth: .infinity, alignment: .leading)

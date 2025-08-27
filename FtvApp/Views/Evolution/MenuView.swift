@@ -37,7 +37,7 @@ struct MenuView: View {
                     .font(.body)
                     .lineLimit(1)
                 Spacer(minLength: 0)
-                Image(systemName: "chevron.down")
+                Image(systemName: "chevron.up.chevron.down")
                     .font(.caption)
                     .opacity(0.85)
             }

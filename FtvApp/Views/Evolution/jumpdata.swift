@@ -33,11 +33,11 @@ struct jumpdata: View {
         VStack(alignment: .leading, spacing: 6) {
             HStack {
                 Text(title)
-                    .font(.caption)
+                    .font(.footnote)
                     .foregroundColor(.secondary)
                 Spacer()
-                Text(dateText) // dd/MM/yy
-                    .font(.caption2)
+                Text(dateText) 
+                    .font(.caption)
                     .foregroundColor(.secondary)
             }
             HStack(alignment: .firstTextBaseline, spacing: 2) {
@@ -45,7 +45,7 @@ struct jumpdata: View {
                     .fontWeight(.semibold)
                     .font(.title)
                 Text(unit)
-                    .font(.caption)
+                    .font(.footnote)
                     .foregroundColor(.secondary)
                     .padding(.horizontal, 4)
             }

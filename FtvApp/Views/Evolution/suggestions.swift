@@ -22,7 +22,7 @@ struct suggestions: View {
 
             SugestaoCard(
                 icone: "figure.strengthtraining.traditional",
-                titulo: "Fortalecer membros inferiores",
+                titulo: "Física",
                 descricao: "Faça agachamento, salto na caixa e prancha isométrica. Isso fortalece pernas e core — essenciais para pular mais alto com estabilidade."
             )
 
