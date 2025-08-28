@@ -52,12 +52,20 @@ struct TemplateMainView: View {
                             }
                         } label: {
                             ZStack {
-                                Circle().fill(Color.colorPrimal)
-                                Image(systemName: selectedBackground == .comFundo ? "square.and.arrow.up" : "doc.on.doc")
-                                    .font(.headline.weight(.bold))
-                                    .foregroundStyle(.black)
+                                Circle()
+                                    .fill(Color.colorPrimal)
+                                    .frame(width: 54, height: 54)
+                                    .overlay(
+                                        Image(systemName: selectedBackground == .comFundo ? "square.and.arrow.up" : "doc.on.doc")
+                                            .font(.title2.weight(.semibold))
+                                            .foregroundStyle(.black)
+                                            .padding()
+                                        
+                                    )
+                                    .padding()
+                                
                             }
-                            .frame(width: 44, height: 44)
+                            
                             .contentShape(Circle())
                         }
                         .accessibilityLabel(selectedBackground == .comFundo ? "Compartilhar" : "Copiar")
