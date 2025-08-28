@@ -108,7 +108,7 @@ struct TemplateBodyView: View {
                         Text(
                             timeFormatter.string(
                                 from: TimeInterval(workout.duration)
-                            ) ?? "00:00:00"
+                            ) ?? "00:00.00"
                         )
                         .font(.largeTitle)
                         .fontWeight(.heavy)

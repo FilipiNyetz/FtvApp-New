@@ -69,11 +69,11 @@ struct TemplateMainView: View {
                     // Picker
                     Picker("", selection: $selectedBackground) {
                         Text(ShareBg.comFundo.rawValue)
-                            .font(.body)
+                            .font(.title3)
                             .fontWeight(.medium)
                             .tag(ShareBg.comFundo)
                         Text(ShareBg.semFundo.rawValue)
-                            .font(.body)
+                            .font(.title3)
                             .fontWeight(.medium)
                             .tag(ShareBg.semFundo)
                     }
