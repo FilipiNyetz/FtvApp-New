@@ -22,95 +22,132 @@ struct TemplateMainView: View {
     let totalWorkouts: Int
     let currentStreak: Int
     let badgeImage: String
-    
+
     var body: some View {
         ZStack {
             NavigationStack {
                 VStack(spacing: 0) {
-                    
-                    // Header com título e botão
-                    HStack {
-                        VStack(alignment: .leading, spacing: 2) {
-                            Text("Compartilhar")
-                                .font(.title.bold())
-                                .foregroundColor(.white)
-                            Text("Compartilhe com seus amigos")
-                                .font(.headline)
-                                .foregroundStyle(.gray)
-                        }
-                        
-                        Spacer()
-                        
-                        Button {
-                            if selectedBackground == .comFundo {
-                                viewModel.exportTemplate(workout: workout, withBackground: true, badgeImage: badgeImage, totalWorkouts: totalWorkouts, currentStreak: currentStreak)
-                            } else {
-                                viewModel.copyTemplateToClipboard(workout: workout, badgeImage: badgeImage, totalWorkouts: totalWorkouts, currentStreak: currentStreak)
-                                withAnimation {
-                                    showCopiedAlert = true
-                                }
-                            }
-                        } label: {
-                            ZStack {
-                                Circle()
-                                    .fill(Color.colorPrimal)
-                                    .frame(width: 54, height: 54)
-                                    .overlay(
-                                        Image(systemName: selectedBackground == .comFundo ? "square.and.arrow.up" : "doc.on.doc")
-                                            .font(.title2.weight(.semibold))
-                                            .foregroundStyle(.black)
-                                            .padding()
-                                        
-                                    )
 
-                                
-                            }
-                            
-                            .contentShape(Circle())
-                        }
-                        .accessibilityLabel(selectedBackground == .comFundo ? "Compartilhar" : "Copiar")
-                        
-                    }
-                    .padding(.horizontal)
-                    .padding(.top)
-                    
-                    // Picker
-                    Picker("", selection: $selectedBackground) {
-                        Text(ShareBg.comFundo.rawValue)
-                            .font(.title3)
-                            .fontWeight(.medium)
-                            .tag(ShareBg.comFundo)
-                        Text(ShareBg.semFundo.rawValue)
-                            .font(.title3)
-                            .fontWeight(.medium)
-                            .tag(ShareBg.semFundo)
-                    }
-                    .pickerStyle(.segmented)
-                    .padding(12)
-                    
-                    // Template Preview
+                    // Header com título e botão
+                    //                    HStack {
+                    //                        VStack(alignment: .leading, spacing: 2) {
+                    //                            Text("Compartilhar")
+                    //                                .font(.title.bold())
+                    //                                .foregroundColor(.white)
+                    //                            Text("Compartilhe com seus amigos")
+                    //                                .font(.headline)
+                    //                                .foregroundStyle(.gray)
+                    //                        }
+                    //
+                    //                        Spacer()
+                    //
+                    //                        Button {
+                    //                            if selectedBackground == .comFundo {
+                    //                                viewModel.exportTemplate(workout: workout, withBackground: true, badgeImage: badgeImage, totalWorkouts: totalWorkouts, currentStreak: currentStreak)
+                    //                            } else {
+                    //                                viewModel.copyTemplateToClipboard(workout: workout, badgeImage: badgeImage, totalWorkouts: totalWorkouts, currentStreak: currentStreak)
+                    //                                withAnimation {
+                    //                                    showCopiedAlert = true
+                    //                                }
+                    //                            }
+                    //                        } label: {
+                    //                            ZStack {
+                    //                                Circle()
+                    //                                    .fill(Color.colorPrimal)
+                    //                                    .frame(width: 54, height: 54)
+                    //                                    .overlay(
+                    //                                        Image(systemName: selectedBackground == .comFundo ? "square.and.arrow.up" : "doc.on.doc")
+                    //                                            .font(.title2.weight(.semibold))
+                    //                                            .foregroundStyle(.black)
+                    //                                            .padding()
+                    //
+                    //                                    )
+                    //
+                    //
+                    //                            }
+                    //
+                    //                            .contentShape(Circle())
+                    //                        }
+                    //                        .accessibilityLabel(selectedBackground == .comFundo ? "Compartilhar" : "Copiar")
+                    //
+                    //                    }
+                    //                    .padding(.horizontal)
+                    //                    .padding(.top)
+
+                    HeaderTemplate(
+                        selectedBackground: $selectedBackground,
+                        showCopiedAlert: $showCopiedAlert,
+                        viewModel: viewModel,
+                        workout: workout,
+                        totalWorkouts: totalWorkouts,
+                        currentStreak: currentStreak,
+                        badgeImage: badgeImage
+                    )
+        
                     ScrollView {
-                        TemplateBodyView(
-                            workout: workout,
-                            withBackground: selectedBackground == .comFundo,
-                            badgeImage: badgeImage,
-                            totalWorkouts: totalWorkouts,
-                            currentStreak: currentStreak,
-                            isPreview: true
-                            
-                        )
-                        
-                        .padding(.top, selectedBackground == .comFundo ? 12 : 0)
-                    }
+                        ZStack {
+                            if selectedBackground == .semFundo {
+                                Image("SemFundo")
+                                    .resizable()
+                                    .scaledToFill()
+                                    .ignoresSafeArea()
+                            }
+
+                            VStack {
+                                // Picker agora fica sobre o mesmo fundo
+                                Picker("", selection: $selectedBackground) {
+                                    Text(ShareBg.comFundo.rawValue)
+                                        .font(.body)
+                                        .fontWeight(.medium)
+                                        .tag(ShareBg.comFundo)
+                                    Text(ShareBg.semFundo.rawValue)
+                                        .font(.body)
+                                        .fontWeight(.medium)
+                                        .tag(ShareBg.semFundo)
+                                }
+                                .pickerStyle(.segmented)
+                                .padding(12)
+                              
+
+                                Spacer()
+                                
+                                // Preview
+                                TemplateBodyView(
+                                    workout: workout,
+                                    withBackground: selectedBackground
+                                        == .comFundo,
+                                    badgeImage: badgeImage,
+                                    totalWorkouts: totalWorkouts,
+                                    currentStreak: currentStreak,
+                                    isPreview: true
+                                )
+                                .padding(
+                                    .top,
+                                    selectedBackground == .comFundo ? 12 : 0
+                                )
+                            }
+                            .padding(.top, 8)
+                        }
+                    }.scrollDisabled(true)
                 }
                 .background(
-                    LinearGradient(
-                        gradient: Gradient(colors: [Color.gradiente2, Color.gradiente2,Color.gradiente2,Color.gradiente2,Color.gradiente2,Color.gradiente2,Color.gradiente2, Color.gradiente1]),
-                        startPoint: .topLeading,
-                        endPoint: .bottomLeading
-                    )
-                    .frame(maxHeight: .infinity)
-                    .ignoresSafeArea(.all)
+                    Group {
+                        if selectedBackground == .comFundo {
+                            LinearGradient(
+                                gradient: Gradient(colors: [
+                                    Color.gradiente2, Color.gradiente2,
+                                    Color.gradiente2, Color.gradiente2,
+                                    Color.gradiente2, Color.gradiente2,
+                                    Color.gradiente2, Color.gradiente1,
+                                ]),
+                                startPoint: .topLeading,
+                                endPoint: .bottomLeading
+                            )
+                            .frame(maxHeight: .infinity)
+                            .ignoresSafeArea(.all)
+                        }
+                    }
+                    .ignoresSafeArea()
                 )
                 .navigationBarBackButtonHidden(true)
                 .toolbar {
@@ -128,13 +165,17 @@ struct TemplateMainView: View {
                         }
                     }
                 }
-                
+                .toolbarBackground(Color.black, for: .navigationBar)
+               // .toolbarBackground(.visible, for: .navigationBar)
+                .background(Color.gray.opacity(0.1).ignoresSafeArea())
+                .foregroundColor(.white)
+
             }
-            
+
             if showCopiedAlert {
                 CopiedAlertView(isPresented: $showCopiedAlert)
             }
-            
+
         }
         .sheet(isPresented: $viewModel.showShare) {
             if let image = viewModel.renderedImage {

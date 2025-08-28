@@ -26,9 +26,7 @@ struct HeaderEvolution: View {
                     MenuView(selectedMetric: $selectedMetric)
                         .padding(.horizontal)
                 }
-                .frame(maxHeight: .infinity)
-                //.padding(.top, 12)
-                .padding(.bottom, 30)
+                .foregroundColor(.white)
                 .background(Color.black)
     }
 }

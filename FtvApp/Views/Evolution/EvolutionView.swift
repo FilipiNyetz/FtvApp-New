@@ -18,10 +18,10 @@ struct EvolutionView: View {
     var body: some View {
 
         NavigationStack {
+           
+            HeaderEvolution()
+            
             ScrollView {
-                
-                HeaderEvolution()
-
                 // Dados do gráfico (filtrados/agregados p/ período + métrica)
                 let periodKey = Period(selection: selectedSelection)
                 let chartData = dataForChart(
@@ -90,6 +90,7 @@ struct EvolutionView: View {
                 suggestions()
                     .padding()
             }
+            .scrollIndicators(.hidden)
             .navigationBarTitleDisplayMode(.inline)
             .navigationBarBackButtonHidden(true)
             .toolbar {
@@ -108,9 +109,9 @@ struct EvolutionView: View {
                 }
             }
             .toolbarBackground(Color.black, for: .navigationBar)
-            .toolbarBackground(.visible, for: .navigationBar)
+         //   .toolbarBackground(.visible, for: .navigationBar)
             .background(Color.gray.opacity(0.1).ignoresSafeArea())
-            .foregroundColor(.white)
+
             // Carrega tudo ao entrar; o gráfico agrega por período em memória
             .onAppear {
                 healthManager.fetchAllWorkouts()
