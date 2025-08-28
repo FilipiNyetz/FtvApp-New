@@ -49,7 +49,8 @@ struct ContentBackground: View {
                     value: "\(currentStreak)",
                     unit: "",
                     label: "",
-                    systemImage: false
+                    systemImage: false,
+                    isStreak: true
                 )
                 .frame(maxWidth: .infinity)
 
@@ -62,7 +63,7 @@ struct ContentBackground: View {
                     Text(
                         timeFormatter.string(
                             from: TimeInterval(workout.duration)
-                        ) ?? "00:00:00"
+                        ) ?? "00:00.00"
                     )
                     .font(.title2)
                     .fontWeight(.bold)
@@ -78,7 +79,8 @@ struct ContentBackground: View {
                     value: "\(totalWorkouts)",
                     unit: "",
                     label: "",
-                    systemImage: false
+                    systemImage: false,
+                    isStreak: false
                 )
                 .frame(maxWidth: .infinity)
             }
@@ -98,7 +100,8 @@ struct ContentBackground: View {
                     value: "\(Int(workout.frequencyHeart))",
                     unit: "bpm",
                     label: "BATIMENTO",
-                    systemImage: true
+                    systemImage: true,
+                    isStreak: false
 
                 )
                 .frame(maxWidth: .infinity)
@@ -108,7 +111,8 @@ struct ContentBackground: View {
                     value: "\(workout.calories)",
                     unit: "cal",
                     label: "CALORIA",
-                    systemImage: true
+                    systemImage: true,
+                    isStreak: false
 
                 )
                 .frame(maxWidth: .infinity)
