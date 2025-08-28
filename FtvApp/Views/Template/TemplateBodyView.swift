@@ -101,10 +101,10 @@ struct TemplateBodyView: View {
                     
                     // Tempo
                     VStack(spacing: 8) {
-                        Text("Tempo")
-                            .font(.callout)
-                            .fontWeight(.bold)
-                            .foregroundStyle(.white)
+                        Text("TEMPO")
+                            .font(.caption2)
+                            .fontWeight(.regular)
+                            .foregroundStyle(Color.textGray)
                         Text(
                             timeFormatter.string(
                                 from: TimeInterval(workout.duration)
@@ -187,18 +187,18 @@ func metric(icon: String, value: String, unit: String, label: String, systemImag
                 
                 if !unit.isEmpty {
                     Text(unit)
-                        .font(.subheadline)
-                        .fontWeight(.semibold)
-                        .foregroundStyle(.white)
+                        .font(.footnote)
+                        .fontWeight(.regular)
+                        .foregroundStyle(Color.textGray)
                         .padding(.top, 4)
                 }
             }
             
             if !label.isEmpty {
                 Text(label)
-                    .font(.caption)
-                    .fontWeight(.semibold)
-                    .foregroundStyle(.white)
+                    .font(.caption2)
+                    .fontWeight(.regular)
+                    .foregroundStyle(Color.textGray)
             }
         }
     }

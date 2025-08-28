@@ -57,8 +57,8 @@ struct ContentBackground: View {
                 VStack(spacing: 4) {
                     Text("TEMPO")
                         .font(.caption2)
-                        .fontWeight(.semibold)
-                        .foregroundStyle(.white)
+                        .fontWeight(.regular)
+                        .foregroundStyle(Color.textGray)
                     Text(
                         timeFormatter.string(
                             from: TimeInterval(workout.duration)
@@ -107,7 +107,7 @@ struct ContentBackground: View {
                     icon: "flame.fill",
                     value: "\(workout.calories)",
                     unit: "cal",
-                    label: "CALORIAS",
+                    label: "CALORIA",
                     systemImage: true
 
                 )
