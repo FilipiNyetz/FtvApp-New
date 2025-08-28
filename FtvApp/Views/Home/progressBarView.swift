@@ -21,7 +21,7 @@ struct ProgressBarView: View {
                         .animation(nil, value: manager.workouts.count) // bloqueia animação
                 }
                     
-                Text("\(manager.workouts.count)")
+                Text("\(userManager.badgeStartValue())")
                     .font(.footnote)
                     .foregroundStyle(Color.textGray)
                     .fontWeight(.medium)
@@ -52,10 +52,17 @@ struct ProgressBarView: View {
                                 )
                             )
                             .frame(width: progress * geometry.size.width, height: 8)
+                        
                     }
                 }
                 .frame(width: 220, height: 16)
                 .padding(.bottom, -4)
+                
+                Text("\(manager.totalWorkoutsCount)")
+                    .font(.footnote)
+                    .foregroundStyle(Color.textGray)
+                    .fontWeight(.medium)
+                    .animation(nil, value: manager.workouts.count) // bloqueia animação
             }
 
             
@@ -86,8 +93,8 @@ struct ProgressBarView: View {
                 .stroke(Color(.backgroundProgressBar), lineWidth: 0.3)
         )
         .shadow(
-            color: Color.black, // ajusta a opacidade
-            radius: 6, // blur
+            color: Color.black.opacity(0.3), // ajusta a opacidade
+            radius: 3, // blur
             x: 0,
             y: 2
         )

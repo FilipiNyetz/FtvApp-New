@@ -10,15 +10,21 @@ import SwiftUI
 struct CardWithoutWorkout: View {
     var body: some View {
 
-        ZStack {
-            LinearGradient(
-                gradient: Gradient(colors: [
-                    .gradiente1, .progressBarBGDark, .progressBarBGDark,
-                    .progressBarBGDark,
-                ]),
-                startPoint: .bottomLeading,
-                endPoint: .topTrailing
-            )
+        ZStack(alignment: .center){
+            RoundedRectangle(cornerRadius: 15)
+                .fill(
+                    LinearGradient(
+                        gradient: Gradient(colors: [.gradiente1, .progressBarBGDark, .progressBarBGDark]),
+                        startPoint: .bottomLeading,
+                        endPoint: .topTrailing
+                    )
+                )
+                .shadow(
+                    color: Color.black, // ajusta a opacidade
+                    radius: 6, // blur
+                    x: 0,
+                    y: 2
+                )
 
             // Imagem que flutua atrás do texto
             Image("logo7S")
@@ -37,7 +43,6 @@ struct CardWithoutWorkout: View {
                     .fontWeight(.bold)
                     .multilineTextAlignment(.center)
                     .lineLimit(nil)
-                    .fixedSize(horizontal: false, vertical: true)
 
                 Text(
                     "Use o SETE na partida e visualize seus resultados logo depois do jogo!"
@@ -46,7 +51,6 @@ struct CardWithoutWorkout: View {
                 .fontWeight(.semibold)
                 .foregroundColor(.white)
                 .multilineTextAlignment(.center)
-                .fixedSize(horizontal: false, vertical: true)
 
                 HStack {
                     Image(systemName: "applewatch")
@@ -61,7 +65,11 @@ struct CardWithoutWorkout: View {
             .padding(.horizontal, 20)
         }
         .frame(maxWidth: .infinity, maxHeight: 220)
-        .clipShape(.rect(cornerRadius: 15))
+        .clipShape(RoundedRectangle(cornerRadius: 15)) 
+        .overlay(
+            RoundedRectangle(cornerRadius: 15)
+                .stroke(Color.backgroundProgressBar, lineWidth: 0.3)
+        )
         .clipped()
 
     }

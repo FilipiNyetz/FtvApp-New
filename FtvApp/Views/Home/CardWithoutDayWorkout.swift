@@ -10,43 +10,48 @@ import SwiftUI
 struct CardWithoutDayWorkout: View {
     var body: some View {
 
-        ZStack {
-            LinearGradient(
-                gradient: Gradient(colors: [
-                    .gradiente1, .progressBarBGDark, .progressBarBGDark, .progressBarBGDark,
-                ]),
-                startPoint: .bottomLeading,
-                endPoint: .topTrailing
-            )
-            .ignoresSafeArea()
-            
-            // Imagem que flutua atrás do texto
+        ZStack(alignment: .center) {  // garante que todo o conteúdo fique centralizado
+            RoundedRectangle(cornerRadius: 15)
+                .fill(
+                    LinearGradient(
+                        gradient: Gradient(colors: [
+                            .gradiente1, .progressBarBGDark, .progressBarBGDark,
+                        ]),
+                        startPoint: .bottomLeading,
+                        endPoint: .topTrailing
+                    )
+                )
+                .shadow(
+                    color: Color.black.opacity(0.2),
+                    radius: 6,
+                    x: 0,
+                    y: 2
+                )
+
+            // Imagem de fundo
             Image("logo7S")
                 .resizable()
                 .scaledToFit()
                 .opacity(0.1)
                 .frame(width: 250, height: 250)
                 .offset(x: 130, y: 10)
-            
-            // Conteúdo de texto e ícone centralizados
-            VStack(alignment: .center, spacing: 10) {
+
+            // Conteúdo do card
+            VStack(spacing: 10) {
                 Text("Seu melhor desempenho ainda pode ser hoje!")
                     .font(.title3)
                     .foregroundColor(.colorPrimal)
                     .fontWeight(.medium)
                     .multilineTextAlignment(.center)
-                    .lineLimit(nil)
-                    .fixedSize(horizontal: false, vertical: true)
-                    .padding(.horizontal)
-                
-                Text("Use o seu apple watch na quadra e seus resultados aparecerão aqui")
-                    .font(.headline)
-                    .fontWeight(.semibold)
-                    .foregroundColor(.white)
-                    .multilineTextAlignment(.center)
-                    .fixedSize(horizontal: false, vertical: true)
-                    .padding(.horizontal, 25)
-                
+
+                Text(
+                    "Use o seu apple watch na quadra e seus resultados aparecerão aqui"
+                )
+                .font(.headline)
+                .fontWeight(.semibold)
+                .foregroundColor(.white)
+                .multilineTextAlignment(.center)
+
                 HStack {
                     Image(systemName: "sportscourt")
                         .resizable()
@@ -55,12 +60,14 @@ struct CardWithoutDayWorkout: View {
                 }
                 .foregroundStyle(.colorPrimal)
             }
-      
+            .padding(.horizontal, 20)
         }
         .frame(maxWidth: .infinity, maxHeight: 220)
-        .clipShape(.rect(cornerRadius: 15))
-        .clipped()
-
+        .clipShape(RoundedRectangle(cornerRadius: 15))
+        .overlay(
+            RoundedRectangle(cornerRadius: 15)
+                .stroke(Color.backgroundProgressBar, lineWidth: 0.3)
+        )
     }
 }
 

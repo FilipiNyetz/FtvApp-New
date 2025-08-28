@@ -35,6 +35,7 @@ struct WorkoutStatsCard: View {
                 )
             }
             
+
             VStack{
                 Text("TEMPO")
                     .font(.caption)
@@ -45,11 +46,8 @@ struct WorkoutStatsCard: View {
                 Text(timeFormatter.string(from: TimeInterval(workout.duration)) ?? "00:00:00")
                     .font(.system(size: 28, weight: .medium, design: .rounded))
                     .foregroundColor(.white)
-                    .font(.system(size: 28, weight: .medium, design: .rounded))
-                    .foregroundColor(.white)
-                
             }
-           
+            
             // Linha de baixo
             HStack {
                 statItem(
@@ -87,7 +85,7 @@ struct WorkoutStatsCard: View {
         .padding()
         .background(
             RoundedRectangle(cornerRadius: 12)
-                .stroke(Color.white.opacity(0.20), lineWidth: 0.5)
+                .stroke(Color.backgroundProgressBar, lineWidth: 0.3)
                 .fill(Color(.secondarySystemBackground))
                 .opacity(0.5)
                 
@@ -112,19 +110,20 @@ struct WorkoutStatsCard: View {
             
             HStack(spacing: 4) {
                 Image(systemName: icon)
-                    .foregroundColor(.white)
+                    .foregroundColor(Color("ColorSecond"))
                 Text(value)
                     .font(
                         .system(size: 22, weight: .semibold, design: .rounded)
                     )
                     .foregroundColor(.white)
-                if !unit.isEmpty {
-                    Text(unit)
-                        .font(
-                            .system(size: 12, weight: .medium, design: .rounded)
-                        )
-                        .foregroundColor(.gray)
-                }
+            }
+            
+            if !unit.isEmpty {
+                Text(unit)
+                    .font(
+                        .system(size: 12, weight: .medium, design: .rounded)
+                    )
+                    .foregroundColor(.gray)
             }
         }
         .frame(maxWidth: .infinity)
