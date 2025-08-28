@@ -95,7 +95,8 @@ struct TemplateBodyView: View {
                             Text("cal")
                                 .font(.title2)
                                 .fontWeight(.medium)
-                                .foregroundStyle(.white.opacity(0.6))
+                                .foregroundStyle(.white)
+                                .padding(.leading, 3)
                         }
                     }
                     
@@ -108,7 +109,7 @@ struct TemplateBodyView: View {
                         Text(
                             timeFormatter.string(
                                 from: TimeInterval(workout.duration)
-                            ) ?? "00:00:00"
+                            ) ?? "00:00.00"
                         )
                         .font(.largeTitle)
                         .fontWeight(.heavy)
@@ -146,11 +147,6 @@ struct TemplateBodyView: View {
                             .font(.largeTitle)
                             .fontWeight(.heavy)
                             .foregroundStyle(Color.colorPrimal)
-                        Text("Futevolei")
-                            .font(.footnote)
-                            .fontWeight(.semibold)
-                            .foregroundStyle(.secondary)
-                            .tracking(1.5)
                     }
                 }
                 .padding(.horizontal, 20)
