@@ -32,7 +32,7 @@ struct TemplateMainView: View {
                     HStack {
                         VStack(alignment: .leading, spacing: 2) {
                             Text("Compartilhar")
-                                .font(.title2.bold())
+                                .font(.title.bold())
                                 .foregroundColor(.white)
                             Text("Compartilhe com seus amigos")
                                 .font(.headline)
