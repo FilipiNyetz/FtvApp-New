@@ -78,7 +78,10 @@ struct WorkoutStatsCard: View {
         .padding()
         .background(
             RoundedRectangle(cornerRadius: 12)
+                .stroke(Color.white.opacity(0.20), lineWidth: 0.5)
                 .fill(Color(.secondarySystemBackground))
+                .opacity(0.5)
+                
         )
         .onAppear {
             userManager.setBadgeTotalWorkout(totalWorkouts: totalWorkouts)
