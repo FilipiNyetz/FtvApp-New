@@ -19,12 +19,22 @@ struct HeaderTemplate: View {
     var body: some View {
         HStack {
             VStack(alignment: .leading, spacing: 2) {
-                Text("Compartilhar")
-                    .font(.title.bold())
-                    .foregroundColor(.white)
-                Text("Compartilhe com seus amigos")
-                    .font(.headline)
-                    .foregroundStyle(.gray)
+                if (selectedBackground == .comFundo){
+                    Text("Compartilhar")
+                        .font(.title.bold())
+                        .foregroundColor(.white)
+                    Text("Compartilhe com seus amigos")
+                        .font(.headline)
+                        .foregroundStyle(.gray)
+                }else{
+                    Text("Compartilhar")
+                        .font(.title.bold())
+                        .foregroundColor(.white)
+                    Text("Copie e cole nas suas fotos")
+                        .font(.headline)
+                        .foregroundStyle(.gray)
+                }
+
             }
             
             Spacer()
