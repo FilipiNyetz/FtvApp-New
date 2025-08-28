@@ -35,12 +35,21 @@ struct WorkoutStatsCard: View {
                 )
             }
             
-            Text(timeFormatter.string(from: TimeInterval(workout.duration)) ?? "00:00:00")
-                .font(.system(size: 28, weight: .medium, design: .rounded))
-                .foregroundColor(.white)
-                .font(.system(size: 28, weight: .medium, design: .rounded))
-                .foregroundColor(.white)
-            
+            VStack{
+                Text("TEMPO")
+                    .font(.caption)
+                    .fontWeight(.regular)
+                    .fontDesign(.rounded)
+                    .foregroundColor(.gray)
+                
+                Text(timeFormatter.string(from: TimeInterval(workout.duration)) ?? "00:00:00")
+                    .font(.system(size: 28, weight: .medium, design: .rounded))
+                    .foregroundColor(.white)
+                    .font(.system(size: 28, weight: .medium, design: .rounded))
+                    .foregroundColor(.white)
+                
+            }
+           
             // Linha de baixo
             HStack {
                 statItem(
@@ -96,7 +105,9 @@ struct WorkoutStatsCard: View {
     ) -> some View {
         VStack(spacing: 2) {
             Text(title)
-                .font(.system(size: 10, weight: .medium, design: .rounded))
+                .font(.caption)
+                .fontWeight(.regular)
+                .fontDesign(.rounded)
                 .foregroundColor(.gray)
             
             HStack(spacing: 4) {

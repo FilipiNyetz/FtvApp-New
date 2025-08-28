@@ -92,7 +92,7 @@ struct CalendarView: View {
             } label: {
                 Image(systemName: "chevron.left")
             }
-            .padding(.trailing, 8)
+            .padding(.trailing, 12)
             
             Button {
                 transitionDirection = .forward
@@ -110,7 +110,8 @@ struct CalendarView: View {
         HStack {
             ForEach(["DOM", "SEG", "TER", "QUA", "QUI", "SEX", "SÁB"], id: \.self) { day in
                 Text(day + ".")
-                    .font(.caption2)
+                    .font(.caption)
+                    .fontWeight(.semibold)
                     .foregroundStyle(.secondary)
                     .frame(maxWidth: .infinity)
             }
@@ -160,7 +161,7 @@ struct CalendarView: View {
         let formatter = DateFormatter()
         formatter.locale = Locale(identifier: "pt_BR")
         formatter.dateFormat = "LLLL 'de' yyyy"
-        return formatter.string(from: currentMonth).capitalized
+        return formatter.string(from: currentMonth)
     }
     
 //    private var selectedDayInfo: DayInfo? {
