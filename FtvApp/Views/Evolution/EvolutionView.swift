@@ -80,7 +80,9 @@ struct EvolutionView: View {
                         endPoint: .bottomTrailing
                     )
                 )
-
+                .padding(.bottom, -8)
+                Divider()
+                
                 suggestions()
                     .padding()
             }

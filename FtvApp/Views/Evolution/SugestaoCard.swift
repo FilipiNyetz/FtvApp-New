@@ -38,7 +38,11 @@ struct SugestaoCard: View {
         .background(
             RoundedRectangle(cornerRadius: 10)
                 .fill(
-                    Color.gray.opacity(0.2)
+                    LinearGradient(
+                        gradient: Gradient(colors: [Color.progressBarBGDark, Color.progressBarBGDark, Color.progressBarBGDark,Color.progressBarBGLight]),
+                        startPoint: .bottom,
+                        endPoint: .top
+                    )
                 )
                 .overlay(
                     RoundedRectangle(cornerRadius: 10)

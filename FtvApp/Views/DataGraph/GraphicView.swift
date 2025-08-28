@@ -23,6 +23,7 @@ struct GraphicView: View {
                 selectedWorkout: $selectedWorkout
             )
             .frame(height: 250)
+            .background(Color.blue)
         }
     }
 }
