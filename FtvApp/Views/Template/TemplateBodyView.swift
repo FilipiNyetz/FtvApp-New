@@ -142,15 +142,7 @@ struct TemplateBodyView: View {
                     
                     // Nome do App
                     VStack(spacing: 8) {
-                        Text("SETE")
-                            .font(.largeTitle)
-                            .fontWeight(.heavy)
-                            .foregroundStyle(Color.colorPrimal)
-                        Text("Futevolei")
-                            .font(.footnote)
-                            .fontWeight(.semibold)
-                            .foregroundStyle(.secondary)
-                            .tracking(1.5)
+                       Image("LogoNome7")
                     }
                 }
                 .padding(.horizontal, 20)

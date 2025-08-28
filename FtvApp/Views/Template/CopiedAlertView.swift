@@ -18,7 +18,7 @@ struct CopiedAlertView: View {
                     .foregroundColor(.colorPrimal)
 
                 Text("Imagem copiada para a área de transferência")
-                    .font(.headline)
+                    .font(.title3)
                     .multilineTextAlignment(.center)
                     .foregroundStyle(.primary)
             }
