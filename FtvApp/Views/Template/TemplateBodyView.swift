@@ -83,7 +83,7 @@ struct TemplateBodyView: View {
                     
                     // Calorias
                     VStack(spacing: 8) {
-                        Text("Calorias")
+                        Text("Caloria")
                             .font(.callout)
                             .fontWeight(.bold)
                             .foregroundStyle(.white)
@@ -102,10 +102,10 @@ struct TemplateBodyView: View {
                     
                     // Tempo
                     VStack(spacing: 8) {
-                        Text("TEMPO")
-                            .font(.caption2)
-                            .fontWeight(.regular)
-                            .foregroundStyle(Color.textGray)
+                        Text("Tempo")
+                            .font(.callout)
+                            .fontWeight(.bold)
+                            .foregroundStyle(.white)
                         Text(
                             timeFormatter.string(
                                 from: TimeInterval(workout.duration)
@@ -143,10 +143,7 @@ struct TemplateBodyView: View {
                     
                     // Nome do App
                     VStack(spacing: 8) {
-                        Text("SETE")
-                            .font(.largeTitle)
-                            .fontWeight(.heavy)
-                            .foregroundStyle(Color.colorPrimal)
+                       Image("LogoNome7")
                     }
                 }
                 .padding(.horizontal, 20)
@@ -210,4 +207,6 @@ func metric(icon: String, value: String, unit: String, label: String, systemImag
             }
         }
     }
+
+
 

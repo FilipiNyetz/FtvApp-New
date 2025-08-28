@@ -58,5 +58,22 @@ class UserManager: ObservableObject{
         }
     }
     
+    func badgeStartValue() -> Int {
+        switch bagdeNames.first {
+        case "1stGoal": return 0
+        case "2ndGoal": return 10
+        case "3rdGoal": return 50
+        case "4thGoal": return 150
+        case "5thGoal": return 250
+        case "6thGoal": return 350
+        case "7thGoal": return 500
+        case "8thGoal": return 650
+        case "9thGoal": return 750
+        case "10thGoal": return 850
+        case "11thGoal": return 1000
+        default: return 0
+        }
+    }
+    
     
 }

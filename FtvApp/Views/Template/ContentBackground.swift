@@ -66,7 +66,7 @@ struct ContentBackground: View {
                         ) ?? "00:00.00"
                     )
                     .font(.title2)
-                    .fontWeight(.bold)
+                    .fontWeight(.medium)
                     .fontDesign(.rounded)
                     .monospacedDigit()
                     .foregroundStyle(.white)
@@ -120,10 +120,7 @@ struct ContentBackground: View {
 
             // Nome do App
             VStack(spacing: 4) {
-                Text("SETE")
-                    .font(.title2)
-                    .fontWeight(.bold)
-                    .foregroundStyle(Color.colorPrimal)
+                Image("LogoNome7")
             }
 
         }

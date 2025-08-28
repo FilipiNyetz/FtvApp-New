@@ -32,7 +32,7 @@ struct TemplateMainView: View {
                     HStack {
                         VStack(alignment: .leading, spacing: 2) {
                             Text("Compartilhar")
-                                .font(.title2.bold())
+                                .font(.title.bold())
                                 .foregroundColor(.white)
                             Text("Compartilhe com seus amigos")
                                 .font(.headline)
@@ -68,8 +68,14 @@ struct TemplateMainView: View {
                     
                     // Picker
                     Picker("", selection: $selectedBackground) {
-                        Text(ShareBg.comFundo.rawValue).tag(ShareBg.comFundo)
-                        Text(ShareBg.semFundo.rawValue).tag(ShareBg.semFundo)
+                        Text(ShareBg.comFundo.rawValue)
+                            .font(.body)
+                            .fontWeight(.medium)
+                            .tag(ShareBg.comFundo)
+                        Text(ShareBg.semFundo.rawValue)
+                            .font(.body)
+                            .fontWeight(.medium)
+                            .tag(ShareBg.semFundo)
                     }
                     .pickerStyle(.segmented)
                     .padding(12)
