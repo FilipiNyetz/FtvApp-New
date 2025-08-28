@@ -69,7 +69,6 @@ struct HeaderHome: View {
                     )
                     .padding(.horizontal)
             }
-            //                .padding(.top, 28)
         }
         .padding(.horizontal)
         .padding(.top, 12)
