@@ -158,54 +158,59 @@ func metric(icon: String, value: String, unit: String, label: String, systemImag
     -> some View
     {
         VStack(spacing: 6) {
-            HStack(spacing: 4) {
-                if systemImage {
-                    Image(systemName: icon)
-                        .foregroundStyle(Color.colorSecond)
-                        .font(.system(size: 16, weight: .medium))
-                }else if !systemImage && isStreak{
-                    Image(icon)
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 24, height: 24)
-                    
-                }
-                else{
-                    Image(icon)
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 32, height: 32)
-                }
-                
-                
-                if !value.isEmpty && systemImage {
-                    Text(value)
-                        .font(.title2)
-                        .fontWeight(.bold)
-                        .foregroundStyle(.white)
-                } else if !value.isEmpty && !systemImage{
-                    Text(value)
-                        .font(.headline)
-                        .fontWeight(.semibold)
-                        .foregroundStyle(Color.textGray)
-                }
-                
-                if !unit.isEmpty {
-                    Text(unit)
-                        .font(.footnote)
-                        .fontWeight(.regular)
-                        .foregroundStyle(Color.textGray)
-                        .padding(.top, 4)
-                }
-            }
-            
-            if !label.isEmpty {
-                Text(label)
-                    .font(.caption2)
-                    .fontWeight(.regular)
-                    .foregroundStyle(Color.textGray)
-            }
-        }
+               if systemImage || isStreak {
+                   // 🔹 Mantém o layout atual (ícone + texto lado a lado)
+                   HStack(spacing: 4) {
+                       if systemImage {
+                           Image(systemName: icon)
+                               .foregroundStyle(Color.colorSecond)
+                               .font(.system(size: 16, weight: .medium))
+                       } else {
+                           Image(icon)
+                               .resizable()
+                               .scaledToFit()
+                               .frame(width: 24, height: 24)
+                       }
+                       
+                       if !value.isEmpty {
+                           Text(value)
+                               .font(systemImage ? .title2 : .headline)
+                               .fontWeight(systemImage ? .bold : .semibold)
+                               .foregroundStyle(systemImage ? .white : Color.textGray)
+                       }
+                       
+                       if !unit.isEmpty {
+                           Text(unit)
+                               .font(.footnote)
+                               .fontWeight(.regular)
+                               .foregroundStyle(Color.textGray)
+                               .padding(.top, 4)
+                       }
+                   }
+               } else {
+                   // 🔹 Caso do badge → Ícone em cima, número embaixo
+                   VStack(spacing: 4) {
+                       Image(icon)
+                           .resizable()
+                           .scaledToFit()
+                           .frame(width: 40, height: 40)
+                       
+                       if !value.isEmpty {
+                           Text(value)
+                               .font(.headline)
+                               .fontWeight(.semibold)
+                               .foregroundStyle(.white)
+                       }
+                   }
+               }
+               
+               if !label.isEmpty {
+                   Text(label)
+                       .font(.caption2)
+                       .fontWeight(.regular)
+                       .foregroundStyle(Color.textGray)
+               }
+           }
     }
 
 
