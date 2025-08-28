@@ -19,24 +19,8 @@ struct EvolutionView: View {
 
         NavigationStack {
             ScrollView {
-                VStack(spacing: 20) {
-
-                    // Cabeçalho + seletor de métrica
-                    HStack {
-                        VStack(alignment: .leading, spacing: 2) {
-                            Text("Evolução")
-                                .font(.title)
-                                .bold()
-                            Text(selectedselection())
-                                .font(.subheadline)
-                                .foregroundColor(.secondary)
-                        }
-
-                        Spacer()
-                        MenuView(selectedMetric: $selectedMetric)
-                    }
-                }
-                .padding()
+                
+                HeaderEvolution()
 
                 // Dados do gráfico (filtrados/agregados p/ período + métrica)
                 let periodKey = Period(selection: selectedSelection)
@@ -47,39 +31,59 @@ struct EvolutionView: View {
                 )
 
                 VStack {
-                    HStack {
-                        Picker("Período", selection: $selectedSelection) {
-                            ForEach(["D","S","M","6M","A"], id: \.self) { periodo in
-                                Text(periodo).tag(periodo)
+                    VStack{
+                        HStack {
+                            Picker("Período", selection: $selectedSelection) {
+                                ForEach(["D","S","M","6M","A"], id: \.self) { periodo in
+                                    Text(periodo).tag(periodo)
+                                }
                             }
+                            .pickerStyle(.segmented)
+                            .padding(.bottom, 8)
+                            Spacer()
                         }
-                        .pickerStyle(.segmented)
-                        .padding(.bottom, 8)
-                        Spacer()
-                    }
+                        .padding()
 
-                    // Gráfico
-                    GraphicChart(
-                        data: chartData,
-                        selectedMetric: selectedMetric,
-                        period: periodKey,
-                        selectedWorkout: $selectedWorkout
+                        // Gráfico
+                        GraphicChart(
+                            data: chartData,
+                            selectedMetric: selectedMetric,
+                            period: periodKey,
+                            selectedWorkout: $selectedWorkout
+                        )
+                        .frame(height: 300)
+                        .id(selectedSelection)
+                        .padding()
+                    }
+                    .background(
+                        RoundedRectangle(cornerRadius: 0, style: .continuous)
+                            .fill(
+                                LinearGradient(
+                                    colors: [Color.progressBarBGLight, Color.progressBarBGDark,Color.progressBarBGDark],
+                                    startPoint: .top,
+                                    endPoint: .bottom
+                                )
+                                .opacity(0.5)
+                            )
                     )
-                    .frame(height: 300) // <-- aumente aqui (250, 300, 350…)
-                    .id(selectedSelection)
+                    .padding(.bottom, -7)
+                    Divider()
+                    //.padding(.horizontal)
 
                     // Cards Máx / Mín conforme métrica selecionada
                     jumpdata(data: chartData, selectedMetric: selectedMetric)
+                        .padding()
                 }
-
-                .padding()
                 .background(
                     LinearGradient(
                         gradient: Gradient(colors: [Color.gradiente2, Color.gradiente2, Color.gradiente1]),
                         startPoint: .topLeading,
                         endPoint: .bottomTrailing
                     )
+                    .frame(maxHeight: .infinity)
+                    .ignoresSafeArea(.all)
                 )
+                .padding(.top, -8)
                 .padding(.bottom, -8)
                 Divider()
                 
@@ -103,7 +107,9 @@ struct EvolutionView: View {
                     }
                 }
             }
-            .background(.gray.opacity(0.1))
+            .toolbarBackground(Color.black, for: .navigationBar)
+            .toolbarBackground(.visible, for: .navigationBar)
+            .background(Color.gray.opacity(0.1).ignoresSafeArea())
             .foregroundColor(.white)
             // Carrega tudo ao entrar; o gráfico agrega por período em memória
             .onAppear {

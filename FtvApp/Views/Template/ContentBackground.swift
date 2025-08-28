@@ -124,7 +124,6 @@ struct ContentBackground: View {
             }
 
         }
-        .background(Color.black)
         .cornerRadius(24)
         .padding(.top, 12)
     }

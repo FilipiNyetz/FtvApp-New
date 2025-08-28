@@ -52,12 +52,20 @@ struct TemplateMainView: View {
                             }
                         } label: {
                             ZStack {
-                                Circle().fill(Color.colorPrimal)
-                                Image(systemName: selectedBackground == .comFundo ? "square.and.arrow.up" : "doc.on.doc")
-                                    .font(.headline.weight(.bold))
-                                    .foregroundStyle(.black)
+                                Circle()
+                                    .fill(Color.colorPrimal)
+                                    .frame(width: 54, height: 54)
+                                    .overlay(
+                                        Image(systemName: selectedBackground == .comFundo ? "square.and.arrow.up" : "doc.on.doc")
+                                            .font(.title2.weight(.semibold))
+                                            .foregroundStyle(.black)
+                                            .padding()
+                                        
+                                    )
+
+                                
                             }
-                            .frame(width: 44, height: 44)
+                            
                             .contentShape(Circle())
                         }
                         .accessibilityLabel(selectedBackground == .comFundo ? "Compartilhar" : "Copiar")
@@ -91,10 +99,19 @@ struct TemplateMainView: View {
                             isPreview: true
                             
                         )
+                        
                         .padding(.top, selectedBackground == .comFundo ? 12 : 0)
                     }
                 }
-                .background(Color.black.ignoresSafeArea())
+                .background(
+                    LinearGradient(
+                        gradient: Gradient(colors: [Color.gradiente2, Color.gradiente2,Color.gradiente2,Color.gradiente2,Color.gradiente2,Color.gradiente2,Color.gradiente2, Color.gradiente1]),
+                        startPoint: .topLeading,
+                        endPoint: .bottomLeading
+                    )
+                    .frame(maxHeight: .infinity)
+                    .ignoresSafeArea(.all)
+                )
                 .navigationBarBackButtonHidden(true)
                 .toolbar {
                     ToolbarItem(placement: .navigationBarLeading) {

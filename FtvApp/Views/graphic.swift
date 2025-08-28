@@ -32,7 +32,8 @@ struct graphic: View {
             ForEach(dados) { dado in
                 BarMark(
                     x: .value("Dia", dado.dia),
-                    y: .value("valor", dado.valor) // título usa a métrica atual
+
+                    y: .value("valor", dado.valor) // título usa a métrica atual changes
                 )
                 .foregroundStyle(Color.white)
             }
