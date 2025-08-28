@@ -359,7 +359,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "FtvApp-Watch-App-Info.plist";
-				INFOPLIST_KEY_CFBundleDisplayName = FtvvApp;
+				INFOPLIST_KEY_CFBundleDisplayName = SETE;
 				INFOPLIST_KEY_NSHealthShareUsageDescription = "Usar para anaalisar dados do usuario";
 				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "Usar para anaalisar dados do usuario";
 				INFOPLIST_KEY_NSHomeKitUsageDescription = "Usar para anaalisar dados do usuario";
@@ -370,7 +370,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.3;
 				PRODUCT_BUNDLE_IDENTIFIER = br.com.gustavosouto.FtvvApp.watchkitapp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = watchos;
@@ -394,7 +394,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "FtvApp-Watch-App-Info.plist";
-				INFOPLIST_KEY_CFBundleDisplayName = FtvvApp;
+				INFOPLIST_KEY_CFBundleDisplayName = SETE;
 				INFOPLIST_KEY_NSHealthShareUsageDescription = "Usar para anaalisar dados do usuario";
 				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "Usar para anaalisar dados do usuario";
 				INFOPLIST_KEY_NSHomeKitUsageDescription = "Usar para anaalisar dados do usuario";
@@ -405,7 +405,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.3;
 				PRODUCT_BUNDLE_IDENTIFIER = br.com.gustavosouto.FtvvApp.watchkitapp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = watchos;
@@ -425,12 +425,12 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = FtvApp/FtvApp.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 1.1;
 				DEVELOPMENT_TEAM = 2XBHGB4LG5;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = FtvApp/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = FtvvApp;
+				INFOPLIST_KEY_CFBundleDisplayName = SETE;
 				INFOPLIST_KEY_NSHealthShareUsageDescription = "Usar para anaalisar dados do usuario";
 				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "Usar para anaalisar dados do usuario";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -443,7 +443,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.3;
 				PRODUCT_BUNDLE_IDENTIFIER = br.com.gustavosouto.FtvvApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
@@ -460,12 +460,12 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = FtvApp/FtvApp.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 1.1;
 				DEVELOPMENT_TEAM = 2XBHGB4LG5;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = FtvApp/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = FtvvApp;
+				INFOPLIST_KEY_CFBundleDisplayName = SETE;
 				INFOPLIST_KEY_NSHealthShareUsageDescription = "Usar para anaalisar dados do usuario";
 				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "Usar para anaalisar dados do usuario";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -478,7 +478,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.3;
 				PRODUCT_BUNDLE_IDENTIFIER = br.com.gustavosouto.FtvvApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
