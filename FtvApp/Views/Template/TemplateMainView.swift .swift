@@ -62,7 +62,7 @@ struct TemplateMainView: View {
                                             .padding()
                                         
                                     )
-                                    .padding()
+
                                 
                             }
                             
@@ -99,10 +99,19 @@ struct TemplateMainView: View {
                             isPreview: true
                             
                         )
+                        
                         .padding(.top, selectedBackground == .comFundo ? 12 : 0)
                     }
                 }
-                .background(Color.black.ignoresSafeArea())
+                .background(
+                    LinearGradient(
+                        gradient: Gradient(colors: [Color.gradiente2, Color.gradiente2,Color.gradiente2,Color.gradiente2,Color.gradiente2,Color.gradiente2,Color.gradiente2, Color.gradiente1]),
+                        startPoint: .topLeading,
+                        endPoint: .bottomLeading
+                    )
+                    .frame(maxHeight: .infinity)
+                    .ignoresSafeArea(.all)
+                )
                 .navigationBarBackButtonHidden(true)
                 .toolbar {
                     ToolbarItem(placement: .navigationBarLeading) {
