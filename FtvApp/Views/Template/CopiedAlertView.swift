@@ -13,11 +13,11 @@ struct CopiedAlertView: View {
     var body: some View {
         ZStack {
             VStack(spacing: 20) {
-                Image(systemName: "checkmark.circle.fill")
-                    .font(.system(size: 50))
+                Image(systemName: "checkmark")
+                    .font(.system(size: 56))
                     .foregroundColor(.colorPrimal)
 
-                Text("Imagem Copiada para a Área de Transferência")
+                Text("Imagem copiada para a área de transferência")
                     .font(.headline)
                     .multilineTextAlignment(.center)
                     .foregroundStyle(.primary)

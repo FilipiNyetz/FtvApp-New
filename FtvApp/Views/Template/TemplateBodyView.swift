@@ -83,7 +83,7 @@ struct TemplateBodyView: View {
                     
                     // Calorias
                     VStack(spacing: 8) {
-                        Text("Calorias")
+                        Text("Caloria")
                             .font(.callout)
                             .fontWeight(.bold)
                             .foregroundStyle(.white)
@@ -101,10 +101,10 @@ struct TemplateBodyView: View {
                     
                     // Tempo
                     VStack(spacing: 8) {
-                        Text("TEMPO")
-                            .font(.caption2)
-                            .fontWeight(.regular)
-                            .foregroundStyle(Color.textGray)
+                        Text("Tempo")
+                            .font(.callout)
+                            .fontWeight(.bold)
+                            .foregroundStyle(.white)
                         Text(
                             timeFormatter.string(
                                 from: TimeInterval(workout.duration)
