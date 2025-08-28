@@ -159,7 +159,6 @@ func metric(icon: String, value: String, unit: String, label: String, systemImag
     {
         VStack(spacing: 6) {
                if systemImage || isStreak {
-                   // 🔹 Mantém o layout atual (ícone + texto lado a lado)
                    HStack(spacing: 4) {
                        if systemImage {
                            Image(systemName: icon)
@@ -188,7 +187,6 @@ func metric(icon: String, value: String, unit: String, label: String, systemImag
                        }
                    }
                } else {
-                   // 🔹 Caso do badge → Ícone em cima, número embaixo
                    VStack(spacing: 4) {
                        Image(icon)
                            .resizable()

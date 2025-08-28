@@ -31,28 +31,44 @@ struct EvolutionView: View {
                 )
 
                 VStack {
-                    HStack {
-                        Picker("Período", selection: $selectedSelection) {
-                            ForEach(["D","S","M","6M","A"], id: \.self) { periodo in
-                                Text(periodo).tag(periodo)
+                    VStack{
+                        HStack {
+                            Picker("Período", selection: $selectedSelection) {
+                                ForEach(["D","S","M","6M","A"], id: \.self) { periodo in
+                                    Text(periodo).tag(periodo)
+                                }
                             }
+                            .pickerStyle(.segmented)
+                            .padding(.bottom, 8)
+                            Spacer()
                         }
-                        .pickerStyle(.segmented)
-                        .padding(.bottom, 8)
-                        Spacer()
-                    }
-                    .padding()
+                        .padding()
 
-                    // Gráfico
-                    GraphicChart(
-                        data: chartData,
-                        selectedMetric: selectedMetric,
-                        period: periodKey,
-                        selectedWorkout: $selectedWorkout
+                        // Gráfico
+                        GraphicChart(
+                            data: chartData,
+                            selectedMetric: selectedMetric,
+                            period: periodKey,
+                            selectedWorkout: $selectedWorkout
+                        )
+                        .frame(height: 300)
+                        .id(selectedSelection)
+                        .padding()
+                    }
+                    .background(
+                        RoundedRectangle(cornerRadius: 0, style: .continuous)
+                            .fill(
+                                LinearGradient(
+                                    colors: [Color.progressBarBGLight, Color.progressBarBGDark,Color.progressBarBGDark],
+                                    startPoint: .top,
+                                    endPoint: .bottom
+                                )
+                                .opacity(0.5)
+                            )
                     )
-                    .frame(height: 300) // <-- aumente aqui (250, 300, 350…)
-                    .id(selectedSelection)
-                    .padding()
+                    .padding(.bottom, -7)
+                    Divider()
+                    //.padding(.horizontal)
 
                     // Cards Máx / Mín conforme métrica selecionada
                     jumpdata(data: chartData, selectedMetric: selectedMetric)
