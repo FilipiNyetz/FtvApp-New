@@ -35,9 +35,12 @@ struct WorkoutStatsCard: View {
                 )
             }
             
-            VStack(spacing: 2) {
+
+            VStack{
                 Text("TEMPO")
-                    .font(.system(size: 10, weight: .medium, design: .rounded))
+                    .font(.caption)
+                    .fontWeight(.regular)
+                    .fontDesign(.rounded)
                     .foregroundColor(.gray)
                 
                 Text(timeFormatter.string(from: TimeInterval(workout.duration)) ?? "00:00:00")
@@ -82,7 +85,10 @@ struct WorkoutStatsCard: View {
         .padding()
         .background(
             RoundedRectangle(cornerRadius: 12)
+                .stroke(Color.backgroundProgressBar, lineWidth: 0.3)
                 .fill(Color(.secondarySystemBackground))
+                .opacity(0.5)
+                
         )
         .onAppear {
             userManager.setBadgeTotalWorkout(totalWorkouts: totalWorkouts)
@@ -97,7 +103,9 @@ struct WorkoutStatsCard: View {
     ) -> some View {
         VStack(spacing: 2) {
             Text(title)
-                .font(.system(size: 10, weight: .medium, design: .rounded))
+                .font(.caption)
+                .fontWeight(.regular)
+                .fontDesign(.rounded)
                 .foregroundColor(.gray)
             
             HStack(spacing: 4) {

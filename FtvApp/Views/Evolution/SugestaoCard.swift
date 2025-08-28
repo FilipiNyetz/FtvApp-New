@@ -30,11 +30,26 @@ struct SugestaoCard: View {
                 .font(.subheadline)
                 .foregroundColor(.white)
                 .foregroundColor(.secondary)
+                .fontWeight(.regular)
             
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding()
-        .background(.gray.opacity(0.2))
+        .background(
+            RoundedRectangle(cornerRadius: 10)
+                .fill(
+                    LinearGradient(
+                        gradient: Gradient(colors: [Color.progressBarBGDark, Color.progressBarBGDark, Color.progressBarBGDark,Color.progressBarBGLight]),
+                        startPoint: .bottom,
+                        endPoint: .top
+                    )
+                )
+                .overlay(
+                    RoundedRectangle(cornerRadius: 10)
+                        .stroke(Color.backgroundProgressBar,lineWidth: 0.3)
+                )
+        )
+//        .background(.gray.opacity(0.2))
         .cornerRadius(10)
     }
 }

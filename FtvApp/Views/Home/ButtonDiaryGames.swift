@@ -4,22 +4,31 @@ struct ButtonDiaryGames: View {
     @ObservedObject var manager: HealthManager
     @ObservedObject var userManager: UserManager
     @Binding var selectedDate: Date
-    @State private var opcaoDeTreinoParaMostrarCard: Int = 0
+    //@State private var opcaoDeTreinoParaMostrarCard: Int = 0
     let totalWorkouts: Int
+    @Binding var selectedIndex: Int 
     
     var body: some View {
         Group {
             if let workoutsDoDia = manager.workoutsByDay[Calendar.current.startOfDay(for: selectedDate)] {
                 VStack {
-                    WorkoutMenu(workouts: workoutsDoDia, selectedIndex: $opcaoDeTreinoParaMostrarCard)
+                    WorkoutMenu(workouts: workoutsDoDia, selectedIndex: $selectedIndex)
+                    //WorkoutMenu(workouts: workoutsDoDia, selectedIndex: $opcaoDeTreinoParaMostrarCard)
                     
                     WorkoutCardView(
-                        workouts: workoutsDoDia,
-                        selectedIndex: opcaoDeTreinoParaMostrarCard,
-                        userManager: userManager,
-                        healthManager: manager,
-                        totalWorkouts: totalWorkouts
-                    )
+                                           workouts: workoutsDoDia,
+                                           selectedIndex: selectedIndex,
+                                           userManager: userManager,
+                                           healthManager: manager,
+                                           totalWorkouts: totalWorkouts
+                                       )
+//                    WorkoutCardView(
+//                        workouts: workoutsDoDia,
+//                        selectedIndex: opcaoDeTreinoParaMostrarCard,
+//                        userManager: userManager,
+//                        healthManager: manager,
+//                        totalWorkouts: totalWorkouts
+//                    )
                 }
             } else {
                 Text("Nenhum treino nesse dia")
@@ -27,9 +36,12 @@ struct ButtonDiaryGames: View {
                     .padding()
             }
         }
-        .onChange(of: selectedDate) { _ in
-            opcaoDeTreinoParaMostrarCard = 0
-        }
+        .onChange(of: selectedDate) {
+                    selectedIndex = 0
+                }
+//        .onChange(of: selectedDate) { _ in
+//            opcaoDeTreinoParaMostrarCard = 0
+//        }
     }
 }
 
@@ -48,6 +60,7 @@ struct WorkoutMenu: View {
         } label: {
             HStack {
                 Text("Jogos do dia")
+                    .fontWeight(.medium)
                 Spacer()
                 Image(systemName: "chevron.right")
             }

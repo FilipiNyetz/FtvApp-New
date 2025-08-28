@@ -80,7 +80,9 @@ struct EvolutionView: View {
                         endPoint: .bottomTrailing
                     )
                 )
-
+                .padding(.bottom, -8)
+                Divider()
+                
                 suggestions()
                     .padding()
             }
@@ -112,12 +114,12 @@ struct EvolutionView: View {
 
     func selectedselection() -> String {
         switch selectedSelection {
-        case "D": return "Diário"
-        case "S": return "Semanal"
-        case "M": return "Mensal"
-        case "6M": return "Semestral"
-        case "A": return "Anual"
-        default:  return "Mensal"
+        case "D": return "Hoje"
+        case "S": return "Esta Semana"
+        case "M": return "Este Mês"
+        case "6M": return "Este Semestre"
+        case "A": return "Este Ano"
+        default:  return "Este Mês"
         }
     }
 

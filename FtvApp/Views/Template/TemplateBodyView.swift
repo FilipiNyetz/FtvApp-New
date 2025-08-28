@@ -47,123 +47,7 @@ struct TemplateBodyView: View {
         .fixedSize(horizontal: false, vertical: false)
     }
     
-    // MARK: - Com Fundo
-//    var contentBackground: some View {
-//        VStack(spacing: 24) {
-//            // Top Metrics (streak, tempo, insignia)
-//            HStack {
-//                metric(
-//                    icon: "flame.fill",
-//                    value: "20",
-//                    unit: "",
-//                    label: "",
-//                    systemImage: true
-//                )
-//                .frame(maxWidth: .infinity)
-//                
-//                // Coluna Central
-//                VStack(spacing: 4) {
-//                    Text("TEMPO")
-//                        .font(.caption2)
-//                        .fontWeight(.semibold)
-//                        .foregroundStyle(.secondary)
-//                    Text(
-//                        timeFormatter.string(
-//                            from: TimeInterval(workout.duration)
-//                        ) ?? "00:00:00"
-//                    )
-//                    .font(.title2)
-//                    .fontWeight(.bold)
-//                    .fontDesign(.rounded)
-//                    .monospacedDigit()
-//                    .foregroundStyle(.white)
-//                }
-//                .frame(maxWidth: .infinity)
-//                
-//                // Coluna Direita
-//                metric(
-//                    icon: "1stGoal",
-//                    value: "100",
-//                    unit: "",
-//                    label: "",
-//                    systemImage: false
-//                )
-//                .frame(maxWidth: .infinity)
-//            }
-//            
-//            // Placeholder Heatmap
-//            ZStack {
-//                RoundedRectangle(cornerRadius: 12).fill(card)
-//                
-//                // Linhas guia do heatmap
-//                VStack(spacing: 0) {
-//                    Spacer()
-//                    Rectangle().fill(stroke).frame(height: 1).opacity(
-//                        0.6
-//                    )
-//                    Spacer()
-//                    Rectangle().fill(stroke).frame(height: 1).opacity(
-//                        0.6
-//                    )
-//                    Spacer()
-//                }
-//                HStack(spacing: 0) {
-//                    Spacer()
-//                    Rectangle().fill(stroke).frame(width: 1).opacity(
-//                        0.6
-//                    )
-//                    Spacer()
-//                }
-//            }
-//            .frame(height: 360)
-//            .clipShape(RoundedRectangle(cornerRadius: 12))
-//            .overlay(
-//                RoundedRectangle(cornerRadius: 12)
-//                    .stroke(Color.white.opacity(0.08), lineWidth: 1)
-//            )
-//            .padding(.horizontal, 12)
-//            
-//            // Bottom Metrics
-//            HStack {
-//                metric(
-//                    icon: "heart.fill",
-//                    value: "\(Int(workout.frequencyHeart))",
-//                    unit: "bpm",
-//                    label: "BATIMENTO",
-//                    systemImage: true
-//                    
-//                )
-//                .frame(maxWidth: .infinity)
-//                
-//                metric(
-//                    icon: "flame.fill",
-//                    value: "\(workout.calories)",
-//                    unit: "cal",
-//                    label: "CALORIAS",
-//                    systemImage: true
-//                    
-//                )
-//                .frame(maxWidth: .infinity)
-//            }
-//            
-//            // Nome do App
-//            VStack(spacing: 4) {
-//                Text("SETE")
-//                    .font(.title2)
-//                    .fontWeight(.bold)
-//                    .foregroundStyle(Color.colorPrimal)
-//                Text("FUTEVÔLEI")
-//                    .font(.caption)
-//                    .fontWeight(.semibold)
-//                    .foregroundStyle(.secondary)
-//                    .kerning(1.5)
-//            }
-//            
-//        }
-//        .background(Color.black)
-//        .cornerRadius(24)
-//        .padding(.top, 12)
-//    }
+
     
     // MARK: - Sem Fundo (Transparente)
     var contentNoBackground: some View {
@@ -217,10 +101,10 @@ struct TemplateBodyView: View {
                     
                     // Tempo
                     VStack(spacing: 8) {
-                        Text("Tempo")
-                            .font(.callout)
-                            .fontWeight(.bold)
-                            .foregroundStyle(.white)
+                        Text("TEMPO")
+                            .font(.caption2)
+                            .fontWeight(.regular)
+                            .foregroundStyle(Color.textGray)
                         Text(
                             timeFormatter.string(
                                 from: TimeInterval(workout.duration)
@@ -277,44 +161,56 @@ struct TemplateBodyView: View {
     }
     
     @ViewBuilder
-func metric(icon: String, value: String, unit: String, label: String, systemImage: Bool)
+func metric(icon: String, value: String, unit: String, label: String, systemImage: Bool, isStreak: Bool)
     -> some View
     {
         VStack(spacing: 6) {
             HStack(spacing: 4) {
                 if systemImage {
                     Image(systemName: icon)
-                        .foregroundStyle(Color.colorPrimal)
-                        .font(.system(size: 32, weight: .medium))
-                }else{
+                        .foregroundStyle(Color.colorSecond)
+                        .font(.system(size: 16, weight: .medium))
+                }else if !systemImage && isStreak{
                     Image(icon)
                         .resizable()
                         .scaledToFit()
-                        .frame(width: 40, height: 40)
+                        .frame(width: 24, height: 24)
+                    
+                }
+                else{
+                    Image(icon)
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 32, height: 32)
                 }
                 
                 
-                if !value.isEmpty {
+                if !value.isEmpty && systemImage {
                     Text(value)
                         .font(.title2)
                         .fontWeight(.bold)
                         .foregroundStyle(.white)
+                } else if !value.isEmpty && !systemImage{
+                    Text(value)
+                        .font(.headline)
+                        .fontWeight(.semibold)
+                        .foregroundStyle(Color.textGray)
                 }
                 
                 if !unit.isEmpty {
                     Text(unit)
-                        .font(.subheadline)
-                        .fontWeight(.semibold)
-                        .foregroundStyle(.white)
+                        .font(.footnote)
+                        .fontWeight(.regular)
+                        .foregroundStyle(Color.textGray)
                         .padding(.top, 4)
                 }
             }
             
             if !label.isEmpty {
                 Text(label)
-                    .font(.caption)
-                    .fontWeight(.semibold)
-                    .foregroundStyle(.white)
+                    .font(.caption2)
+                    .fontWeight(.regular)
+                    .foregroundStyle(Color.textGray)
             }
         }
     }

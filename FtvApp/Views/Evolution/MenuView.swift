@@ -12,9 +12,9 @@ struct MenuView: View {
     @Binding var selectedMetric: String
 
     let metrics: [(name: String, icon: String)] = [
-        ("Batimento", "heart"),
-        ("Caloria",   "flame"),
-        ("Distância", "location")
+        ("Batimento", "heart.fill"),
+        ("Caloria",   "flame.fill"),
+        ("Distância", "location.fill")
     ]
 
     private var currentMetricIcon: String {
@@ -37,7 +37,7 @@ struct MenuView: View {
                     .font(.body)
                     .lineLimit(1)
                 Spacer(minLength: 0)
-                Image(systemName: "chevron.down")
+                Image(systemName: "chevron.up.chevron.down")
                     .font(.caption)
                     .opacity(0.85)
             }

@@ -28,12 +28,12 @@ struct CalendarScreen: View {
                     }
                 } label: {
                     Text(selectedDate.formattedPill())
-                        .font(.subheadline.weight(.semibold))
+                        .font(.headline.weight(.regular))
                         .padding(.vertical, 6)
                         .padding(.horizontal, 10)
                         .background(
                             RoundedRectangle(cornerRadius: 8)
-                                .fill(Color(.tertiaryLabel).opacity(0.35))
+                                .fill(Color.darkGrayBackground)
                         )
                         .foregroundStyle(.primary)
                 }
@@ -49,9 +49,7 @@ struct CalendarScreen: View {
                 .transition(.move(edge: .leading).combined(with: .opacity))
             }
             
-            Spacer()
         }
-        //.padding()
         .background(Color.clear)
     }
 }

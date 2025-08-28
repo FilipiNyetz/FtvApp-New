@@ -31,12 +31,14 @@ struct DayCell: View {
                 }
                 if !hasWorkout && !isToday{
                     Text(date.dayNumber())
-                        .font(.system(size: 15, weight: .semibold))
-                        .foregroundStyle(.gray)
+                        .font(.headline)
+                        .fontWeight(.semibold)
+                        .foregroundStyle(Color(white: 0.3))
                         .frame(width: 32, height: 32)
                 }else{
                     Text(date.dayNumber())
-                        .font(.system(size: 15, weight: .semibold))
+                        .font(.headline)
+                        .fontWeight(.semibold)
                         .foregroundStyle(textColor)
                         .frame(width: 32, height: 32)
                 }
@@ -67,7 +69,7 @@ struct DayCell: View {
         if isToday && isSelected { return .black }
         else if isSelected && !isToday { return .colorPrimal }
         else if isToday && !isSelected { return .colorPrimal }
-        else if isFuture && !isSelected { return .gray }
+        else if isFuture && !isSelected { return .white.opacity(0.2)}
         else { return .primary }
     }
 }

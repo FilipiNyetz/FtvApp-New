@@ -49,7 +49,8 @@ struct ContentBackground: View {
                     value: "\(currentStreak)",
                     unit: "",
                     label: "",
-                    systemImage: false
+                    systemImage: false,
+                    isStreak: true
                 )
                 .frame(maxWidth: .infinity)
 
@@ -57,12 +58,12 @@ struct ContentBackground: View {
                 VStack(spacing: 4) {
                     Text("TEMPO")
                         .font(.caption2)
-                        .fontWeight(.semibold)
-                        .foregroundStyle(.white)
+                        .fontWeight(.regular)
+                        .foregroundStyle(Color.textGray)
                     Text(
                         timeFormatter.string(
                             from: TimeInterval(workout.duration)
-                        ) ?? "00:00:00"
+                        ) ?? "00:00.00"
                     )
                     .font(.title2)
                     .fontWeight(.bold)
@@ -78,7 +79,8 @@ struct ContentBackground: View {
                     value: "\(totalWorkouts)",
                     unit: "",
                     label: "",
-                    systemImage: false
+                    systemImage: false,
+                    isStreak: false
                 )
                 .frame(maxWidth: .infinity)
             }
@@ -98,7 +100,8 @@ struct ContentBackground: View {
                     value: "\(Int(workout.frequencyHeart))",
                     unit: "bpm",
                     label: "BATIMENTO",
-                    systemImage: true
+                    systemImage: true,
+                    isStreak: false
 
                 )
                 .frame(maxWidth: .infinity)
@@ -107,8 +110,9 @@ struct ContentBackground: View {
                     icon: "flame.fill",
                     value: "\(workout.calories)",
                     unit: "cal",
-                    label: "CALORIAS",
-                    systemImage: true
+                    label: "CALORIA",
+                    systemImage: true,
+                    isStreak: false
 
                 )
                 .frame(maxWidth: .infinity)

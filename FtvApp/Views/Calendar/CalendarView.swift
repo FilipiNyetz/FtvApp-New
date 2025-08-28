@@ -14,8 +14,13 @@ import SwiftUI
 struct CalendarView: View {
     @Binding var selectedDate: Date
     @ObservedObject var manager: HealthManager   // <-- referência direta
-    
     @State private var currentMonth: Date
+    @State private var transitionDirection: TransitionDirection = .forward
+    
+    // Enum para a direção do slide
+    private enum TransitionDirection {
+        case forward, backward
+    }
     
     init(selectedDate: Binding<Date>, manager: HealthManager) {
         self._selectedDate = selectedDate
@@ -24,20 +29,30 @@ struct CalendarView: View {
     }
     
     var body: some View {
+        let transition = AnyTransition.asymmetric(
+            insertion: .move(edge: transitionDirection == .forward ? .trailing : .leading),
+            removal: .move(edge: transitionDirection == .forward ? .leading : .trailing)
+        )
         VStack(spacing: 0) {
             // Cabeçalho com mês/ano e setas de navegação
             header
                 .padding(.horizontal, 16)
                 .padding(.top, 16)
+                .transition(transition)
+                .id(currentMonth)
             
             // Cabeçalho dos dias da semana
             weekHeader
                 .padding(.horizontal, 16)
                 .padding(.top, 8)
+                .transition(transition)
+                .id(currentMonth)
             
             // Grid com os dias do mês
             monthGrid
                 .padding(.horizontal, 16)
+                .transition(transition)
+                .id(currentMonth)
             
 //            // Linha separadora (se houver jogos)
 //            if selectedDayHasGames {
@@ -52,10 +67,10 @@ struct CalendarView: View {
 //                .padding(.horizontal, 16)
 //                .padding(.bottom, 16)
         }
+        .clipShape(RoundedRectangle(cornerRadius: 16))
         .background(
             RoundedRectangle(cornerRadius: 16)
                 .fill(Color.darkGrayBackground)
-            //trocar a cor aqui caso nao seja essa 
         )
     }
     
@@ -70,18 +85,20 @@ struct CalendarView: View {
             Spacer()
             
             Button {
-                withAnimation {
-                    currentMonth = Calendar.current.date(byAdding: .month, value: -1, to: currentMonth) ?? currentMonth
-                }
+                transitionDirection = .backward
+                                withAnimation(.easeInOut(duration: 0.5)) {
+                                    currentMonth = Calendar.current.date(byAdding: .month, value: -1, to: currentMonth) ?? currentMonth
+                                }
             } label: {
                 Image(systemName: "chevron.left")
             }
-            .padding(.trailing, 8)
+            .padding(.trailing, 12)
             
             Button {
-                withAnimation {
-                    currentMonth = Calendar.current.date(byAdding: .month, value: 1, to: currentMonth) ?? currentMonth
-                }
+                transitionDirection = .forward
+                withAnimation(.easeInOut(duration: 0.5)) {
+                                    currentMonth = Calendar.current.date(byAdding: .month, value: 1, to: currentMonth) ?? currentMonth
+                                }
             } label: {
                 Image(systemName: "chevron.right")
             }
@@ -93,7 +110,8 @@ struct CalendarView: View {
         HStack {
             ForEach(["DOM", "SEG", "TER", "QUA", "QUI", "SEX", "SÁB"], id: \.self) { day in
                 Text(day + ".")
-                    .font(.caption2)
+                    .font(.caption)
+                    .fontWeight(.semibold)
                     .foregroundStyle(.secondary)
                     .frame(maxWidth: .infinity)
             }
@@ -143,7 +161,7 @@ struct CalendarView: View {
         let formatter = DateFormatter()
         formatter.locale = Locale(identifier: "pt_BR")
         formatter.dateFormat = "LLLL 'de' yyyy"
-        return formatter.string(from: currentMonth).capitalized
+        return formatter.string(from: currentMonth)
     }
     
 //    private var selectedDayInfo: DayInfo? {

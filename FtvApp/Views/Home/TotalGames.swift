@@ -16,7 +16,9 @@ struct TotalGames: View {
         VStack(alignment: .leading, spacing: 16){
             VStack(alignment: .leading, spacing: 4){
                 Text("Total de jogos")
-                    .font(.headline)
+                    .font(.title3)
+                    .fontWeight(.medium)
+                
                 Text("Jogue suas partidas e conquiste insígnias")
                     .font(.subheadline)
                     .foregroundColor(.gray)
