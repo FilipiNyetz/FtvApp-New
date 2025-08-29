@@ -20,7 +20,11 @@ struct FtvAppApp: App {
         WindowGroup {
             MainView()
                 .preferredColorScheme(.dark)
+//                .onAppear {
+//                    wcSessionDelegate.startSession()
+//                }
                
         }
+        
     }
 }

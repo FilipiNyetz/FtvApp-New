@@ -15,6 +15,7 @@ struct MainView: View {
     // Instâncias dos managers
     @StateObject private var healthManager = HealthManager()
     @StateObject private var userManager = UserManager()
+    @StateObject var wcSessionDelegate = PhoneWCSessionDelegate()
 
     var body: some View {
         ZStack {
@@ -39,6 +40,9 @@ struct MainView: View {
             // Wait for the animation to complete before changing the state
             try? await Task.sleep(for: .seconds(1.0))
             isLoading = false
+        }
+        .onAppear {
+            wcSessionDelegate.startSession()
         }
     }
 }

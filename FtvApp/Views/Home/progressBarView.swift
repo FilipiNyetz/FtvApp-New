@@ -5,20 +5,21 @@ struct ProgressBarView: View {
     @ObservedObject var userManager: UserManager
     @State private var animatedProgress: Double = 0
     let goal: Int = 20 // meta inicial
+
     
     var body: some View {
         HStack {
             VStack {
                 if userManager.bagdeNames.isEmpty{
                     Image("1stGoal")
+                }else if manager.totalWorkoutsCount > 500{
+                    Image(userManager.bagdeNames[0])
                         .resizable()
-                        .frame(width: 45, height: 50)
-                        .animation(nil, value: manager.workouts.count) // bloqueia animação
+                        .frame(width: 60, height: 50)
                 }else{
                     Image(userManager.bagdeNames[0])
                         .resizable()
                         .frame(width: 45, height: 50)
-                        .animation(nil, value: manager.workouts.count) // bloqueia animação
                 }
                     
                 Text("\(userManager.badgeStartValue())")
@@ -69,6 +70,10 @@ struct ProgressBarView: View {
             VStack {
                 if userManager.bagdeNames.isEmpty{
                     Image("1stGoal")
+                }else if manager.totalWorkoutsCount > 650{
+                    Image(userManager.bagdeNames[1])
+                        .resizable()
+                        .frame(width: 60, height: 50)
                 }else{
                     Image(userManager.bagdeNames[1])
                         .resizable()
@@ -99,7 +104,7 @@ struct ProgressBarView: View {
             y: 2
         )
         .onAppear {
-            userManager.setBadgeTotalWorkout(totalWorkouts: manager.totalWorkoutsCount)
+            userManager.setBadgeTotalWorkout(totalWorkouts: 690)
             // Inicializa animação da barra
             let progress = min(Double(manager.workouts.count) / Double(userManager.goalBadge), 1.0)
             animatedProgress = progress
