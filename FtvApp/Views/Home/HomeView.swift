@@ -4,6 +4,7 @@ import SwiftUI
 struct HomeView: View {
     @ObservedObject var manager: HealthManager
     @ObservedObject var userManager: UserManager
+    @ObservedObject var wcSessionDelegate: PhoneWCSessionDelegate
     @State private var isGamesPresented = false
     @State var selectedDate: Date = Date()
     @State var opcaoDeTreinoParaMostrarCard: Int = 0
@@ -30,7 +31,7 @@ struct HomeView: View {
                 VStack(spacing: 0) {
                     // HEADER PRETO PERSONALIZADO
                     HeaderHome(manager: manager)
-                    
+                    Text("\( wcSessionDelegate.number ?? 9)")
                     // CONTEÚDO
                     ScrollView {
                         ZStack {

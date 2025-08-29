@@ -23,7 +23,7 @@ struct MainView: View {
                 .opacity(isLoading ? splashOpacity : 0)
 
             if !isLoading {
-                HomeView(manager: healthManager, userManager: userManager)
+                HomeView(manager: healthManager, userManager: userManager, wcSessionDelegate: wcSessionDelegate)
                     .opacity(startViewOpacity)
             }
         }

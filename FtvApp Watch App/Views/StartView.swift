@@ -11,10 +11,13 @@ import SwiftUI
 struct StartView: View {
 
     @StateObject var manager = WorkoutManager()
+    @StateObject var wcSessionDelegate = WatchWCSessionDelegate()
     @State private var isWorkoutActive = false
     @State private var isCountingDown = false
     @State private var savedWorkout: HKWorkout?
     @State private var selectedWorkoutType: HKWorkoutActivityType? = nil
+    
+    @State var numeroWatch: Int = 0
 
     var workoutTypes: [HKWorkoutActivityType] = [.soccer]
 
@@ -61,7 +64,25 @@ struct StartView: View {
                         .ignoresSafeArea()
                     
                     VStack(spacing: 12) {
-
+                        
+                        HStack{
+                            Button(action: {
+                                numeroWatch -= 1
+                                wcSessionDelegate.sendMessage(message: ["number": numeroWatch])
+                            }, label: {
+                                Text("-")
+                            })
+                            
+                            Text("\(numeroWatch)")
+                            
+                            Button(action: {
+                                numeroWatch += 1
+                                wcSessionDelegate.sendMessage(message: ["number": numeroWatch])
+                            }, label: {
+                                Text("+")
+                            })
+                        }
+                        
                         //Text("Seu desempenho será registrado em tempo real")
                         Text("Bem vindo ao SETE, vamos registrar sua performance e evoluir seu jogo")
                             .font(.title3)
@@ -93,6 +114,7 @@ struct StartView: View {
 
                 .onAppear {
                     manager.requestAuthorization()
+                    wcSessionDelegate.startSession()
                 }
             }
         }
