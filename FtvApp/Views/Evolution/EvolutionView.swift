@@ -19,7 +19,7 @@ struct EvolutionView: View {
 
         NavigationStack {
            
-            HeaderEvolution()
+            HeaderEvolution(selectedMetric: $selectedMetric)
             
             ScrollView {
                 // Dados do gráfico (filtrados/agregados p/ período + métrica)

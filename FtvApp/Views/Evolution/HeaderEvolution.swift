@@ -9,7 +9,7 @@ import SwiftUI
 
 struct HeaderEvolution: View {
     @State private var selectedSelection = "M"
-    @State private var selectedMetric: String = "Batimento"
+    @Binding var selectedMetric: String
     
     var body: some View {
                 HStack {
@@ -29,8 +29,4 @@ struct HeaderEvolution: View {
                 .foregroundColor(.white)
                 .background(Color.black)
     }
-}
-
-#Preview {
-    HeaderEvolution()
 }
