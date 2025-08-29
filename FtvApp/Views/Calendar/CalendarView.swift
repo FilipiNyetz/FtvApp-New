@@ -108,7 +108,13 @@ struct CalendarView: View {
     
     private var weekHeader: some View {
         HStack {
-            ForEach(["DOM", "SEG", "TER", "QUA", "QUI", "SEX", "SÁB"], id: \.self) { day in
+            ForEach([NSLocalizedString("DOM", comment: ""),
+                     NSLocalizedString("SEG", comment: ""),
+                     NSLocalizedString("TER", comment: ""),
+                     NSLocalizedString("QUA", comment: ""),
+                     NSLocalizedString("QUA", comment: ""),
+                     NSLocalizedString("SEX", comment: ""),
+                     NSLocalizedString("SÁB", comment: "")], id: \.self) { day in
                 Text(day + ".")
                     .font(.caption)
                     .fontWeight(.semibold)
@@ -159,7 +165,7 @@ struct CalendarView: View {
     
     private var monthTitle: String {
         let formatter = DateFormatter()
-        formatter.locale = Locale(identifier: "pt_BR")
+        formatter.locale = Locale.current
         formatter.dateFormat = "LLLL 'de' yyyy"
         return formatter.string(from: currentMonth)
     }
