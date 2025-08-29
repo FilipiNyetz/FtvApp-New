@@ -12,9 +12,9 @@ struct MenuView: View {
     @Binding var selectedMetric: String
 
     let metrics: [(name: String, icon: String)] = [
-        ("Batimento", "heart.fill"),
-        ("Caloria",   "flame.fill"),
-        ("Distância", "location.fill")
+        (NSLocalizedString("Batimento", comment: ""), "heart.fill"),
+        (NSLocalizedString("Caloria", comment: ""),   "flame.fill"),
+        (NSLocalizedString("Distância", comment: ""), "location.fill")
     ]
 
     private var currentMetricIcon: String {
@@ -24,9 +24,14 @@ struct MenuView: View {
     var body: some View {
         Menu {
             ForEach(metrics, id: \.name) { metric in
-                Button(metric.name, systemImage: metric.icon) {
+                Button(action:{
                     selectedMetric = metric.name
-                }
+                },label:{
+                    HStack{
+                        Text(LocalizedStringKey(metric.name))
+                        Image(systemName: metric.icon)
+                    }
+                })
             }
         } label: {
             HStack(spacing: 8) {

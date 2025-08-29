@@ -29,6 +29,12 @@
             "state" : "translated",
             "value" : "%.0f"
           }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%.0f"
+          }
         }
       }
     },
@@ -53,6 +59,12 @@
           }
         },
         "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld"
+          }
+        },
+        "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "%lld"
@@ -85,6 +97,46 @@
             "state" : "translated",
             "value" : "%lld woche%@"
           }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld semana%@"
+          }
+        }
+      }
+    },
+    "Batimento" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pulse"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Frecuencia cardíaca"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pouls"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Herzfrequenz"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Batimento"
+          }
         }
       }
     },
@@ -109,6 +161,12 @@
           }
         },
         "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "cal"
+          }
+        },
+        "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "cal"
@@ -141,6 +199,12 @@
             "state" : "translated",
             "value" : "Kalorie"
           }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Caloria"
+          }
         }
       }
     },
@@ -168,6 +232,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Teilen"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Compartilhar"
           }
         }
       }
@@ -197,6 +267,12 @@
             "state" : "translated",
             "value" : "Mit deinen Freunden teilen"
           }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Compartilhe com seus amigos"
+          }
         }
       }
     },
@@ -224,6 +300,46 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Kopieren"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Copiar"
+          }
+        }
+      }
+    },
+    "Copie e cole nas suas fotos" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Copy and paste onto your photos"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Copia y pega en tus fotos"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Copier-coller sur vos photos"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kopiere und füge es in deine Fotos ein"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Copie e cole nas suas fotos"
           }
         }
       }
@@ -253,6 +369,12 @@
             "state" : "translated",
             "value" : "Datum"
           }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Data"
+          }
         }
       }
     },
@@ -280,6 +402,80 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Tag"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dia"
+          }
+        }
+      }
+    },
+    "Distância" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Distance"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Distancia"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Distance"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Distanz"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Distância"
+          }
+        }
+      }
+    },
+    "Estratégia" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Strategy"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Estrategia"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Stratégie"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Strategie"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Estratégia"
           }
         }
       }
@@ -309,6 +505,12 @@
             "state" : "translated",
             "value" : "Verbessere dich in den Spielen mit den richtigen Tipps"
           }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Evolua nos jogos com as dicas certas"
+          }
         }
       }
     },
@@ -336,6 +538,80 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Entwicklung"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Evolução"
+          }
+        }
+      }
+    },
+    "Faça agachamento, salto na caixa e prancha isométrica. Isso fortalece pernas e core — essenciais para pular mais alto com estabilidade." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Do squats, box jumps, and planks. These strengthen your legs and core — essential for jumping higher with stability."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Haz sentadillas, saltos al cajón y planchas isométricas. Esto fortalece piernas y core — esenciales para saltar más alto con estabilidad."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Faites des squats, des sauts sur boîte et des planches. Cela renforce vos jambes et votre sangle abdominale — essentiels pour sauter plus haut avec stabilité."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mache Kniebeugen, Boxsprünge und Planks. Das stärkt Beine und Core – entscheidend, um höher und stabiler zu springen."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Faça agachamento, salto na caixa e prancha isométrica. Isso fortalece pernas e core — essenciais para pular mais alto com estabilidade."
+          }
+        }
+      }
+    },
+    "Física" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Strength"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fuerza"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Force"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Física"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Física"
           }
         }
       }
@@ -365,6 +641,12 @@
             "state" : "translated",
             "value" : "Vorlage erstellen"
           }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gerar Template"
+          }
         }
       }
     },
@@ -392,6 +674,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Bild in die Zwischenablage kopiert"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Imagem copiada para a área de transferência"
           }
         }
       }
@@ -421,6 +709,46 @@
             "state" : "translated",
             "value" : "Spiele des Tages"
           }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Jogos do dia"
+          }
+        }
+      }
+    },
+    "Jogue mais partidas focando em prever a jogada adversária." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Play more matches focusing on anticipating your opponent’s moves."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Juega más partidas centrándote en anticipar los movimientos de tu oponente."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Jouez plus de parties en vous concentrant sur l’anticipation des mouvements de votre adversaire."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Spiele mehr Partien und konzentriere dich darauf, die Züge deines Gegners vorherzusehen."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Jogue mais partidas focando em prever a jogada adversária."
+          }
         }
       }
     },
@@ -448,6 +776,80 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Spiele deine Partien und erlange Abzeichen"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Jogue suas partidas e conquiste insígnias"
+          }
+        }
+      }
+    },
+    "MÁX" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "MAX"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "MÁX"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "MAX"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "MAX"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "MÁX"
+          }
+        }
+      }
+    },
+    "MÍN" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "MIN"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "MÍN"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "MIN"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "MIN"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "MÍN"
           }
         }
       }
@@ -477,6 +879,12 @@
             "state" : "translated",
             "value" : "An diesem Tag kein Training"
           }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nenhum treino nesse dia"
+          }
         }
       }
     },
@@ -505,6 +913,12 @@
             "state" : "translated",
             "value" : "Zeitraum"
           }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Período"
+          }
         }
       }
     },
@@ -529,6 +943,12 @@
           }
         },
         "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "SETE"
+          }
+        },
+        "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "SETE"
@@ -561,6 +981,12 @@
             "state" : "translated",
             "value" : "Deine beste Leistung kann noch heute kommen!"
           }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Seu melhor desempenho ainda pode ser hoje!"
+          }
         }
       }
     },
@@ -588,6 +1014,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Deine Spiele"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Seus jogos"
           }
         }
       }
@@ -617,6 +1049,12 @@
             "state" : "translated",
             "value" : "%lld-Wochen-Serie"
           }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Streak de %lld semanas"
+          }
         }
       }
     },
@@ -644,6 +1082,46 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Vorschläge"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sugestões"
+          }
+        }
+      }
+    },
+    "Técnica" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Technique"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Técnica"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Technique"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Technik"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Técnica"
           }
         }
       }
@@ -673,6 +1151,12 @@
             "state" : "translated",
             "value" : "Trainingsdauer"
           }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tempo"
+          }
         }
       }
     },
@@ -700,6 +1184,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Trainingsdauer"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "TEMPO"
           }
         }
       }
@@ -729,6 +1219,12 @@
             "state" : "translated",
             "value" : "Trainingstyp"
           }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tipo"
+          }
         }
       }
     },
@@ -756,6 +1252,46 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Gesamtzahl der Spiele"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Total de jogos"
+          }
+        }
+      }
+    },
+    "Treine saltos com passada controlada e aterrissagem suave. Tente corrigir postura e alinhar braços, tronco e pernas no movimento." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Practice jumps with controlled steps and soft landings. Try to correct your posture and align your arms, torso, and legs during the movement."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Entrena saltos con pasos controlados y aterrizajes suaves. Intenta corregir la postura y alinear brazos, tronco y piernas durante el movimiento."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Entraînez vos sauts avec des pas contrôlés et des atterrissages doux. Essayez de corriger votre posture et d’aligner vos bras, votre tronc et vos jambes pendant le mouvement."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Trainiere Sprünge mit kontrollierten Schritten und sanften Landungen. Versuche, deine Haltung zu korrigieren und Arme, Rumpf und Beine während der Bewegung auszurichten."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Treine saltos com passada controlada e aterrissagem suave. Tente corrigir postura e alinhar braços, tronco e pernas no movimento."
           }
         }
       }
@@ -785,6 +1321,12 @@
             "state" : "translated",
             "value" : "Training %lld"
           }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Treino %lld"
+          }
         }
       }
     },
@@ -812,6 +1354,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Nutze die 7 im Spiel und sieh deine Ergebnisse direkt nach dem Spiel!"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Use o SETE na partida e visualize seus resultados logo depois do jogo!"
           }
         }
       }
@@ -841,6 +1389,12 @@
             "state" : "translated",
             "value" : "Nutze deine Apple Watch auf dem Spielfeld und deine Ergebnisse werden hier angezeigt"
           }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Use o seu apple watch na quadra e seus resultados aparecerão aqui"
+          }
         }
       }
     },
@@ -869,6 +1423,12 @@
             "state" : "translated",
             "value" : "Kalorienwert"
           }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "valor"
+          }
         }
       }
     },
@@ -896,6 +1456,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Du hast noch keine Trainings aufgezeichnet"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Você ainda não tem treinos registrados"
           }
         }
       }

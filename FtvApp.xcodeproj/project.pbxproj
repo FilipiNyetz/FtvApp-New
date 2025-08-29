@@ -177,6 +177,7 @@
 				es,
 				nl,
 				fr,
+				"pt-BR",
 			);
 			mainGroup = BB2FFBB12E4E4FD100F15AF8;
 			minimizedProjectReferenceProxies = 1;

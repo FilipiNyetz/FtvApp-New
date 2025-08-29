@@ -22,20 +22,20 @@ struct suggestions: View {
 
             SugestaoCard(
                 icone: "figure.strengthtraining.traditional",
-                titulo: "Física",
-                descricao: "Faça agachamento, salto na caixa e prancha isométrica. Isso fortalece pernas e core — essenciais para pular mais alto com estabilidade."
+                titulo: Text("Física"),
+                descricao: Text("Faça agachamento, salto na caixa e prancha isométrica. Isso fortalece pernas e core — essenciais para pular mais alto com estabilidade.")
             )
 
             SugestaoCard(
                 icone: "book.fill",
-                titulo: "Técnica",
-                descricao: "Treine saltos com passada controlada e aterrissagem suave. Tente corrigir postura e alinhar braços, tronco e pernas no movimento."
+                titulo: Text("Técnica"),
+                descricao: Text("Treine saltos com passada controlada e aterrissagem suave. Tente corrigir postura e alinhar braços, tronco e pernas no movimento.")
             )
 
             SugestaoCard(
                 icone: "mappin.and.ellipse",
-                titulo: "Estratégia",
-                descricao: "Jogue mais partidas focando em prever a jogada adversária."
+                titulo: Text("Estratégia"),
+                descricao: Text("Jogue mais partidas focando em prever a jogada adversária.")
             )
         }
     }

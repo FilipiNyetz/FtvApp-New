@@ -10,7 +10,7 @@ struct jumpdata: View {
         HStack(spacing: 12) {
             // Card Máx
             StatCard(
-                title: "MÁX",
+                title: Text("MÁX"),
                 value: stats.maxValueText,
                 unit: stats.unit,
                 dateText: stats.maxDateText
@@ -18,7 +18,7 @@ struct jumpdata: View {
 
             // Card Mín
             StatCard(
-                title: "MÍN",
+                title: Text("MÍN"),
                 value: stats.minValueText,
                 unit: stats.unit,
                 dateText: stats.minDateText

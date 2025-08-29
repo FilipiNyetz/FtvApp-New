@@ -9,8 +9,8 @@ import SwiftUI
 
 struct SugestaoCard: View {
     let icone: String
-    let titulo: String
-    let descricao: String
+    let titulo: Text
+    let descricao: Text
     
     var body: some View {
         VStack(alignment: .leading, spacing: 6) {
@@ -19,14 +19,14 @@ struct SugestaoCard: View {
                 Image(systemName: icone)
                     .foregroundColor(.colorSecond)
                 
-                Text(titulo)
+                titulo
                     .foregroundColor(.white)
                     .font(.callout)
                     .fontWeight(.medium)
             }
             
             // Texto da descrição
-            Text(descricao)
+            descricao
                 .font(.subheadline)
                 .foregroundColor(.white)
                 .foregroundColor(.secondary)

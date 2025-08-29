@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct StatCard: View {
-    let title: String
+    let title: Text
     let value: String
     let unit: String
     let dateText: String
@@ -16,7 +16,7 @@ struct StatCard: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 6) {
             HStack {
-                Text(title)
+                title
                     .font(.footnote)
                     .foregroundColor(.secondary)
                 Spacer()
