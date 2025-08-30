@@ -104,7 +104,7 @@ struct ProgressBarView: View {
             y: 2
         )
         .onAppear {
-            userManager.setBadgeTotalWorkout(totalWorkouts: 690)
+            userManager.setBadgeTotalWorkout(totalWorkouts: manager.workouts.count)
             // Inicializa animação da barra
             let progress = min(Double(manager.workouts.count) / Double(userManager.goalBadge), 1.0)
             animatedProgress = progress

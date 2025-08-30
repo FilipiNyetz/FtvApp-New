@@ -75,14 +75,14 @@ final class JumpDetector: ObservableObject {
         ) { [weak self] deviceMotion, error in
             guard let self = self, let motion = deviceMotion else {
                 if let error = error {
-                    print("⚠️ Erro no sensor: \(error.localizedDescription)")
+//                    print("⚠️ Erro no sensor: \(error.localizedDescription)")
                 }
                 return
             }
             self.processMotion(motion)
         }
         
-        print("🚀 Detector de saltos iniciado")
+//        print("🚀 Detector de saltos iniciado")
     }
     
     /// Para a detecção
@@ -103,7 +103,7 @@ final class JumpDetector: ObservableObject {
         // Log periódico para debug (a cada 60 amostras = ~1s)
         logCounter += 1
         if logCounter % 60 == 0 {
-            print("📊 Aceleração: \(String(format: "%.2f", acceleration))g | Em voo: \(isInFlight)")
+//            print("📊 Aceleração: \(String(format: "%.2f", acceleration))g | Em voo: \(isInFlight)")
         }
         
         if isInFlight {
@@ -139,7 +139,7 @@ final class JumpDetector: ObservableObject {
                     takeoffTime = timestamp
                     isInFlight = true
                     freefallCount = 0
-                    print("🛫 SALTO DETECTADO! (a=\(String(format: "%.2f", acceleration))g)")
+//                    print("🛫 SALTO DETECTADO! (a=\(String(format: "%.2f", acceleration))g)")
                 }
             } else {
                 freefallCount = 0
@@ -203,7 +203,7 @@ final class JumpDetector: ObservableObject {
         
         //  VALIDAÇÃO DO TEMPO DE VOO (menos rigorosa para movimentos rápidos)
         guard flightTime >= minFlightTime && flightTime < 1.5 else { 
-            print("⚠️ Tempo de voo inválido: \(String(format: "%.3f", flightTime))s")
+//            print("⚠️ Tempo de voo inválido: \(String(format: "%.3f", flightTime))s")
             return
         }
         
@@ -234,10 +234,10 @@ final class JumpDetector: ObservableObject {
             //  ATUALIZA O SALTO MAIS ALTO 
             if height > (self?.bestJumpHeight ?? 0) {
                 self?.bestJumpHeight = height
-                print("🏆 Novo recorde: \(String(format: "%.0f", height * 100))cm")
+//                print("🏆 Novo recorde: \(String(format: "%.0f", height * 100))cm")
             }
             
-            print("✅ Salto válido: \(String(format: "%.0f", height * 100))cm (t=\(String(format: "%.3f", flightTime))s)")
+//            print("✅ Salto válido: \(String(format: "%.0f", height * 100))cm (t=\(String(format: "%.3f", flightTime))s)")
         }
     }
     

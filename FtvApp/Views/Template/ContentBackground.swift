@@ -105,6 +105,7 @@ struct ContentBackground: View {
 
                 )
                 .frame(maxWidth: .infinity)
+                
 
                 metric(
                     icon: "flame.fill",

@@ -21,7 +21,7 @@ struct HomeView: View {
         let idx = min(max(opcaoDeTreinoParaMostrarCard, 0), workoutsToday.count - 1)
         return workoutsToday[idx]
     }
-
+    
     
     var body: some View {
         NavigationStack {
@@ -30,8 +30,23 @@ struct HomeView: View {
                 
                 VStack(spacing: 0) {
                     // HEADER PRETO PERSONALIZADO
-                    HeaderHome(manager: manager)
-                    Text("\( wcSessionDelegate.number ?? 9)")
+                    HeaderHome(manager: manager, wcSessionDelegate: wcSessionDelegate)
+//                    ForEach(wcSessionDelegate.higherJumps, id: \.self){jump in
+//                        Text("Maiores salto recebido:")
+//                        if let jump = jump{
+//                            Text("\(jump, specifier: "%.0f") cm")
+//                                .font(.largeTitle)
+//                                .bold()
+//                        }
+//                      z
+//                    }
+                    ForEach(wcSessionDelegate.pulos, id: \.self){pulo in
+                        Text("Maiores pulos")
+                        if pulo != 0.0{
+                            Text("\(pulo, specifier: "%.0f") cm")
+                        }
+                    }
+                    Text("Total de pulos: \(wcSessionDelegate.pulos.count)")
                     // CONTEÚDO
                     ScrollView {
                         ZStack {

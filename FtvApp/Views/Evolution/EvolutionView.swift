@@ -9,7 +9,7 @@ import Charts
 
 struct EvolutionView: View {
     @Environment(\.dismiss) private var dismiss
-    
+    @ObservedObject var wcSessionDelegate: PhoneWCSessionDelegate
     @State private var selectedSelection = "M"
     @State private var selectedMetric: String = "Batimento"
     @StateObject var healthManager = HealthManager()
@@ -142,7 +142,4 @@ struct EvolutionView: View {
     }
 }
 
-#Preview {
-    EvolutionView()
-        .preferredColorScheme(.dark)
-}
+

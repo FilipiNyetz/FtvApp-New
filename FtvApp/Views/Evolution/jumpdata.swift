@@ -79,14 +79,14 @@ struct jumpdata: View {
     }
 }
 
-#Preview {
-    // Preview com dados fake
-    let now = Date()
-    let fake: [Workout] = [
-        Workout(id: UUID(), idWorkoutType: 0, duration: 0, calories: 230, distance: 800, frequencyHeart: 120, dateWorkout: now.addingTimeInterval(-2*86400)),
-        Workout(id: UUID(), idWorkoutType: 0, duration: 0, calories: 450, distance: 1200, frequencyHeart: 150, dateWorkout: now.addingTimeInterval(-1*86400)),
-        Workout(id: UUID(), idWorkoutType: 0, duration: 0, calories: 300, distance: 600, frequencyHeart: 110, dateWorkout: now)
-    ]
-    return jumpdata(data: fake, selectedMetric: "Batimento")
-        .preferredColorScheme(.dark)
-}
+//#Preview {
+//    // Preview com dados fake
+//    let now = Date()
+//    let fake: [Workout] = [
+//        Workout(id: UUID(), idWorkoutType: 0, duration: 0, calories: 230, distance: 800, frequencyHeart: 120, dateWorkout: now.addingTimeInterval(-2*86400)),
+//        Workout(id: UUID(), idWorkoutType: 0, duration: 0, calories: 450, distance: 1200, frequencyHeart: 150, dateWorkout: now.addingTimeInterval(-1*86400)),
+//        Workout(id: UUID(), idWorkoutType: 0, duration: 0, calories: 300, distance: 600, frequencyHeart: 110, dateWorkout: now)
+//    ]
+////    return jumpdata(data: fake, selectedMetric: "Batimento")
+////        .preferredColorScheme(.dark)
+//}

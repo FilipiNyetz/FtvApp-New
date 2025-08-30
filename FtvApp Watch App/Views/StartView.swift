@@ -24,7 +24,7 @@ struct StartView: View {
     var body: some View {
         NavigationStack {
             if isWorkoutActive {
-                SessionPagingView(manager: manager)
+                SessionPagingView(manager: manager, wcSessionDelegate: wcSessionDelegate)
                     .onAppear {
                         manager.onWorkoutEnded = { workout in
                             self.savedWorkout = workout

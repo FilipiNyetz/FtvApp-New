@@ -74,40 +74,96 @@ func aggregateByDay(workouts: [Workout], selectedMetric: String) -> [Workout] {
     let grouped = Dictionary(grouping: workouts) {
         calendar.startOfDay(for: $0.dateWorkout)
     }
-    return grouped.map { (date, workouts) in
-        let avg = workouts.map { valueForMetric($0, selectedMetric) }.reduce(0, +) / Double(workouts.count)
-        return Workout(
+
+    var result: [Workout] = []
+
+    for (date, dayWorkouts) in grouped {
+        // 1️⃣ Calcula os valores da métrica
+        let values = dayWorkouts.map { valueForMetric($0, selectedMetric) }
+        let sum = values.reduce(0, +)
+        let avg = sum / Double(values.count)
+
+        // 2️⃣ Inicializa os campos
+        var calories = 0
+        var distance = 0
+        var frequencyHeart = 0.0
+
+        switch selectedMetric {
+        case "Caloria":
+            calories = Int(avg)
+        case "Distância":
+            distance = Int(avg)
+        case "Batimento":
+            frequencyHeart = avg
+        default:
+            break
+        }
+
+        // 3️⃣ Cria o Workout agregado
+        let workout = Workout(
             id: UUID(),
             idWorkoutType: 0,
             duration: 0,
-            calories: selectedMetric == "Caloria" ? Int(avg) : 0,
-            distance: selectedMetric == "Distância" ? Int(avg) : 0,
-            frequencyHeart: selectedMetric == "Batimento" ? avg : 0,
-            dateWorkout: date
+            calories: calories,
+            distance: distance,
+            frequencyHeart: frequencyHeart,
+            dateWorkout: date,
+            higherJump: nil // se quiser incluir média de salto, pode calcular aqui
         )
+
+        result.append(workout)
     }
-    .sorted { $0.dateWorkout < $1.dateWorkout }
+
+    // 4️⃣ Ordena por data
+    return result.sorted { $0.dateWorkout < $1.dateWorkout }
 }
+
 
 func aggregateByMonth(workouts: [Workout], selectedMetric: String) -> [Workout] {
     let calendar = Calendar.current
     let grouped = Dictionary(grouping: workouts) {
         calendar.date(from: calendar.dateComponents([.year, .month], from: $0.dateWorkout)) ?? $0.dateWorkout
     }
-    return grouped.map { (date, workouts) in
-        let avg = workouts.map { valueForMetric($0, selectedMetric) }.reduce(0, +) / Double(workouts.count)
-        return Workout(
+    
+    var result: [Workout] = []
+    
+    for (date, monthWorkouts) in grouped {
+        let values = monthWorkouts.map { valueForMetric($0, selectedMetric) }
+        let sum = values.reduce(0, +)
+        let avg = sum / Double(values.count)
+        
+        var calories = 0
+        var distance = 0
+        var frequencyHeart = 0.0
+        
+        switch selectedMetric {
+        case "Caloria":
+            calories = Int(avg)
+        case "Distância":
+            distance = Int(avg)
+        case "Batimento":
+            frequencyHeart = avg
+        default:
+            break
+        }
+        
+        let workout = Workout(
             id: UUID(),
             idWorkoutType: 0,
             duration: 0,
-            calories: selectedMetric == "Caloria" ? Int(avg) : 0,
-            distance: selectedMetric == "Distância" ? Int(avg) : 0,
-            frequencyHeart: selectedMetric == "Batimento" ? avg : 0,
-            dateWorkout: date
+            calories: calories,
+            distance: distance,
+            frequencyHeart: frequencyHeart,
+            dateWorkout: date,
+            higherJump: nil // se quiser incluir o salto, pode adicionar lógica aqui
         )
+        
+        result.append(workout)
     }
-    .sorted { $0.dateWorkout < $1.dateWorkout }
+    
+    return result.sorted { $0.dateWorkout < $1.dateWorkout }
 }
+
 
 func valueForMetric(_ workout: Workout, _ selectedMetric: String) -> Double {
     switch selectedMetric {

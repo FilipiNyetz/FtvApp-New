@@ -38,6 +38,9 @@
         }
       }
     },
+    "%.0f cm" : {
+
+    },
     "%lld" : {
       "localizations" : {
         "en" : {
@@ -820,6 +823,9 @@
         }
       }
     },
+    "Maiores pulos" : {
+
+    },
     "MÁX" : {
       "localizations" : {
         "en" : {
@@ -1465,6 +1471,9 @@
           }
         }
       }
+    },
+    "Total de pulos: %lld" : {
+
     },
     "Treine saltos com passada controlada e aterrissagem suave. Tente corrigir postura e alinhar braços, tronco e pernas no movimento." : {
       "localizations" : {

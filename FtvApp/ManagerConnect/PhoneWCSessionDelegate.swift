@@ -4,7 +4,11 @@ import WatchConnectivity
 /// The WCSession delegate on the watch side
 class PhoneWCSessionDelegate: NSObject, WCSessionDelegate,ObservableObject {
     
-    @Published var number: Int?
+//    @Published var higherJumps: [Double?] = [0.0]
+    @Published var number: Int = 0
+    @Published var higherJump: Double = 0.0
+    @Published var pulos: [Double] = []
+    var healthManager: HealthManager?
     
     /// Assigns this delegate to WCSession and starts the session
     func startSession() {
@@ -57,10 +61,15 @@ class PhoneWCSessionDelegate: NSObject, WCSessionDelegate,ObservableObject {
     
     func session(_ session: WCSession, didReceiveMessage message: [String : Any]) {
         print("Recebe mensagem")
-        if let valor = message["number"] as? Int {
+        if let valor = message["pulo"] as? Double {
             DispatchQueue.main.async {
+                
                 print("📱 Valor recebido: \(valor)")
-                self.number = valor
+            
+//                self.higherJumps.append(valor)
+                self.higherJump = valor
+                self.pulos.append(valor)
+                
                 // Aqui você pode atualizar sua UI ou lógica
             }
         }

@@ -54,9 +54,3 @@ struct SugestaoCard: View {
     }
 }
 
-struct EvolutionView_Previews: PreviewProvider {
-    static var previews: some View {
-        EvolutionView()
-            .preferredColorScheme(.dark)
-    }
-}

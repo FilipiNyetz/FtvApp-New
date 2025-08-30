@@ -23,6 +23,8 @@ class HealthManager: ObservableObject, @unchecked Sendable {
     // Streak atual
     @Published var currentStreak: Int = 0
     
+    @Published var higherJump: Double = 0.0
+    
     @AppStorage("streakUser") private var storedStreak: Int = 0
     
     var weekChangeTimer: Timer?
@@ -152,8 +154,6 @@ class HealthManager: ObservableObject, @unchecked Sendable {
     
     // MARK: - Fetch histórico completo
     func fetchAllWorkouts(until endDate: Date = Date()) {
-        
-        // Limpa arrays antes da busca
         DispatchQueue.main.async {
             self.workouts.removeAll()
             self.newWorkouts.removeAll()
@@ -162,7 +162,6 @@ class HealthManager: ObservableObject, @unchecked Sendable {
         
         let workoutType = HKObjectType.workoutType()
         let timePredicate = HKQuery.predicateForSamples(withStart: .distantPast, end: endDate)
-        
         let workoutPredicate = HKQuery.predicateForWorkouts(with: .soccer)
         let predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [timePredicate, workoutPredicate])
         let sortDescriptor = NSSortDescriptor(key: HKSampleSortIdentifierEndDate, ascending: true)
@@ -184,31 +183,30 @@ class HealthManager: ObservableObject, @unchecked Sendable {
             
             let group = DispatchGroup()
             var tempWorkouts: [Workout] = []
-            let tempQueue = DispatchQueue(label: "tempWorkoutsQueue") // fila serial para evitar race conditions
+            let tempQueue = DispatchQueue(label: "tempWorkoutsQueue")
             
             for workout in workouts {
                 group.enter()
                 
                 queryFrequenciaCardiaca(workout: workout, healthStore: self.healthStore) { bpm in
-                    
-                    
                     let energyType = HKQuantityType.quantityType(forIdentifier: .activeEnergyBurned)!
-                    
-                    // Valor padrão caso não consiga calcular
                     var calories = 0.0
-                    
                     if let totalEnergy = workout.statistics(for: energyType)?.sumQuantity() {
                         calories = totalEnergy.doubleValue(for: .kilocalorie())
                     }
                     
+                    // 🔑 Pega o higherJump do metadata (se existir)
+                    let higherJump = workout.metadata?["higherJump"] as? Double ?? 0.0
+                    
                     let summary = Workout(
-                        id: workout.uuid, // UUID do HealthKit garante unicidade
+                        id: workout.uuid,
                         idWorkoutType: Int(workout.workoutActivityType.rawValue),
                         duration: workout.duration,
                         calories: Int(calories),
                         distance: Int(workout.totalDistance?.doubleValue(for: .meter()) ?? 0),
                         frequencyHeart: bpm,
-                        dateWorkout: workout.endDate
+                        dateWorkout: workout.endDate,
+                        higherJump: higherJump
                     )
                     
                     tempQueue.async {
@@ -220,7 +218,6 @@ class HealthManager: ObservableObject, @unchecked Sendable {
             
             group.notify(queue: .main) {
                 Task { @MainActor in
-                    // Remove duplicados pelo mesmo id (HealthKit UUID)
                     let uniqueWorkouts = Array(Dictionary(grouping: tempWorkouts, by: { $0.id }).values.map { $0.first! })
                     
                     self.newWorkouts = uniqueWorkouts.sorted { $0.dateWorkout < $1.dateWorkout }
@@ -230,11 +227,11 @@ class HealthManager: ObservableObject, @unchecked Sendable {
                     self.updateWorkoutsByDay(filtered: self.workouts)
                 }
             }
-            
         }
         
         healthStore.execute(query)
     }
+
     
     
     
@@ -309,7 +306,8 @@ class HealthManager: ObservableObject, @unchecked Sendable {
                         calories: Int(calories),
                         distance: Int(workout.totalDistance?.doubleValue(for: .meter()) ?? 0),
                         frequencyHeart: bpm,
-                        dateWorkout: workout.endDate
+                        dateWorkout: workout.endDate,
+                        higherJump: self.higherJump
                     )
                     self.newWorkouts.append(summary)
                     group.leave()

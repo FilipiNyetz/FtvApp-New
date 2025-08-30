@@ -7,6 +7,7 @@
 
 import Foundation
 
+
 struct Workout: Identifiable, Hashable{
     let id: UUID
     let idWorkoutType: Int
@@ -15,4 +16,5 @@ struct Workout: Identifiable, Hashable{
     let distance: Int
     let frequencyHeart: Double
     let dateWorkout: Date
+    let higherJump: Double?
 }
