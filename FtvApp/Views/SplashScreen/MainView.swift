@@ -25,7 +25,7 @@ struct MainView: View {
             }
         }
         .task {
-            try? await Task.sleep(for: .seconds(0.8))
+            try? await Task.sleep(for: .seconds(0.7))
 
             withAnimation(.easeInOut(duration: 0.6)) {
                 splashOpacity = 0.0
