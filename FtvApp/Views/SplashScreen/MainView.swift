@@ -1,11 +1,8 @@
-//
-//  MainView.swift
-//  FtvApp
-//
-//  Created by Cauê Carneiro on 26/08/25.
-//
 
 import SwiftUI
+import SwiftData
+
+
 
 struct MainView: View {
     @State private var isLoading = true
@@ -13,9 +10,12 @@ struct MainView: View {
     @State private var startViewOpacity: Double = 0.0
     
     // Instâncias dos managers
-    @StateObject private var healthManager = HealthManager()
-    @StateObject private var userManager = UserManager()
+    @StateObject var healthManager = HealthManager()
+    @StateObject var userManager = UserManager()
     @StateObject var wcSessionDelegate = PhoneWCSessionDelegate()
+    
+    // Criar ModelContainer como State
+    @State private var container: ModelContainer?
 
     var body: some View {
         ZStack {
@@ -23,11 +23,24 @@ struct MainView: View {
                 .opacity(isLoading ? splashOpacity : 0)
 
             if !isLoading {
-                HomeView(manager: healthManager, userManager: userManager, wcSessionDelegate: wcSessionDelegate)
-                    .opacity(startViewOpacity)
+                if let container {
+                    HomeView(manager: healthManager, userManager: userManager, wcSessionDelegate: wcSessionDelegate)
+                        .environment(\.modelContext, container.mainContext)
+                        .opacity(startViewOpacity)
+                } else {
+                    Text("Erro ao inicializar base de dados")
+                }
             }
         }
         .task {
+            // Inicializa o ModelContainer de forma segura
+            do {
+                container = try ModelContainer(for: JumpEntity.self)
+                wcSessionDelegate.container = container
+            } catch {
+                print("Erro ao criar ModelContainer: \(error)")
+            }
+
             // Wait for the splash screen duration
             try? await Task.sleep(for: .seconds(0.8))
 
@@ -43,6 +56,7 @@ struct MainView: View {
         }
         .onAppear {
             wcSessionDelegate.startSession()
+            healthManager.wcSessionDelegate = wcSessionDelegate
         }
     }
 }

@@ -1,9 +1,11 @@
 import Foundation
+import SwiftData
 import WatchConnectivity
 
 /// The WCSession delegate on the watch side
 class PhoneWCSessionDelegate: NSObject, WCSessionDelegate,ObservableObject {
     
+    var container: ModelContainer!
 //    @Published var higherJumps: [Double?] = [0.0]
     @Published var number: Int = 0
     @Published var higherJump: Double = 0.0
@@ -59,21 +61,61 @@ class PhoneWCSessionDelegate: NSObject, WCSessionDelegate,ObservableObject {
         print("*** Message recieved by watch: \(message) ***")
     }
     
-    func session(_ session: WCSession, didReceiveMessage message: [String : Any]) {
-        print("Recebe mensagem")
-        if let valor = message["pulo"] as? Double {
+    func session(_ session: WCSession, didReceiveMessage message: [String: Any]) {
+        guard let valor = message["pulo"] as? Double,
+              let workoutIdString = message["workoutId"] as? String,
+              let workoutId = UUID(uuidString: workoutIdString) else { return }
+        print("📩 Recebido jump \(valor) para workoutId \(workoutId)")
+
+        
             DispatchQueue.main.async {
-                
-                print("📱 Valor recebido: \(valor)")
-            
-//                self.higherJumps.append(valor)
                 self.higherJump = valor
                 self.pulos.append(valor)
                 
-                // Aqui você pode atualizar sua UI ou lógica
+                Task {
+                    guard let container = self.container else {
+                        print("❌ Container não inicializado, não é possível salvar jump")
+                        return
+                    }
+                    await self.saveJump(value: valor, workoutId: workoutId)
+                }
+
             }
         }
+        
+    @MainActor
+    func saveJump(value: Double, workoutId: UUID) {
+        guard let container else { return }
+        
+        let jump = JumpEntity(height: value, date: Date(), workoutId: workoutId)
+        container.mainContext.insert(jump)
+        
+        do {
+            try container.mainContext.save()
+        } catch {
+            print("Erro ao salvar jump: \(error)")
+        }
     }
+
+    
+    @MainActor
+    func fetchJumps(for workoutId: UUID) async -> [JumpEntity] {
+        guard let container else { return [] }
+        let descriptor = FetchDescriptor<JumpEntity>(
+            predicate: #Predicate { $0.workoutId == workoutId }
+        )
+        do {
+            return try container.mainContext.fetch(descriptor)
+        } catch {
+            print("Erro ao buscar jumps: \(error)")
+            return []
+        }
+    }
+
+
+
+
+
     
     
 }

@@ -14,6 +14,8 @@ class HealthManager: ObservableObject, @unchecked Sendable {
     
     let healthStore = HKHealthStore()
     
+    var wcSessionDelegate: PhoneWCSessionDelegate?
+    
     // Todos os treinos históricos
     @Published var workouts: [Workout] = []
     // Treinos agrupados por dia (baseado nos workouts filtrados)
@@ -22,8 +24,6 @@ class HealthManager: ObservableObject, @unchecked Sendable {
     @Published var totalWorkoutsCount: Int = 0
     // Streak atual
     @Published var currentStreak: Int = 0
-    
-    @Published var higherJump: Double = 0.0
     
     @AppStorage("streakUser") private var storedStreak: Int = 0
     
@@ -153,12 +153,11 @@ class HealthManager: ObservableObject, @unchecked Sendable {
     }
     
     // MARK: - Fetch histórico completo
+    @MainActor
     func fetchAllWorkouts(until endDate: Date = Date()) {
-        DispatchQueue.main.async {
-            self.workouts.removeAll()
-            self.newWorkouts.removeAll()
-            self.totalWorkoutsCount = 0
-        }
+        self.workouts.removeAll()
+        self.newWorkouts.removeAll()
+        self.totalWorkoutsCount = 0
         
         let workoutType = HKObjectType.workoutType()
         let timePredicate = HKQuery.predicateForSamples(withStart: .distantPast, end: endDate)
@@ -179,11 +178,11 @@ class HealthManager: ObservableObject, @unchecked Sendable {
             
             if workouts.isEmpty {
                 print("Nenhum treino encontrado")
+                return
             }
             
             let group = DispatchGroup()
             var tempWorkouts: [Workout] = []
-            let tempQueue = DispatchQueue(label: "tempWorkoutsQueue")
             
             for workout in workouts {
                 group.enter()
@@ -195,21 +194,24 @@ class HealthManager: ObservableObject, @unchecked Sendable {
                         calories = totalEnergy.doubleValue(for: .kilocalorie())
                     }
                     
-                    // 🔑 Pega o higherJump do metadata (se existir)
-                    let higherJump = workout.metadata?["higherJump"] as? Double ?? 0.0
-                    
-                    let summary = Workout(
-                        id: workout.uuid,
-                        idWorkoutType: Int(workout.workoutActivityType.rawValue),
-                        duration: workout.duration,
-                        calories: Int(calories),
-                        distance: Int(workout.totalDistance?.doubleValue(for: .meter()) ?? 0),
-                        frequencyHeart: bpm,
-                        dateWorkout: workout.endDate,
-                        higherJump: higherJump
-                    )
-                    
-                    tempQueue.async {
+                    // ⚡️ Aqui criamos um Task para acessar async fetchJumps
+                    Task { @MainActor in
+                        let jumps = await self.wcSessionDelegate?.fetchJumps(for: workout.uuid) ?? []
+                        let higherJump = jumps.map { $0.height }.max() ?? 0.0
+                        print("Jumps encontrados: \(jumps.count) para workout \(workout.uuid)")
+                        
+                        let summary = Workout(
+                            id: workout.uuid,
+                            idWorkoutType: Int(workout.workoutActivityType.rawValue),
+                            duration: workout.duration,
+                            calories: Int(calories),
+                            distance: Int(workout.totalDistance?.doubleValue(for: .meter()) ?? 0),
+                            frequencyHeart: bpm,
+                            dateWorkout: workout.endDate,
+                            higherJump: higherJump
+                        )
+                        
+                        // Adiciona ao array temporário
                         tempWorkouts.append(summary)
                         group.leave()
                     }
@@ -219,11 +221,9 @@ class HealthManager: ObservableObject, @unchecked Sendable {
             group.notify(queue: .main) {
                 Task { @MainActor in
                     let uniqueWorkouts = Array(Dictionary(grouping: tempWorkouts, by: { $0.id }).values.map { $0.first! })
-                    
                     self.newWorkouts = uniqueWorkouts.sorted { $0.dateWorkout < $1.dateWorkout }
                     self.workouts = self.newWorkouts
                     self.totalWorkoutsCount = self.workouts.count
-                    
                     self.updateWorkoutsByDay(filtered: self.workouts)
                 }
             }
@@ -232,18 +232,16 @@ class HealthManager: ObservableObject, @unchecked Sendable {
         healthStore.execute(query)
     }
 
+
     
     
     
     
     // MARK: - Fetch por período (mantida!)
     func fetchDataWorkout(endDate: Date, period: String) {
-        
-        DispatchQueue.main.async {
-            self.workouts.removeAll()
-            self.newWorkouts.removeAll()
-            self.totalWorkoutsCount = 0
-        }
+        self.workouts.removeAll()
+        self.newWorkouts.removeAll()
+        self.totalWorkoutsCount = 0
         
         let startDate: Date
         let adjustedEndDate: Date
@@ -273,10 +271,11 @@ class HealthManager: ObservableObject, @unchecked Sendable {
         let workoutPredicate = HKQuery.predicateForWorkouts(with: .soccer)
         let predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [timePredicate, workoutPredicate])
         
-        let query = HKSampleQuery(sampleType: workoutType,
-                                  predicate: predicate,
-                                  limit: HKObjectQueryNoLimit,
-                                  sortDescriptors: [NSSortDescriptor(key: HKSampleSortIdentifierEndDate, ascending: true)]
+        let query = HKSampleQuery(
+            sampleType: workoutType,
+            predicate: predicate,
+            limit: HKObjectQueryNoLimit,
+            sortDescriptors: [NSSortDescriptor(key: HKSampleSortIdentifierEndDate, ascending: true)]
         ) { _, samples, error in
             guard let workouts = samples as? [HKWorkout], error == nil else {
                 print("Erro ao buscar workouts: \(error?.localizedDescription ?? "desconhecido")")
@@ -289,28 +288,31 @@ class HealthManager: ObservableObject, @unchecked Sendable {
                 group.enter()
                 
                 queryFrequenciaCardiaca(workout: workout, healthStore: self.healthStore) { bpm in
-                    
                     let energyType = HKQuantityType.quantityType(forIdentifier: .activeEnergyBurned)!
-                    
-                    // Valor padrão caso não consiga calcular
                     var calories = 0.0
-                    
                     if let totalEnergy = workout.statistics(for: energyType)?.sumQuantity() {
                         calories = totalEnergy.doubleValue(for: .kilocalorie())
                     }
                     
-                    let summary = Workout(
-                        id: UUID(),
-                        idWorkoutType: Int(workout.workoutActivityType.rawValue),
-                        duration: workout.duration,
-                        calories: Int(calories),
-                        distance: Int(workout.totalDistance?.doubleValue(for: .meter()) ?? 0),
-                        frequencyHeart: bpm,
-                        dateWorkout: workout.endDate,
-                        higherJump: self.higherJump
-                    )
-                    self.newWorkouts.append(summary)
-                    group.leave()
+                    // ⚡️ Buscar os jumps do SwiftData
+                    Task { @MainActor in
+                        let jumps = await self.wcSessionDelegate?.fetchJumps(for: workout.uuid) ?? []
+                        let higherJump = jumps.map { $0.height }.max() ?? 0.0
+                        
+                        let summary = Workout(
+                            id: workout.uuid,
+                            idWorkoutType: Int(workout.workoutActivityType.rawValue),
+                            duration: workout.duration,
+                            calories: Int(calories),
+                            distance: Int(workout.totalDistance?.doubleValue(for: .meter()) ?? 0),
+                            frequencyHeart: bpm,
+                            dateWorkout: workout.endDate,
+                            higherJump: higherJump
+                        )
+                        
+                        self.newWorkouts.append(summary)
+                        group.leave()
+                    }
                 }
             }
             
@@ -325,6 +327,7 @@ class HealthManager: ObservableObject, @unchecked Sendable {
         
         healthStore.execute(query)
     }
+
     
     // MARK: - Filtro em memória
     func filterWorkouts(period: String, referenceDate: Date = Date()) {

@@ -16,6 +16,7 @@ struct StartView: View {
     @State private var isCountingDown = false
     @State private var savedWorkout: HKWorkout?
     @State private var selectedWorkoutType: HKWorkoutActivityType? = nil
+    @StateObject private var jumpDetector = JumpDetector()
     
     @State var numeroWatch: Int = 0
 
@@ -29,6 +30,7 @@ struct StartView: View {
                         manager.onWorkoutEnded = { workout in
                             self.savedWorkout = workout
                         }
+                        jumpDetector.start()
                     }
                     .sheet(
                         item: $savedWorkout,
@@ -36,7 +38,11 @@ struct StartView: View {
                             isWorkoutActive = false
                         }
                     ) { workout in
-                        SummaryView(workout: workout)
+                        SummaryView(
+                            wcSessionDelegate: wcSessionDelegate,
+                            jumpDetector: jumpDetector,
+                            workout: workout
+                        )
                             .environmentObject(manager)
                     }
             } else if isCountingDown, let workoutType = selectedWorkoutType {

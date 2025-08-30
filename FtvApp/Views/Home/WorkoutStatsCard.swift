@@ -33,6 +33,13 @@ struct WorkoutStatsCard: View {
                     unit: "cal",
                     icon: "flame.fill"
                 )
+                Divider().frame(height: 40).background(Color.white.opacity(0.4))
+                statItem(
+                    title: "ALTURA",
+                    value: "\(Double(workout.higherJump!))",
+                    unit: "cm",
+                    icon: "flame.fill"
+                )
             }
             
 

@@ -11,7 +11,8 @@ import HealthKit
 struct MetricsView: View {
     @ObservedObject var workoutManager: WorkoutManager
     @ObservedObject var wcSessionDelegate: WatchWCSessionDelegate
-    @StateObject private var jumpDetector = JumpDetector()
+//    @ObservedObject var jumpDetector: JumpDetector
+   
 
     var body: some View {
         TimelineView(MetricsTimeLineSchedule(from: workoutManager.startDate ?? Date())) { context in
@@ -66,11 +67,11 @@ struct MetricsView: View {
                 
                 
                 // Saltos
-                Text("Ú: \(String(format: "%.0f", jumpDetector.lastJumpHeight * 100)) cm")
-                
-                
-                
-                Text("MKA: \(String(format: "%.0f", jumpDetector.bestJumpHeight * 100)) cm")
+//                Text("Ú: \(String(format: "%.0f", jumpDetector.lastJumpHeight * 100)) cm")
+//                
+//                
+//                
+//                Text("MKA: \(String(format: "%.0f", jumpDetector.bestJumpHeight * 100)) cm")
                 
             }
             .font(
@@ -82,15 +83,15 @@ struct MetricsView: View {
             .ignoresSafeArea(edges: .bottom)
             .scenePadding()
         }
-        .onAppear {
-            jumpDetector.start()
-        }
-        .onDisappear {
-            jumpDetector.stop()
-            let cmValue:Double = jumpDetector.bestJumpHeight*100
-            print("Vai enviar a msg")
-            wcSessionDelegate.sendMessage(message: ["pulo": cmValue])
-        }
+//        .onAppear {
+//            jumpDetector.start()
+//        }
+//        .onDisappear {
+//            jumpDetector.stop()
+//            let cmValue:Double = jumpDetector.bestJumpHeight*100
+//            print("Vai enviar a msg")
+//            wcSessionDelegate.sendMessage(message: ["pulo": cmValue])
+//        }
     }
 }
 

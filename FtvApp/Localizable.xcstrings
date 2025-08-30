@@ -483,6 +483,9 @@
         }
       }
     },
+    "Erro ao inicializar base de dados" : {
+
+    },
     "Estratégia" : {
       "localizations" : {
         "en" : {
