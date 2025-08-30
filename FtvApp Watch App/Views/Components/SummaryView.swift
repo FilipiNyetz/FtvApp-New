@@ -78,7 +78,7 @@ struct SummaryView: View {
         .navigationBarTitleDisplayMode(.inline)
         .onAppear(){
             jumpDetector.stop()
-            let bestJumpCM: Double = (jumpDetector.bestJumpHeight * 100).rounded()
+            let bestJumpCM: Double = (jumpDetector.bestJumpHeight * 10).rounded()
             print("vai enviar o melhor pulo para o iphone")
             wcSessionDelegate.sendMessage(message: [
                 "pulo": bestJumpCM,

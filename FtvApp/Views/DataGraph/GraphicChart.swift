@@ -13,6 +13,7 @@ struct GraphicChart: View {
     var selectedMetric: String
     var period: String
     @Binding var selectedWorkout: Workout?
+    var todosWorkouts: [Workout]?
     
     var body: some View {
         Chart {

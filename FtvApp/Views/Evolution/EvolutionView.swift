@@ -12,20 +12,20 @@ struct EvolutionView: View {
     @ObservedObject var wcSessionDelegate: PhoneWCSessionDelegate
     @State private var selectedSelection = "M"
     @State private var selectedMetric: String = "Batimento"
-    @StateObject var healthManager = HealthManager()
+    @ObservedObject var manager: HealthManager
     @State private var selectedWorkout: Workout?
+    
 
     var body: some View {
 
         NavigationStack {
-           
             HeaderEvolution(selectedMetric: $selectedMetric)
             
             ScrollView {
                 // Dados do gráfico (filtrados/agregados p/ período + métrica)
                 let periodKey = Period(selection: selectedSelection)
                 let chartData = dataForChart(
-                    healthManager: healthManager,
+                    manager: manager,
                     period: periodKey,
                     selectedMetric: selectedMetric
                 )
@@ -114,7 +114,7 @@ struct EvolutionView: View {
 
             // Carrega tudo ao entrar; o gráfico agrega por período em memória
             .onAppear {
-                healthManager.fetchAllWorkouts()
+                manager.fetchAllWorkouts()
             }
         }
     }

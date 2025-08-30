@@ -14,7 +14,8 @@ struct MenuView: View {
     let metrics: [(name: String, icon: String)] = [
         (NSLocalizedString("Batimento", comment: ""), "heart.fill"),
         (NSLocalizedString("Caloria", comment: ""),   "flame.fill"),
-        (NSLocalizedString("Distância", comment: ""), "location.fill")
+        (NSLocalizedString("Distância", comment: ""), "location.fill"),
+        (NSLocalizedString("Altura", comment: ""), "location.fill")
     ]
 
     private var currentMetricIcon: String {
