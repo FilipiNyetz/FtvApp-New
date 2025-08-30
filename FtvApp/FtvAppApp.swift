@@ -12,7 +12,6 @@ import SwiftData
 struct FtvAppApp: App {
     
     init() {
-        // Configuração mínima da navigation bar
         UINavigationBar.appearance().tintColor = UIColor(named: "ColorPrimal") ?? UIColor.systemGreen
     }
     
@@ -20,9 +19,6 @@ struct FtvAppApp: App {
         WindowGroup {
             MainView()
                 .preferredColorScheme(.dark)
-//                .onAppear {
-//                    wcSessionDelegate.startSession()
-//                }
                
         }
         

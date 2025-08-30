@@ -8,8 +8,6 @@
 import Foundation
 import SwiftUICore
 
-// MARK: - Célula de cada dia do calendário
-
 struct DayCell: View {
     let date: Date
     let isToday: Bool
@@ -43,8 +41,6 @@ struct DayCell: View {
                         .frame(width: 32, height: 32)
                 }
                 
-                
-                // Bolinha indicando treino concluído
                 if(isToday && isSelected){
                     Circle()
                         .fill(Color.black)

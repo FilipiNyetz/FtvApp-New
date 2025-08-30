@@ -12,18 +12,16 @@ struct SplashScreeniOS: View {
         VStack(spacing: 20) {
             Spacer()
             
-            // Logo principal com ajuste visual para a direita
             HStack {
                 Spacer()
                 Image("logo7S")
                     .resizable()
                     .scaledToFit()
                     .frame(width: 150, height: 150)
-                    .offset(x: 8) // Move logo ligeiramente para a direita
+                    .offset(x: 8)
                 Spacer()
             }
             
-            // Texto do nome com ajuste visual para a esquerda
             HStack {
                 Spacer()
                 Text("SETE")
@@ -31,7 +29,7 @@ struct SplashScreeniOS: View {
                     .foregroundColor(Color("ColorPrimal"))
                     .tracking(4)
                     .textCase(.uppercase)
-                    .offset(x: -4) // Move texto ligeiramente para a esquerda
+                    .offset(x: -4)
                 Spacer()
             }
                 

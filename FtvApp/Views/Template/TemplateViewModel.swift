@@ -32,10 +32,10 @@ class TemplateViewModel: ObservableObject {
             currentStreak: currentStreak,
             isPreview: false
         )
-        .frame(width: 360, height: 700)  // define o tamanho da imagem desejado
+        .frame(width: 360, height: 700) 
 
         let renderer = ImageRenderer(content: templateView)
-        renderer.scale = 3.0  // você pode ajustar para 2 ou 3 para maior resolução
+        renderer.scale = 3.0
         renderer.isOpaque = withBackground
 
         if let uiImage = renderer.uiImage {

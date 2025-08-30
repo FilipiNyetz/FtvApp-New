@@ -60,28 +60,7 @@ struct TemplateBodyView: View {
 
     // MARK: - Sem Fundo (Transparente)
     var contentNoBackground: some View {
-
-        // MARK: Layout estilo Sem Fundo
         VStack(spacing: 30) {
-            // Altura Máxima
-            //                    VStack(spacing: 8) {
-            //                        Text("Altura máx")
-            //                            .font(.callout)
-            //                            .fontWeight(.bold)
-            //                            .foregroundStyle(.white)
-            //                        HStack(alignment: .firstTextBaseline, spacing: 4) {
-            //                            Text("40")
-            //                                .font(.largeTitle)
-            //                                .fontWeight(.heavy)
-            //                                .foregroundStyle(.white)
-            //                            Text("cm")
-            //                                .font(.title2)
-            //                                .fontWeight(.medium)
-            //                                .foregroundStyle(.white.opacity(0.6))
-            //                        }
-            //                    }
-
-            // Calorias
             VStack(spacing: 8) {
                 Text("Caloria")
                     .font(.callout)
@@ -100,7 +79,6 @@ struct TemplateBodyView: View {
                 }
             }
 
-            // Tempo
             VStack(spacing: 8) {
                 Text("Tempo")
                     .font(.callout)
@@ -118,30 +96,6 @@ struct TemplateBodyView: View {
                 .foregroundStyle(.white)
             }
 
-            //                 //    Heatmap Pequeno
-            //                    VStack(spacing: 20) {
-            //                        RoundedRectangle(cornerRadius: 12)
-            //                            .stroke(Color.white.opacity(0.3), lineWidth: 2)
-            //                            .frame(width: 120, height: 160)
-            //                            .overlay(
-            //                                // Placeholder para heatmap futuro
-            //                                VStack(spacing: 8) {
-            //                                    Image(systemName: "chart.xyaxis.line")
-            //                                        .font(.title2)
-            //                                        .foregroundStyle(
-            //                                            Color.white.opacity(0.4)
-            //                                        )
-            //
-            //                                    Text("Heatmap")
-            //                                        .font(.caption2)
-            //                                        .foregroundStyle(
-            //                                            Color.white.opacity(0.4)
-            //                                        )
-            //                                }
-            //                            )
-            //                    }
-
-            // Nome do App
             VStack(spacing: 8) {
                 Image("LogoNome7")
             }

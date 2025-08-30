@@ -4,8 +4,7 @@ struct ProgressBarView: View {
     @ObservedObject var manager: HealthManager
     @ObservedObject var userManager: UserManager
     @State private var animatedProgress: Double = 0
-    let goal: Int = 20 // meta inicial
-
+    let goal: Int = 20
     
     var body: some View {
         HStack {
@@ -26,19 +25,17 @@ struct ProgressBarView: View {
                     .font(.footnote)
                     .foregroundStyle(Color.textGray)
                     .fontWeight(.medium)
-                    .animation(nil, value: manager.workouts.count) // bloqueia animação
+                    .animation(nil, value: manager.workouts.count)
             }
             
             VStack {
                 GeometryReader { geometry in
                     ZStack(alignment: .leading) {
-                        // Fundo da barra
                         Rectangle()
                             .frame(height: 8)
                             .foregroundColor(Color.backgroundProgressBar)
                             .cornerRadius(8)
                         
-                        // Progresso
                         let progress = min(Double(manager.workouts.count) / Double(userManager.goalBadge), 1.0)
                         
                         RoundedRectangle(cornerRadius: 8, style: .continuous)
@@ -63,7 +60,7 @@ struct ProgressBarView: View {
                     .font(.footnote)
                     .foregroundStyle(Color.textGray)
                     .fontWeight(.medium)
-                    .animation(nil, value: manager.workouts.count) // bloqueia animação
+                    .animation(nil, value: manager.workouts.count)
             }
 
             
@@ -94,12 +91,12 @@ struct ProgressBarView: View {
             )
         )
         .overlay(
-            RoundedRectangle(cornerRadius: 8) // mesmo radius do Figma
+            RoundedRectangle(cornerRadius: 8)
                 .stroke(Color(.backgroundProgressBar), lineWidth: 0.3)
         )
         .shadow(
-            color: Color.black.opacity(0.3), // ajusta a opacidade
-            radius: 3, // blur
+            color: Color.black.opacity(0.3),
+            radius: 3,
             x: 0,
             y: 2
         )
@@ -118,12 +115,11 @@ struct ProgressBarView: View {
         }
     }
     
-    /// Interpola entre duas cores (#A2A2A2 -> #D6FF45) conforme o progresso
     func interpolatedColor(progress: Double) -> Color {
-        let clamped = max(0, min(progress, 1)) // garante que esteja entre 0 e 1
+        let clamped = max(0, min(progress, 1))
         
-        let start = UIColor(hex: "#A2A2A2") // cinza
-        let end = UIColor(hex: "#D6FF45")   // verde limão
+        let start = UIColor(hex: "#A2A2A2")
+        let end = UIColor(hex: "#D6FF45")
         
         var sR: CGFloat = 0, sG: CGFloat = 0, sB: CGFloat = 0, sA: CGFloat = 0
         var eR: CGFloat = 0, eG: CGFloat = 0, eB: CGFloat = 0, eA: CGFloat = 0
@@ -140,7 +136,6 @@ struct ProgressBarView: View {
 
 }
 
-// Extensão para converter hex em UIColor
 extension UIColor {
     convenience init(hex: String) {
         var hexSanitized = hex.trimmingCharacters(in: .whitespacesAndNewlines).uppercased()

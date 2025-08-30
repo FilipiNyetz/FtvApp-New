@@ -23,16 +23,13 @@ struct MainView: View {
             }
         }
         .task {
-            // Wait for the splash screen duration
             try? await Task.sleep(for: .seconds(2))
 
-            // Animate splash screen fade out and start view fade in
             withAnimation(.easeInOut(duration: 1.0)) {
                 splashOpacity = 0.0
                 startViewOpacity = 1.0
             }
 
-            // Wait for the animation to complete before changing the state
             try? await Task.sleep(for: .seconds(1.0))
             isLoading = false
         }

@@ -7,7 +7,6 @@
 
 import Foundation
 
-// Janela do período atual (ancorada em "hoje")
 func currentRange(for period: String, now: Date = Date()) -> ClosedRange<Date> {
     let cal = Calendar.current
     switch period {
@@ -42,7 +41,6 @@ func currentRange(for period: String, now: Date = Date()) -> ClosedRange<Date> {
     }
 }
 
-// Filtra treinos que caem dentro da janela
 func filter(_ workouts: [Workout], in range: ClosedRange<Date>) -> [Workout] {
     workouts.filter { range.contains($0.dateWorkout) }
 }
@@ -53,15 +51,12 @@ func dataForChart(healthManager: HealthManager, period: String, selectedMetric: 
 
     switch period {
     case "day":
-        // Sem agregação: só treinos do dia atual
         return scoped
 
     case "week", "month":
-        // Agrega por dia, dentro da janela
         return aggregateByDay(workouts: scoped, selectedMetric: selectedMetric)
 
     case "sixmonth", "year":
-        // Agrega por mês, dentro da janela
         return aggregateByMonth(workouts: scoped, selectedMetric: selectedMetric)
 
     default:
@@ -118,7 +113,6 @@ func valueForMetric(_ workout: Workout, _ selectedMetric: String) -> Double {
     }
 }
 
-// Rótulos do eixo X em pt-BR (3 letras p/ semana/mês)
 func localizedXAxisLabel(for date: Date, period: String) -> String {
     let loc = Locale(identifier: "pt_BR")
     let df = DateFormatter()
@@ -130,23 +124,22 @@ func localizedXAxisLabel(for date: Date, period: String) -> String {
         df.dateFormat = "HH:mm"
         return df.string(from: date)
     case "week":
-        let idx = Calendar.current.component(.weekday, from: date) - 1 // 0...6
-        let sym = df.shortWeekdaySymbols[idx] // ex: "dom."
-        return String(sym.replacingOccurrences(of: ".", with: "").prefix(3)) // "dom"
+        let idx = Calendar.current.component(.weekday, from: date) - 1
+        let sym = df.shortWeekdaySymbols[idx]
+        return String(sym.replacingOccurrences(of: ".", with: "").prefix(3))
     case "month":
         df.dateFormat = "d"
         return df.string(from: date)
     case "sixmonth", "year":
-        let idx = Calendar.current.component(.month, from: date) - 1 // 0...11
-        let sym = df.shortMonthSymbols[idx] // ex: "jan"
-        return String(sym.replacingOccurrences(of: ".", with: "").prefix(3)) // "jan"
+        let idx = Calendar.current.component(.month, from: date) - 1
+        let sym = df.shortMonthSymbols[idx]
+        return String(sym.replacingOccurrences(of: ".", with: "").prefix(3))
     default:
         df.dateFormat = "d/M"
         return df.string(from: date)
     }
 }
 
-// Usado no balão (annotation)
 func xLabelPtBR(for date: Date, period: String) -> String {
     localizedXAxisLabel(for: date, period: period)
 }
@@ -156,7 +149,6 @@ func updateSelection(for date: Date, in data: [Workout], selectedWorkout: inout 
     selectedWorkout = closest
 }
 
-// Domínio sempre = janela do período (+1s evita clipping da última barra)
 func xDomain(data: [Workout], period: String) -> ClosedRange<Date> {
     let cal = Calendar.current
     var range = currentRange(for: period)

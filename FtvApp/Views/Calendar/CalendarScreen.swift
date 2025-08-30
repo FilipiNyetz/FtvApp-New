@@ -16,11 +16,8 @@ struct CalendarScreen: View {
     @Binding var selectedDate: Date
     @ObservedObject var manager: HealthManager
     
-    //private let calendarData = SampleData.createCalendarData()
-    
     var body: some View {
         VStack(spacing: 12) {
-            // Pílula da data ( fixa a esquerda)
             HStack{
                 Button {
                     withAnimation (){
@@ -39,8 +36,6 @@ struct CalendarScreen: View {
                 }
                 Spacer()
             }
-            
-            // Calendário (aparece/desaparece)
             if showCalendar {
                 CalendarView(
                     selectedDate: $selectedDate,

@@ -14,7 +14,6 @@ struct DatePickerField: View {
     
     var body: some View {
         ZStack {
-            // Background invisível para detectar toques fora do calendário
             if showCalendar {
                 Color.clear
                     .contentShape(Rectangle())
@@ -30,7 +29,6 @@ struct DatePickerField: View {
             VStack{
                 CalendarScreen(showCalendar: $showCalendar, selectedDate: $selectedDate, manager: manager)
                     .onTapGesture {
-                        // Impede que toques no calendário sejam propagados para o background
                     }
             }
         }

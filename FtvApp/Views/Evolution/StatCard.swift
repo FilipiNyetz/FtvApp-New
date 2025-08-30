@@ -12,7 +12,6 @@ struct StatCard: View {
     let value: String
     let unit: String
     let dateText: String
-//    let stroke = stroke(Color.blue.opacity(0.3), lineWidth: 1)
     var body: some View {
         VStack(alignment: .leading, spacing: 6) {
             HStack {

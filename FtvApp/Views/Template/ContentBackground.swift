@@ -25,7 +25,6 @@ struct ContentBackground: View {
 
     let workout: Workout
 
-    // Lógica dos níveis de fogo (igual ao HeaderHome)
     var nivelFogo: Int {
         switch currentStreak {
         case 0...1: return 1
@@ -42,7 +41,6 @@ struct ContentBackground: View {
 
     var body: some View {
         VStack(spacing: 24) {
-            // Top Metrics (streak, tempo, insignia)
             HStack {
                 metric(
                     icon: imageFogoNum,
@@ -54,7 +52,6 @@ struct ContentBackground: View {
                 )
                 .frame(maxWidth: .infinity)
 
-                // Coluna Central
                 VStack(spacing: 4) {
                     Text("TEMPO")
                         .font(.caption2)
@@ -73,7 +70,6 @@ struct ContentBackground: View {
                 }
                 .frame(maxWidth: .infinity)
 
-                // Coluna Direita
                 metric(
                     icon: badgeImage,
                     value: "\(totalWorkouts)",
@@ -85,7 +81,6 @@ struct ContentBackground: View {
                 .frame(maxWidth: .infinity)
             }
 
-            // Logo centralizada no heatmap (AUMENTADA)
             Image("logo7S")
                 .resizable()
                 .scaledToFit()
@@ -93,7 +88,6 @@ struct ContentBackground: View {
                 .opacity(0.8)
                 .padding(50)
 
-            // Bottom Metrics
             HStack {
                 metric(
                     icon: "heart.fill",
@@ -118,7 +112,6 @@ struct ContentBackground: View {
                 .frame(maxWidth: .infinity)
             }
 
-            // Nome do App
             VStack(spacing: 4) {
                 Image("LogoNome7")
             }

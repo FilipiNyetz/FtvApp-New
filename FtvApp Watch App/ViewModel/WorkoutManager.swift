@@ -56,7 +56,6 @@ class WorkoutManager: NSObject, ObservableObject {
     // MARK: - Workout Control
 
     func startWorkout(workoutType: HKWorkoutActivityType) {
-        // 1. Zera todo o estado anterior
         self.accumulatedTime = 0
         self.elapsedTime = 0
         self.heartRate = 0
@@ -67,7 +66,6 @@ class WorkoutManager: NSObject, ObservableObject {
         self.isEndingWorkout = false
         self.resetTimer()
 
-        // 2. Configura e cria a nova sessão
         let configuration = HKWorkoutConfiguration()
         configuration.activityType = workoutType
         configuration.locationType = .outdoor
@@ -83,7 +81,6 @@ class WorkoutManager: NSObject, ObservableObject {
         session.delegate = self
         builder.delegate = self
 
-        // 3. Inicia o treino
         startDate = Date()
         session.startActivity(with: startDate!)
         builder.beginCollection(withStart: startDate!) { _, _ in }
@@ -193,7 +190,6 @@ class WorkoutManager: NSObject, ObservableObject {
 extension WorkoutManager: HKWorkoutSessionDelegate {
     func workoutSession(_ workoutSession: HKWorkoutSession, didChangeTo toState: HKWorkoutSessionState, from fromState: HKWorkoutSessionState, date: Date) {
         DispatchQueue.main.async {
-            // ✅ A LINHA QUE FALTAVA FOI ADICIONADA DE VOLTA
             self.running = toState == .running
             
             print("HK Session State Changed to: \(toState.rawValue) -> Running is \(self.running)")

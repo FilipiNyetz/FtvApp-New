@@ -8,8 +8,6 @@
 import Foundation
 import HealthKit
 
-/// Consulta frequência cardíaca de um workout específico.
-/// Retorna a média em BPM.
 func queryFrequenciaCardiaca(
     workout: HKWorkout,
     healthStore: HKHealthStore,
@@ -34,7 +32,7 @@ func queryFrequenciaCardiaca(
         }
         
         let bpm = result?.averageQuantity()?.doubleValue(for: HKUnit.count().unitDivided(by: .minute())) ?? 0
-        completionHandler(bpm) // Chamado apenas uma vez por treino
+        completionHandler(bpm)
     }
     
     healthStore.execute(query)

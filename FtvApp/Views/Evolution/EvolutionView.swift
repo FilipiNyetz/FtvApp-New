@@ -9,7 +9,7 @@ import Charts
 
 struct EvolutionView: View {
     @Environment(\.dismiss) private var dismiss
-    
+
     @State private var selectedSelection = "M"
     @State private var selectedMetric: String = "Batimento"
     @StateObject var healthManager = HealthManager()
@@ -18,11 +18,10 @@ struct EvolutionView: View {
     var body: some View {
 
         NavigationStack {
-           
+
             HeaderEvolution(selectedMetric: $selectedMetric)
-            
+
             ScrollView {
-                // Dados do gráfico (filtrados/agregados p/ período + métrica)
                 let periodKey = Period(selection: selectedSelection)
                 let chartData = dataForChart(
                     healthManager: healthManager,
@@ -31,10 +30,11 @@ struct EvolutionView: View {
                 )
 
                 VStack {
-                    VStack{
+                    VStack {
                         HStack {
                             Picker("Período", selection: $selectedSelection) {
-                                ForEach(["D","S","M","6M","A"], id: \.self) { periodo in
+                                ForEach(["D", "S", "M", "6M", "A"], id: \.self)
+                                { periodo in
                                     Text(periodo).tag(periodo)
                                 }
                             }
@@ -44,7 +44,6 @@ struct EvolutionView: View {
                         }
                         .padding()
 
-                        // Gráfico
                         GraphicChart(
                             data: chartData,
                             selectedMetric: selectedMetric,
@@ -59,7 +58,11 @@ struct EvolutionView: View {
                         RoundedRectangle(cornerRadius: 0, style: .continuous)
                             .fill(
                                 LinearGradient(
-                                    colors: [Color.progressBarBGLight, Color.progressBarBGDark,Color.progressBarBGDark],
+                                    colors: [
+                                        Color.progressBarBGLight,
+                                        Color.progressBarBGDark,
+                                        Color.progressBarBGDark,
+                                    ],
                                     startPoint: .top,
                                     endPoint: .bottom
                                 )
@@ -68,15 +71,16 @@ struct EvolutionView: View {
                     )
                     .padding(.bottom, -7)
                     Divider()
-                    //.padding(.horizontal)
 
-                    // Cards Máx / Mín conforme métrica selecionada
                     jumpdata(data: chartData, selectedMetric: selectedMetric)
                         .padding()
                 }
                 .background(
                     LinearGradient(
-                        gradient: Gradient(colors: [Color.gradiente2, Color.gradiente2, Color.gradiente1]),
+                        gradient: Gradient(colors: [
+                            Color.gradiente2, Color.gradiente2,
+                            Color.gradiente1,
+                        ]),
                         startPoint: .topLeading,
                         endPoint: .bottomTrailing
                     )
@@ -86,7 +90,7 @@ struct EvolutionView: View {
                 .padding(.top, -8)
                 .padding(.bottom, -8)
                 Divider()
-                
+
                 suggestions()
                     .padding()
             }
@@ -109,10 +113,7 @@ struct EvolutionView: View {
                 }
             }
             .toolbarBackground(Color.black, for: .navigationBar)
-         //   .toolbarBackground(.visible, for: .navigationBar)
             .background(Color.gray.opacity(0.1).ignoresSafeArea())
-
-            // Carrega tudo ao entrar; o gráfico agrega por período em memória
             .onAppear {
                 healthManager.fetchAllWorkouts()
             }
@@ -126,18 +127,18 @@ struct EvolutionView: View {
         case "M": return "Este Mês"
         case "6M": return "Este Semestre"
         case "A": return "Este Ano"
-        default:  return "Este Mês"
+        default: return "Este Mês"
         }
     }
 
     func Period(selection: String) -> String {
         switch selection {
-        case "D":  return "day"
-        case "S":  return "week"
-        case "M":  return "month"
+        case "D": return "day"
+        case "S": return "week"
+        case "M": return "month"
         case "6M": return "sixmonth"
-        case "A":  return "year"
-        default:   return "month"
+        case "A": return "year"
+        default: return "month"
         }
     }
 }

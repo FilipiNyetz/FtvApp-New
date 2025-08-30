@@ -10,7 +10,7 @@ import SwiftUI
 struct CardWithoutDayWorkout: View {
     var body: some View {
 
-        ZStack(alignment: .center) {  // garante que todo o conteúdo fique centralizado
+        ZStack(alignment: .center) { 
             RoundedRectangle(cornerRadius: 15)
                 .fill(
                     LinearGradient(
@@ -28,7 +28,6 @@ struct CardWithoutDayWorkout: View {
                     y: 2
                 )
 
-            // Imagem de fundo
             Image("logo7S")
                 .resizable()
                 .scaledToFit()
@@ -36,7 +35,6 @@ struct CardWithoutDayWorkout: View {
                 .frame(width: 250, height: 250)
                 .offset(x: 130, y: 10)
 
-            // Conteúdo do card
             VStack(spacing: 10) {
                 Text("Seu melhor desempenho ainda pode ser hoje!")
                     .font(.title3)

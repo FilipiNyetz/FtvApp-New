@@ -9,7 +9,6 @@ import SwiftUI
 
 struct suggestions: View {
     var body: some View {
-        // ---------- Sugestões ----------
         VStack(alignment: .leading, spacing: 12) {
             VStack(alignment: .leading, spacing: 4) {
                 Text("Sugestões")

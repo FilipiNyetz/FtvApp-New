@@ -20,13 +20,12 @@ struct CardWithoutWorkout: View {
                     )
                 )
                 .shadow(
-                    color: Color.black, // ajusta a opacidade
-                    radius: 6, // blur
+                    color: Color.black,
+                    radius: 6,
                     x: 0,
                     y: 2
                 )
 
-            // Imagem que flutua atrás do texto
             Image("logo7S")
                 .resizable()
                 .scaledToFit()
@@ -34,7 +33,6 @@ struct CardWithoutWorkout: View {
                 .frame(width: 250, height: 250)
                 .offset(x: 130, y: 10)
 
-            // Conteúdo de texto e ícone centralizados
             VStack(alignment: .center, spacing: 10) {
 
                 Text("Você ainda não tem treinos registrados")
