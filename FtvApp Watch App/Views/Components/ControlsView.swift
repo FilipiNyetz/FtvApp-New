@@ -32,7 +32,6 @@ struct ControlsView: View {
                             manager.pause()
                         } else if manager.session?.state == .paused {
                             manager.resume()
-                            // ✨ NOVA FUNCIONALIDADE: Navega para MetricsView ao retomar
                             onResume?()
                         }
                     } label: {
@@ -52,7 +51,6 @@ struct ControlsView: View {
                 Button {
                     manager.endWorkout(shouldShowSummary: false) {
                         self.manager.startWorkout(workoutType: .soccer)
-                        // Chama o callback para navegar para MetricsView
                         self.onNextMatch?()
                     }
                 } label: {

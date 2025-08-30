@@ -18,7 +18,6 @@ struct WorkoutStatsCard: View {
     
     var body: some View {
         VStack(spacing: 16) {
-            // Linha de cima
             HStack {
                 statItem(
                     title: "BATIMENTO",
@@ -47,8 +46,7 @@ struct WorkoutStatsCard: View {
                     .font(.system(size: 28, weight: .medium, design: .rounded))
                     .foregroundColor(.white)
             }
-            
-            // Linha de baixo
+
             HStack {
                 statItem(
                     title: "DISTÂNCIA",

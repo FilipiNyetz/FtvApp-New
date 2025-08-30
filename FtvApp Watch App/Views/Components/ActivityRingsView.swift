@@ -23,7 +23,6 @@ struct ActivityRingsView: WKInterfaceObjectRepresentable {
     }
     
     func updateWKInterfaceObject(_ wkInterfaceObject: WKInterfaceActivityRing, context: Context) {
-        // Se precisar reagir a mudanças externas, atualize aqui
     }
     
     private func startActivityRingsUpdates(_ activityRingsObject: WKInterfaceActivityRing) {
@@ -39,7 +38,6 @@ struct ActivityRingsView: WKInterfaceObjectRepresentable {
             }
         }
         
-        // Configura para atualizar continuamente
         query.updateHandler = { _, summaries, _ in
             DispatchQueue.main.async {
                 activityRingsObject.setActivitySummary(summaries?.first, animated: true)

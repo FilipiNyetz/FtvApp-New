@@ -35,7 +35,6 @@ struct HeaderHome: View {
                     .font(.title.bold())
                     .foregroundColor(.white)
 
-                // Foguinho evolutivo por streak
                 HStack(spacing: 8) {
                     Image(imageFogoNum)
                         .resizable()

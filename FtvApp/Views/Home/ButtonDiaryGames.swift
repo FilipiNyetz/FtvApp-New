@@ -4,7 +4,6 @@ struct ButtonDiaryGames: View {
     @ObservedObject var manager: HealthManager
     @ObservedObject var userManager: UserManager
     @Binding var selectedDate: Date
-    //@State private var opcaoDeTreinoParaMostrarCard: Int = 0
     let totalWorkouts: Int
     @Binding var selectedIndex: Int 
     
@@ -13,7 +12,6 @@ struct ButtonDiaryGames: View {
             if let workoutsDoDia = manager.workoutsByDay[Calendar.current.startOfDay(for: selectedDate)] {
                 VStack {
                     WorkoutMenu(workouts: workoutsDoDia, selectedIndex: $selectedIndex)
-                    //WorkoutMenu(workouts: workoutsDoDia, selectedIndex: $opcaoDeTreinoParaMostrarCard)
                     
                     WorkoutCardView(
                                            workouts: workoutsDoDia,
@@ -22,13 +20,7 @@ struct ButtonDiaryGames: View {
                                            healthManager: manager,
                                            totalWorkouts: totalWorkouts
                                        )
-//                    WorkoutCardView(
-//                        workouts: workoutsDoDia,
-//                        selectedIndex: opcaoDeTreinoParaMostrarCard,
-//                        userManager: userManager,
-//                        healthManager: manager,
-//                        totalWorkouts: totalWorkouts
-//                    )
+
                 }
             } else {
                 Text("Nenhum treino nesse dia")
@@ -39,9 +31,6 @@ struct ButtonDiaryGames: View {
         .onChange(of: selectedDate) {
                     selectedIndex = 0
                 }
-//        .onChange(of: selectedDate) { _ in
-//            opcaoDeTreinoParaMostrarCard = 0
-//        }
     }
 }
 

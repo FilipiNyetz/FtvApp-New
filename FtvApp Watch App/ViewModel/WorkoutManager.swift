@@ -10,7 +10,6 @@ import HealthKit
 
 class WorkoutManager: NSObject, ObservableObject {
 
-    // MARK: - HealthKit
     let healthStore = HKHealthStore()
 
     override init() {
@@ -56,7 +55,6 @@ class WorkoutManager: NSObject, ObservableObject {
     // MARK: - Workout Control
 
     func startWorkout(workoutType: HKWorkoutActivityType) {
-        // 1. Zera todo o estado anterior
         self.accumulatedTime = 0
         self.elapsedTime = 0
         self.heartRate = 0
@@ -67,7 +65,6 @@ class WorkoutManager: NSObject, ObservableObject {
         self.isEndingWorkout = false
         self.resetTimer()
 
-        // 2. Configura e cria a nova sessão
         let configuration = HKWorkoutConfiguration()
         configuration.activityType = workoutType
         configuration.locationType = .outdoor
@@ -83,7 +80,6 @@ class WorkoutManager: NSObject, ObservableObject {
         session.delegate = self
         builder.delegate = self
 
-        // 3. Inicia o treino
         startDate = Date()
         session.startActivity(with: startDate!)
         builder.beginCollection(withStart: startDate!) { _, _ in }
@@ -166,7 +162,7 @@ class WorkoutManager: NSObject, ObservableObject {
         startDate = nil
     }
 
-    // MARK: - Statistics (sem alterações)
+    // MARK: - Statistics
     func updateForStatistics(_ statistics: HKStatistics?) {
         guard let statistics = statistics else { return }
         DispatchQueue.main.async {
@@ -193,7 +189,6 @@ class WorkoutManager: NSObject, ObservableObject {
 extension WorkoutManager: HKWorkoutSessionDelegate {
     func workoutSession(_ workoutSession: HKWorkoutSession, didChangeTo toState: HKWorkoutSessionState, from fromState: HKWorkoutSessionState, date: Date) {
         DispatchQueue.main.async {
-            // ✅ A LINHA QUE FALTAVA FOI ADICIONADA DE VOLTA
             self.running = toState == .running
             
             print("HK Session State Changed to: \(toState.rawValue) -> Running is \(self.running)")
@@ -211,7 +206,7 @@ extension WorkoutManager: HKWorkoutSessionDelegate {
     }
 }
 
-// MARK: - HKLiveWorkoutBuilderDelegate (sem alterações)
+// MARK: - HKLiveWorkoutBuilderDelegate 
 extension WorkoutManager: HKLiveWorkoutBuilderDelegate {
     func workoutBuilderDidCollectEvent(_ workoutBuilder: HKLiveWorkoutBuilder) {}
     func workoutBuilder(_ workoutBuilder: HKLiveWorkoutBuilder, didCollectDataOf collectedTypes: Set<HKSampleType>) {

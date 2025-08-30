@@ -22,7 +22,6 @@ struct EvolutionView: View {
             HeaderEvolution(selectedMetric: $selectedMetric)
             
             ScrollView {
-                // Dados do gráfico (filtrados/agregados p/ período + métrica)
                 let periodKey = Period(selection: selectedSelection)
                 let chartData = dataForChart(
                     healthManager: healthManager,
@@ -44,7 +43,6 @@ struct EvolutionView: View {
                         }
                         .padding()
 
-                        // Gráfico
                         GraphicChart(
                             data: chartData,
                             selectedMetric: selectedMetric,
@@ -67,10 +65,9 @@ struct EvolutionView: View {
                             )
                     )
                     .padding(.bottom, -7)
+                    
                     Divider()
-                    //.padding(.horizontal)
-
-                    // Cards Máx / Mín conforme métrica selecionada
+                    
                     jumpdata(data: chartData, selectedMetric: selectedMetric)
                         .padding()
                 }
@@ -109,10 +106,7 @@ struct EvolutionView: View {
                 }
             }
             .toolbarBackground(Color.black, for: .navigationBar)
-         //   .toolbarBackground(.visible, for: .navigationBar)
             .background(Color.gray.opacity(0.1).ignoresSafeArea())
-
-            // Carrega tudo ao entrar; o gráfico agrega por período em memória
             .onAppear {
                 healthManager.fetchAllWorkouts()
             }

@@ -43,7 +43,6 @@ struct StartView: View {
                     isWorkoutActive = true
                 })
             } else {
-                //criar a logica de onboarding
                 ZStack{
                     Image("LogoS")
                         .resizable()
@@ -62,7 +61,6 @@ struct StartView: View {
                     
                     VStack(spacing: 12) {
 
-                        //Text("Seu desempenho será registrado em tempo real")
                         Text("Bem vindo ao SETE, vamos registrar sua performance e evoluir seu jogo")
                             .font(.title3)
                             .fontWeight(.medium)

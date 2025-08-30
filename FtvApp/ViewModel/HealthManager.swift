@@ -14,15 +14,10 @@ class HealthManager: ObservableObject, @unchecked Sendable {
     
     let healthStore = HKHealthStore()
     
-    // Todos os treinos históricos
     @Published var workouts: [Workout] = []
-    // Treinos agrupados por dia (baseado nos workouts filtrados)
     @Published var workoutsByDay: [Date: [Workout]] = [:]
-    // Total de treinos (baseado nos workouts filtrados)
     @Published var totalWorkoutsCount: Int = 0
-    // Streak atual
     @Published var currentStreak: Int = 0
-    
     @AppStorage("streakUser") private var storedStreak: Int = 0
     
     var weekChangeTimer: Timer?
@@ -101,8 +96,7 @@ class HealthManager: ObservableObject, @unchecked Sendable {
             storedStreak = 0
             return
         }
-        
-        // converte para semanas
+
         var weeks: [(year: Int, week: Int)] = []
         for day in workoutDays {
             let year = calendar.component(.yearForWeekOfYear, from: day)
@@ -135,8 +129,7 @@ class HealthManager: ObservableObject, @unchecked Sendable {
             }
             lastWeek = week
         }
-        
-        // se passou uma semana sem treino → zera
+
         if let last = lastWeek {
             let currentYear = calendar.component(.yearForWeekOfYear, from: today)
             let currentWeek = calendar.component(.weekOfYear, from: today)
@@ -152,8 +145,7 @@ class HealthManager: ObservableObject, @unchecked Sendable {
     
     // MARK: - Fetch histórico completo
     func fetchAllWorkouts(until endDate: Date = Date()) {
-        
-        // Limpa arrays antes da busca
+
         DispatchQueue.main.async {
             self.workouts.removeAll()
             self.newWorkouts.removeAll()
@@ -184,7 +176,7 @@ class HealthManager: ObservableObject, @unchecked Sendable {
             
             let group = DispatchGroup()
             var tempWorkouts: [Workout] = []
-            let tempQueue = DispatchQueue(label: "tempWorkoutsQueue") // fila serial para evitar race conditions
+            let tempQueue = DispatchQueue(label: "tempWorkoutsQueue")
             
             for workout in workouts {
                 group.enter()
@@ -194,7 +186,6 @@ class HealthManager: ObservableObject, @unchecked Sendable {
                     
                     let energyType = HKQuantityType.quantityType(forIdentifier: .activeEnergyBurned)!
                     
-                    // Valor padrão caso não consiga calcular
                     var calories = 0.0
                     
                     if let totalEnergy = workout.statistics(for: energyType)?.sumQuantity() {
@@ -220,7 +211,6 @@ class HealthManager: ObservableObject, @unchecked Sendable {
             
             group.notify(queue: .main) {
                 Task { @MainActor in
-                    // Remove duplicados pelo mesmo id (HealthKit UUID)
                     let uniqueWorkouts = Array(Dictionary(grouping: tempWorkouts, by: { $0.id }).values.map { $0.first! })
                     
                     self.newWorkouts = uniqueWorkouts.sorted { $0.dateWorkout < $1.dateWorkout }
@@ -295,7 +285,6 @@ class HealthManager: ObservableObject, @unchecked Sendable {
                     
                     let energyType = HKQuantityType.quantityType(forIdentifier: .activeEnergyBurned)!
                     
-                    // Valor padrão caso não consiga calcular
                     var calories = 0.0
                     
                     if let totalEnergy = workout.statistics(for: energyType)?.sumQuantity() {

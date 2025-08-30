@@ -13,7 +13,7 @@ struct SplashScreen: View {
             HStack{
                 Spacer()
                 
-                Image("LogoS") // Substitua por sua imagem de logo
+                Image("LogoS") 
                     .resizable()
                     .scaledToFit()
                     .frame(width: 150, height: 150)
