@@ -30,11 +30,13 @@ class HealthManager: ObservableObject, @unchecked Sendable {
     var weekChangeTimer: Timer?
     private let calendar = Calendar.current
     var newWorkouts: [Workout] = []
+    var workoutAnchor: HKQueryAnchor?
     
     // MARK: - Init
     init() {
         self.currentStreak = storedStreak
         requestAuthorization()
+        startObservingWorkouts()
     }
     
     // MARK: - Authorization
@@ -359,5 +361,60 @@ class HealthManager: ObservableObject, @unchecked Sendable {
         Task { @MainActor in
             self.updateWorkoutsByDay(filtered: filtered)
         }
+    }
+    
+    //observar novos treinos diretamente no health kit
+    func startObservingWorkouts() {
+        let workoutType = HKObjectType.workoutType()
+
+        // 1. ObserverQuery avisa quando há novos treinos
+        let observerQuery = HKObserverQuery(sampleType: workoutType, predicate: nil) { [weak self] _, _, error in
+            guard let self = self else { return }
+            if let error = error {
+                print("Erro no observer: \(error.localizedDescription)")
+                return
+            }
+
+            // Sempre que chegar dado novo, re-fetch
+            self.fetchNewWorkouts()
+        }
+
+        healthStore.execute(observerQuery)
+        healthStore.enableBackgroundDelivery(for: workoutType, frequency: .immediate) { success, error in
+            if success {
+                print("Background delivery habilitado ✅")
+            } else {
+                print("Erro background delivery: \(error?.localizedDescription ?? "")")
+            }
+        }
+    }
+
+    private func fetchNewWorkouts() {
+        let workoutType = HKObjectType.workoutType()
+        let sortDescriptor = NSSortDescriptor(key: HKSampleSortIdentifierEndDate, ascending: true)
+
+        let query = HKAnchoredObjectQuery(
+            type: workoutType,
+            predicate: nil,
+            anchor: workoutAnchor,
+            limit: HKObjectQueryNoLimit,
+            resultsHandler: { [weak self] _, samples, _, newAnchor, error in
+                guard let self = self else { return }
+                if let error = error {
+                    print("Erro no anchored query: \(error.localizedDescription)")
+                    return
+                }
+                self.workoutAnchor = newAnchor
+
+                guard let workouts = samples as? [HKWorkout], !workouts.isEmpty else { return }
+
+                Task { @MainActor in
+                    // 🔁 Reaproveita sua lógica existente
+                    self.fetchAllWorkouts()
+                }
+            }
+        )
+
+        healthStore.execute(query)
     }
 }
