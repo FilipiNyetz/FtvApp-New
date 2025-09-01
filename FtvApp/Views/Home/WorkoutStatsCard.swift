@@ -20,14 +20,14 @@ struct WorkoutStatsCard: View {
         VStack(spacing: 16) {
             HStack {
                 statItem(
-                    title: "BATIMENTO",
+                    title: Text("BATIMENTO"),
                     value: "\(Int(workout.frequencyHeart))",
                     unit: "bpm",
                     icon: "heart.fill"
                 )
                 Divider().frame(height: 40).background(Color.white.opacity(0.4))
                 statItem(
-                    title: "CALORIA",
+                    title: Text("CALORIA"),
                     value: "\(workout.calories)",
                     unit: "cal",
                     icon: "flame.fill"
@@ -49,7 +49,7 @@ struct WorkoutStatsCard: View {
             
             HStack {
                 statItem(
-                    title: "DISTÂNCIA",
+                    title: Text("DISTÂNCIA"),
                     value: String(format: "%.1f", workout.distance),
                     unit: "km",
                     icon: "location.fill"
@@ -58,7 +58,7 @@ struct WorkoutStatsCard: View {
             
             if userManager.bagdeNames.isEmpty{
                 NavigationLink(destination: TemplateMainView(workout: workout, totalWorkouts: totalWorkouts, currentStreak: healthManager.currentStreak, badgeImage: "1stGoal")) {
-                    Text("Gerar Template")
+                    Text("Compartilhar treino")
                         .font(.headline)
                         .foregroundColor(.black)
                         .padding(.vertical, 10)
@@ -68,7 +68,7 @@ struct WorkoutStatsCard: View {
                 }
             }else{
                 NavigationLink(destination: TemplateMainView(workout: workout, totalWorkouts: totalWorkouts, currentStreak: healthManager.currentStreak, badgeImage: userManager.bagdeNames[0])) {
-                    Text("Gerar Template")
+                    Text("Compartilhar treino")
                         .font(.headline)
                         .foregroundColor(.black)
                         .padding(.vertical, 10)
@@ -94,13 +94,13 @@ struct WorkoutStatsCard: View {
     }
     
     private func statItem(
-        title: String,
+        title: Text,
         value: String,
         unit: String,
         icon: String
     ) -> some View {
         VStack(spacing: 2) {
-            Text(title)
+            title
                 .font(.caption)
                 .fontWeight(.regular)
                 .fontDesign(.rounded)
