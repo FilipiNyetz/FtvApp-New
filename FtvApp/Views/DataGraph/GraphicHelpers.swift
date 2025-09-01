@@ -49,7 +49,7 @@ func filter(_ workouts: [Workout], in range: ClosedRange<Date>) -> [Workout] {
 }
 
 // MARK: - Dados para gráfico
-func dataForChart(manager: HealthManager, period: String, selectedMetric: String) -> [Workout] {
+func dataForChart(manager: HealthManager, period: String, selectedMetricId: String) -> [Workout] {
     let range = currentRange(for: period)
     let scoped = filter(manager.workouts, in: range)
 
@@ -59,17 +59,17 @@ func dataForChart(manager: HealthManager, period: String, selectedMetric: String
 
     case "week", "month":
         // Se não quiser calcular média de altura, apenas use os workouts existentes
-        if selectedMetric == "Altura" {
+        if selectedMetricId == "height" {
             return scoped
         }
-        return aggregateByDay(workouts: scoped, selectedMetric: selectedMetric)
+        return aggregateByDay(workouts: scoped, selectedMetricId: selectedMetricId)
 
     case "sixmonth", "year":
-        if selectedMetric == "Altura" {
+        if selectedMetricId == "height" {
             
             return scoped
         }
-        return aggregateByMonth(workouts: scoped, selectedMetric: selectedMetric)
+        return aggregateByMonth(workouts: scoped, selectedMetricId: selectedMetricId)
 
     default:
         return scoped
@@ -78,7 +78,7 @@ func dataForChart(manager: HealthManager, period: String, selectedMetric: String
 
 
 // MARK: - Agregação diária
-func aggregateByDay(workouts: [Workout], selectedMetric: String) -> [Workout] {
+func aggregateByDay(workouts: [Workout], selectedMetricId: String) -> [Workout] {
     let calendar = Calendar.current
     let grouped = Dictionary(grouping: workouts) { calendar.startOfDay(for: $0.dateWorkout) }
 
@@ -86,7 +86,7 @@ func aggregateByDay(workouts: [Workout], selectedMetric: String) -> [Workout] {
 
     for (date, dayWorkouts) in grouped {
         // Calcula a métrica
-        let values = dayWorkouts.map { valueForMetric($0, selectedMetric) }
+        let values = dayWorkouts.map { valueForMetric($0, selectedMetricId) }
         let avg = values.reduce(0, +) / Double(values.count)
 
         // Campos agregados
@@ -95,14 +95,14 @@ func aggregateByDay(workouts: [Workout], selectedMetric: String) -> [Workout] {
         var frequencyHeart = 0.0
         var higherJump: Double? = nil
 
-        switch selectedMetric {
-        case "Caloria":
+        switch selectedMetricId {
+        case "calories":
             calories = Int(avg)
-        case "Distância":
+        case "distance":
             distance = Int(avg)
-        case "Batimento":
+        case "heartRate":
             frequencyHeart = avg
-        case "Altura":
+        case "height":
             let jumps = dayWorkouts.compactMap { $0.higherJump }
             higherJump = jumps.isEmpty ? nil : jumps.max()
         default:
@@ -127,7 +127,7 @@ func aggregateByDay(workouts: [Workout], selectedMetric: String) -> [Workout] {
 }
 
 // MARK: - Agregação mensal
-func aggregateByMonth(workouts: [Workout], selectedMetric: String) -> [Workout] {
+func aggregateByMonth(workouts: [Workout], selectedMetricId : String) -> [Workout] {
     let calendar = Calendar.current
     let grouped = Dictionary(grouping: workouts) {
         calendar.date(from: calendar.dateComponents([.year, .month], from: $0.dateWorkout)) ?? $0.dateWorkout
@@ -136,7 +136,7 @@ func aggregateByMonth(workouts: [Workout], selectedMetric: String) -> [Workout] 
     var result: [Workout] = []
 
     for (date, monthWorkouts) in grouped {
-        let values = monthWorkouts.map { valueForMetric($0, selectedMetric) }
+        let values = monthWorkouts.map { valueForMetric($0, selectedMetricId) }
         let avg = values.reduce(0, +) / Double(values.count)
 
         var calories = 0
@@ -144,14 +144,14 @@ func aggregateByMonth(workouts: [Workout], selectedMetric: String) -> [Workout] 
         var frequencyHeart = 0.0
         var higherJump: Double? = nil
 
-        switch selectedMetric {
-        case "Caloria":
+        switch selectedMetricId {
+        case "calories":
             calories = Int(avg)
-        case "Distância":
+        case "distance":
             distance = Int(avg)
-        case "Batimento":
+        case "heartRate":
             frequencyHeart = avg
-        case "Altura":
+        case "height":
             let jumps = monthWorkouts.compactMap { $0.higherJump }
             higherJump = jumps.isEmpty ? nil : jumps.max()
         default:
@@ -176,12 +176,12 @@ func aggregateByMonth(workouts: [Workout], selectedMetric: String) -> [Workout] 
 }
 
 // MARK: - Valor de métrica
-func valueForMetric(_ workout: Workout, _ selectedMetric: String) -> Double {
-    switch selectedMetric {
-    case "Caloria": return Double(workout.calories)
-    case "Distância": return Double(workout.distance)
-    case "Batimento": return Double(workout.frequencyHeart)
-    case "Altura": return workout.higherJump ?? 0
+func valueForMetric(_ workout: Workout, _ selectedMetricId  : String) -> Double {
+    switch selectedMetricId {
+    case "calories": return Double(workout.calories)
+    case "distance": return Double(workout.distance)
+    case "heartRate": return Double(workout.frequencyHeart)
+    case "height": return workout.higherJump ?? 0
     default: return 0
     }
 }

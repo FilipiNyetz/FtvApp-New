@@ -11,7 +11,7 @@ struct EvolutionView: View {
     @Environment(\.dismiss) private var dismiss
     @ObservedObject var wcSessionDelegate: PhoneWCSessionDelegate
     @State private var selectedSelection = "M"
-    @State private var selectedMetric: String = "Batimento"
+    @State private var selectedMetricId: String = "heartRate"
     @ObservedObject var manager: HealthManager
     @State private var selectedWorkout: Workout?
     
@@ -19,7 +19,7 @@ struct EvolutionView: View {
     var body: some View {
 
         NavigationStack {
-            HeaderEvolution(selectedMetric: $selectedMetric)
+            HeaderEvolution(selectedMetricId: $selectedMetricId)
             
             ScrollView {
                 // Dados do gráfico (filtrados/agregados p/ período + métrica)
@@ -27,7 +27,7 @@ struct EvolutionView: View {
                 let chartData = dataForChart(
                     manager: manager,
                     period: periodKey,
-                    selectedMetric: selectedMetric
+                    selectedMetricId: selectedMetricId
                 )
 
                 VStack {
@@ -47,7 +47,7 @@ struct EvolutionView: View {
                         // Gráfico
                         GraphicChart(
                             data: chartData,
-                            selectedMetric: selectedMetric,
+                            selectedMetric: selectedMetricId,
                             period: periodKey,
                             selectedWorkout: $selectedWorkout
                         )
@@ -71,7 +71,7 @@ struct EvolutionView: View {
                     //.padding(.horizontal)
 
                     // Cards Máx / Mín conforme métrica selecionada
-                    jumpdata(data: chartData, selectedMetric: selectedMetric)
+                    jumpdata(data: chartData, selectedMetric: selectedMetricId)
                         .padding()
                 }
                 .background(

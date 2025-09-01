@@ -21,21 +21,21 @@ struct WorkoutStatsCard: View {
             // Linha de cima
             HStack {
                 statItem(
-                    title: "BATIMENTO",
+                    title: Text("BATIMENTO"),
                     value: "\(Int(workout.frequencyHeart))",
                     unit: "bpm",
                     icon: "heart.fill"
                 )
                 Divider().frame(height: 40).background(Color.white.opacity(0.4))
                 statItem(
-                    title: "CALORIA",
+                    title: Text("CALORIA"),
                     value: "\(workout.calories)",
                     unit: "cal",
                     icon: "flame.fill"
                 )
                 Divider().frame(height: 40).background(Color.white.opacity(0.4))
                 statItem(
-                    title: "ALTURA",
+                    title: Text("ALTURA"),
                     value: "\(Double(workout.higherJump!))",
                     unit: "cm",
                     icon: "flame.fill"
@@ -58,7 +58,7 @@ struct WorkoutStatsCard: View {
             // Linha de baixo
             HStack {
                 statItem(
-                    title: "DISTÂNCIA",
+                    title: Text("DISTÂNCIA"),
                     value: String(format: "%.1f", workout.distance),
                     unit: "km",
                     icon: "location.fill"
@@ -103,13 +103,13 @@ struct WorkoutStatsCard: View {
     }
     
     private func statItem(
-        title: String,
+        title: Text,
         value: String,
         unit: String,
         icon: String
     ) -> some View {
         VStack(spacing: 2) {
-            Text(title)
+            title
                 .font(.caption)
                 .fontWeight(.regular)
                 .fontDesign(.rounded)
