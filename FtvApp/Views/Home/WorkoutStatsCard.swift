@@ -67,22 +67,22 @@ struct WorkoutStatsCard: View {
             
             if userManager.bagdeNames.isEmpty{
                 NavigationLink(destination: TemplateMainView(workout: workout, totalWorkouts: totalWorkouts, currentStreak: healthManager.currentStreak, badgeImage: "1stGoal")) {
-                    Text("Gerar Template")
+                    Text("Compartilhar treino")
                         .font(.headline)
                         .foregroundColor(.black)
                         .padding(.vertical, 10)
                         .padding(.horizontal, 20)
-                        .background(Color.colorPrimal)
+                        .background(Color.colorPrimal).opacity(0.9)
                         .cornerRadius(12)
                 }
             }else{
                 NavigationLink(destination: TemplateMainView(workout: workout, totalWorkouts: totalWorkouts, currentStreak: healthManager.currentStreak, badgeImage: userManager.bagdeNames[0])) {
-                    Text("Gerar Template")
+                    Text("Compartilhar treino")
                         .font(.headline)
                         .foregroundColor(.black)
                         .padding(.vertical, 10)
                         .padding(.horizontal, 20)
-                        .background(Color.colorPrimal)
+                        .background(Color.colorPrimal).opacity(0.9)
                         .cornerRadius(12)
                 }
             }

@@ -33,87 +33,76 @@ struct HomeView: View {
                     HeaderHome(manager: manager, wcSessionDelegate: wcSessionDelegate)
                 
                     // CONTEÚDO
-                    ScrollView {
-                        ZStack {
-                            LinearGradient(
-                                gradient: Gradient(colors: [.gradiente1, .gradiente2, .gradiente2, .gradiente2]),
-                                startPoint: .bottomLeading,
-                                endPoint: .topTrailing
-                            )
-                            .ignoresSafeArea()
-                            
-                            VStack(alignment: .leading, spacing: 20) {
+                    ScrollViewReader { proxy in
+                        ScrollView {
+                            ZStack {
+                                LinearGradient(
+                                    gradient: Gradient(colors: [.gradiente1, .gradiente2, .gradiente2, .gradiente2]),
+                                    startPoint: .bottomLeading,
+                                    endPoint: .topTrailing
+                                )
+                                .ignoresSafeArea()
                                 
-                                // Linha da data com share alinhado ao topo-direito
-                                HStack {
-                                    DatePickerField(
-                                        selectedDate: $selectedDate,
-                                        showCalendar: $showCalendar,
-                                        manager: manager
-                                    )
-                                    .background(Color.clear)
+                                VStack(alignment: .leading, spacing: 20) {
                                     
-                                }
-                                .overlay(alignment: .topTrailing) {
-                                    if let workout = selectedWorkoutForShare {
-                                        NavigationLink {
-                                            TemplateMainView(
-                                                workout: workout,
-                                                totalWorkouts: manager.totalWorkoutsCount,
-                                                currentStreak: manager.currentStreak,
-                                                badgeImage: userManager.bagdeNames.first ?? ""
-                                            )
-                                        } label: {
-                                            Image(systemName: "square.and.arrow.up")
-                                                .resizable()
-                                                .frame(width: 20, height: 25)
-                                                .fontWeight(.medium)
-                                                .foregroundStyle(
-                                                    LinearGradient(colors: [.white, .colorSecond, .colorPrimal],
-                                                                   startPoint: .top, endPoint: .bottom)
-                                                )
-                                        }
-                                        .padding(.trailing, 10)
-                                    }
-                                }
-                                .foregroundStyle(.white)
-                                
-                                // Cards conforme estado
-                                Group {
-                                    if manager.workouts.isEmpty {
-                                        // Nenhum treino no histórico
-                                        CardWithoutWorkout()
-                                    } else if hasWorkoutsToday {
-                                        // Há treinos na data selecionada
-                                        ButtonDiaryGames(
-                                            manager: manager,
-                                            userManager: userManager,
+                                    // Linha da data com share alinhado ao topo-direito
+                                    HStack {
+                                        DatePickerField(
                                             selectedDate: $selectedDate,
-                                            totalWorkouts: manager.totalWorkoutsCount,
-                                            selectedIndex: $opcaoDeTreinoParaMostrarCard
+                                            showCalendar: $showCalendar,
+                                            manager: manager
                                         )
-                                    } else {
-                                        // Há histórico, mas não nessa data
-                                        CardWithoutDayWorkout()
+                                        .background(Color.clear)
+                                        
                                     }
+                                    .foregroundStyle(.white)
+                                    
+                                    // Cards conforme estado
+                                    Group {
+                                        if manager.workouts.isEmpty {
+                                            // Nenhum treino no histórico
+                                            CardWithoutWorkout()
+                                                .id("card-top")
+                                        } else if hasWorkoutsToday {
+                                            // Há treinos na data selecionada
+                                            ButtonDiaryGames(
+                                                manager: manager,
+                                                userManager: userManager,
+                                                selectedDate: $selectedDate,
+                                                totalWorkouts: manager.totalWorkoutsCount,
+                                                selectedIndex: $opcaoDeTreinoParaMostrarCard
+                                            )
+                                            .id("card-top")
+                                        } else {
+                                            // Há histórico, mas não nessa data
+                                            CardWithoutDayWorkout()
+                                                .id("card-top")
+                                        }
+                                    }
+                                }
+                                .padding()
+                            }
+                            .onChange(of: selectedDate) {
+                                // Quando muda a data, rolar para o card
+                                withAnimation(.easeInOut) {
+                                    proxy.scrollTo("card-top", anchor: .top)
                                 }
                             }
-                            .padding()
+                            
+                            Divider()
+                                .padding(.top, -8)
+                            
+                            VStack {
+                                TotalGames(
+                                    manager: manager,
+                                    userManager: userManager,
+                                    totalWorkouts: manager.totalWorkoutsCount
+                                )
+                            }
                         }
-                        
-                        Divider()
-                            .padding(.top, -8)
-                        
-                        VStack {
-                            TotalGames(
-                                manager: manager,
-                                userManager: userManager,
-                                totalWorkouts: manager.totalWorkoutsCount
-                            )
-                        }
+                        .padding(.horizontal)
+                        .scrollIndicators(.hidden)
                     }
-                    .padding(.horizontal)
-                    .scrollIndicators(.hidden)
                 }
             }
         }
