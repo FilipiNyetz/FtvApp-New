@@ -75,7 +75,7 @@ final class JumpDetector: ObservableObject {
         ) { [weak self] deviceMotion, error in
             guard let self = self, let motion = deviceMotion else {
                 if let error = error {
-//                    print("⚠️ Erro no sensor: \(error.localizedDescription)")
+                    print("⚠️ Erro no sensor: \(error.localizedDescription)")
                 }
                 return
             }

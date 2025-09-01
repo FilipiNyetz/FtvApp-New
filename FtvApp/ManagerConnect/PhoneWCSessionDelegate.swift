@@ -68,16 +68,16 @@ class PhoneWCSessionDelegate: NSObject, WCSessionDelegate,ObservableObject {
         print("📩 Recebido jump \(valor) para workoutId \(workoutId)")
 
         
-            DispatchQueue.main.async {
+        DispatchQueue.main.async { [self] in
                 self.higherJump = valor
                 self.pulos.append(valor)
                 
                 Task {
-                    guard let container = self.container else {
+                    guard container != nil else {
                         print("❌ Container não inicializado, não é possível salvar jump")
                         return
                     }
-                    await self.saveJump(value: valor, workoutId: workoutId)
+                     self.saveJump(value: valor, workoutId: workoutId)
                 }
 
             }
@@ -111,11 +111,4 @@ class PhoneWCSessionDelegate: NSObject, WCSessionDelegate,ObservableObject {
             return []
         }
     }
-
-
-
-
-
-    
-    
 }

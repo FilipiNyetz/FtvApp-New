@@ -391,7 +391,7 @@ class HealthManager: ObservableObject, @unchecked Sendable {
 
     private func fetchNewWorkouts() {
         let workoutType = HKObjectType.workoutType()
-        let sortDescriptor = NSSortDescriptor(key: HKSampleSortIdentifierEndDate, ascending: true)
+//        let sortDescriptor = NSSortDescriptor(key: HKSampleSortIdentifierEndDate, ascending: true)
 
         let query = HKAnchoredObjectQuery(
             type: workoutType,
