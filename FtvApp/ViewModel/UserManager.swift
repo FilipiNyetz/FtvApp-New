@@ -12,6 +12,21 @@ class UserManager: ObservableObject{
     
     @Published var bagdeNames: [String] = []
     @Published var goalBadge: Int = 10
+    @Published var pendingMedal: String? {
+            didSet {
+                if let m = pendingMedal {
+                    UserDefaults.standard.set(m, forKey: Self.pendingKey)
+                } else {
+                    UserDefaults.standard.removeObject(forKey: Self.pendingKey)
+                }
+            }
+        }
+        private static let pendingKey = "pendingMedal"
+
+        init() {
+            // carrega pending salvo (se houver)
+            pendingMedal = UserDefaults.standard.string(forKey: Self.pendingKey)
+        }
     
     func setBadgeTotalWorkout(totalWorkouts: Int){
         switch totalWorkouts {
@@ -73,6 +88,29 @@ class UserManager: ObservableObject{
         case "11thGoal": return 1000
         default: return 0
         }
+    }
+    func nextGoalBadge(for totalWorkouts: Int) -> Int {
+        switch totalWorkouts {
+        case ..<10: return 10
+        case ..<50: return 50
+        case ..<150: return 150
+        case ..<250: return 250
+        case ..<350: return 350
+        case ..<500: return 500
+        case ..<650: return 650
+        case ..<750: return 750
+        case ..<850: return 850
+        case ..<1000: return 1000
+        default: return 0
+        }
+    }
+    
+    func setPendingMedal(_ name: String) {
+        pendingMedal = name
+    }
+
+    func clearPendingMedal() {
+        pendingMedal = nil
     }
     
     

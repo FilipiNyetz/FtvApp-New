@@ -1,9 +1,11 @@
 import SwiftUI
+import UIKit
 
 struct ProgressBarView: View {
     @ObservedObject var manager: HealthManager
     @ObservedObject var userManager: UserManager
     @State private var animatedProgress: Double = 0
+    @State private var previousWorkoutsCount: Int = 0
     let goal: Int = 20 // meta inicial
 
     
@@ -21,7 +23,7 @@ struct ProgressBarView: View {
                         .resizable()
                         .frame(width: 45, height: 50)
                 }
-                    
+                
                 Text("\(userManager.badgeStartValue())")
                     .font(.footnote)
                     .foregroundStyle(Color.textGray)
@@ -65,7 +67,7 @@ struct ProgressBarView: View {
                     .fontWeight(.medium)
                     .animation(nil, value: manager.workouts.count) // bloqueia animação
             }
-
+            
             
             VStack {
                 if userManager.bagdeNames.isEmpty{
@@ -104,18 +106,39 @@ struct ProgressBarView: View {
             y: 2
         )
         .onAppear {
-            userManager.setBadgeTotalWorkout(totalWorkouts: manager.workouts.count)
-            // Inicializa animação da barra
-            let progress = min(Double(manager.workouts.count) / Double(userManager.goalBadge), 1.0)
-            animatedProgress = progress
-        }
-        .onChange(of: manager.workouts.count) { _, newValue in
+                userManager.setBadgeTotalWorkout(totalWorkouts: manager.workouts.count)
+                let progress = min(Double(manager.workouts.count) / Double(userManager.goalBadge), 1.0)
+                animatedProgress = progress
+                previousWorkoutsCount = manager.workouts.count
+            }
+        .onChange(of: manager.workouts.count) {_, newValue in
+            let prev = previousWorkoutsCount
+            previousWorkoutsCount = newValue
+
+            let nextGoal = userManager.nextGoalBadge(for: prev)
+            
+            if prev < nextGoal && newValue >= nextGoal {
+                let nextBadgeName = userManager.bagdeNames.indices.contains(1) ?
+                    userManager.bagdeNames[0] : userManager.bagdeNames[1]
+                
+                DispatchQueue.main.async {
+                    if let rootVC = UIApplication.topMostViewController() {
+                        MedalRevealCoordinator.showMedal(nextBadgeName, on: rootVC)
+                    } else {
+                        userManager.setPendingMedal(nextBadgeName)
+                    }
+                }
+            }
+
+            // Atualiza badges e progresso
             userManager.setBadgeTotalWorkout(totalWorkouts: newValue)
             let progress = min(Double(newValue) / Double(userManager.goalBadge), 1.0)
-            withAnimation(.easeInOut) {
-                animatedProgress = progress
-            }
+            withAnimation(.easeInOut) { animatedProgress = progress }
         }
+
+
+
+
     }
     
     /// Interpola entre duas cores (#A2A2A2 -> #D6FF45) conforme o progresso
@@ -156,5 +179,24 @@ extension UIColor {
         let b = CGFloat(rgb & 0x0000FF) / 255.0
         
         self.init(red: r, green: g, blue: b, alpha: 1.0)
+    }
+}
+
+extension UIApplication {
+    static func topMostViewController(base: UIViewController? =
+        UIApplication.shared.connectedScenes
+            .compactMap { ($0 as? UIWindowScene)?.keyWindow }
+            .first?.rootViewController
+    ) -> UIViewController? {
+        if let nav = base as? UINavigationController {
+            return topMostViewController(base: nav.visibleViewController)
+        }
+        if let tab = base as? UITabBarController, let selected = tab.selectedViewController {
+            return topMostViewController(base: selected)
+        }
+        if let presented = base?.presentedViewController {
+            return topMostViewController(base: presented)
+        }
+        return base
     }
 }
