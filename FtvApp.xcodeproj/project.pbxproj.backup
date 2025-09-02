@@ -373,8 +373,6 @@
 				INFOPLIST_KEY_NSHomeKitUsageDescription = "Usar para anaalisar dados do usuario";
 				INFOPLIST_KEY_NSMotionUsageDescription = "Este app usa dados de movimento para detectar saltos";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
-				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = br.com.cauecarneiro.FtvApp;
-				INFOPLIST_KEY_WKWatchOnly = NO;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -409,8 +407,6 @@
 				INFOPLIST_KEY_NSHomeKitUsageDescription = "Usar para anaalisar dados do usuario";
 				INFOPLIST_KEY_NSMotionUsageDescription = "Este app usa dados de movimento para detectar saltos";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
-				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = br.com.cauecarneiro.FtvApp;
-				INFOPLIST_KEY_WKWatchOnly = NO;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
