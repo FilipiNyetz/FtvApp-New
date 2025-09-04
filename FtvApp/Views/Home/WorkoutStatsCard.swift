@@ -1,13 +1,13 @@
 import SwiftUI
 
 struct WorkoutStatsCard: View {
-    
+
     @ObservedObject var userManager: UserManager
     @ObservedObject var healthManager: HealthManager
-    
+
     let workout: Workout
     let totalWorkouts: Int
-    
+
     var timeFormatter: DateComponentsFormatter {
         let formatter = DateComponentsFormatter()
         formatter.allowedUnits = [.hour, .minute, .second]
@@ -15,7 +15,20 @@ struct WorkoutStatsCard: View {
         formatter.zeroFormattingBehavior = .pad
         return formatter
     }
-    
+
+    var formattedDistance: String {
+        if workout.distance > 999 {
+            let km = Double(workout.distance) / 1000.0
+            return String(format: "%.1f", km)  // 1 casa decimal
+        } else {
+            return "\(workout.distance)"
+        }
+    }
+
+    var distanceUnit: String {
+        return workout.distance > 999 ? "km" : "m"
+    }
+
     var body: some View {
         VStack(spacing: 16) {
             HStack {
@@ -33,31 +46,40 @@ struct WorkoutStatsCard: View {
                     icon: "flame.fill"
                 )
             }
-            
 
-            VStack{
+            VStack {
                 Text("TEMPO")
                     .font(.caption)
                     .fontWeight(.regular)
                     .fontDesign(.rounded)
                     .foregroundColor(.gray)
-                
-                Text(timeFormatter.string(from: TimeInterval(workout.duration)) ?? "00:00:00")
-                    .font(.system(size: 28, weight: .medium, design: .rounded))
-                    .foregroundColor(.white)
+
+                Text(
+                    timeFormatter.string(from: TimeInterval(workout.duration))
+                        ?? "00:00:00"
+                )
+                .font(.system(size: 28, weight: .medium, design: .rounded))
+                .foregroundColor(.white)
             }
-            
+
             HStack {
                 statItem(
                     title: Text("DISTÂNCIA"),
-                    value: String(format: "%.1f", workout.distance),
-                    unit: "km",
+                    value: formattedDistance,
+                    unit: distanceUnit,
                     icon: "location.fill"
                 )
             }
             
-            if userManager.bagdeNames.isEmpty{
-                NavigationLink(destination: TemplateMainView(workout: workout, totalWorkouts: totalWorkouts, currentStreak: healthManager.currentStreak, badgeImage: "1stGoal")) {
+            if userManager.bagdeNames.isEmpty {
+                NavigationLink(
+                    destination: TemplateMainView(
+                        workout: workout,
+                        totalWorkouts: totalWorkouts,
+                        currentStreak: healthManager.currentStreak,
+                        badgeImage: "1stGoal"
+                    )
+                ) {
                     Text("Compartilhar treino")
                         .font(.headline)
                         .foregroundColor(.black)
@@ -66,8 +88,15 @@ struct WorkoutStatsCard: View {
                         .background(Color.colorPrimal)
                         .cornerRadius(12)
                 }
-            }else{
-                NavigationLink(destination: TemplateMainView(workout: workout, totalWorkouts: totalWorkouts, currentStreak: healthManager.currentStreak, badgeImage: userManager.bagdeNames[0])) {
+            } else {
+                NavigationLink(
+                    destination: TemplateMainView(
+                        workout: workout,
+                        totalWorkouts: totalWorkouts,
+                        currentStreak: healthManager.currentStreak,
+                        badgeImage: userManager.bagdeNames[0]
+                    )
+                ) {
                     Text("Compartilhar treino")
                         .font(.headline)
                         .foregroundColor(.black)
@@ -77,8 +106,7 @@ struct WorkoutStatsCard: View {
                         .cornerRadius(12)
                 }
             }
-            
-            
+
         }
         .padding()
         .background(
@@ -86,13 +114,13 @@ struct WorkoutStatsCard: View {
                 .stroke(Color.backgroundProgressBar, lineWidth: 0.3)
                 .fill(Color(.secondarySystemBackground))
                 .opacity(0.5)
-                
+
         )
         .onAppear {
             userManager.setBadgeTotalWorkout(totalWorkouts: totalWorkouts)
         }
     }
-    
+
     private func statItem(
         title: Text,
         value: String,
@@ -105,7 +133,7 @@ struct WorkoutStatsCard: View {
                 .fontWeight(.regular)
                 .fontDesign(.rounded)
                 .foregroundColor(.gray)
-            
+
             HStack(spacing: 4) {
                 Image(systemName: icon)
                     .foregroundColor(Color("ColorSecond"))
@@ -115,7 +143,7 @@ struct WorkoutStatsCard: View {
                     )
                     .foregroundColor(.white)
             }
-            
+
             if !unit.isEmpty {
                 Text(unit)
                     .font(
@@ -126,5 +154,5 @@ struct WorkoutStatsCard: View {
         }
         .frame(maxWidth: .infinity)
     }
-    
+
 }
