@@ -115,15 +115,32 @@ struct ProgressBarView: View {
             y: 2
         )
         .onAppear {
-            userManager.setBadgeTotalWorkout(
-                totalWorkouts: manager.workouts.count
-            )
+            userManager.setBadgeTotalWorkout(totalWorkouts: manager.workouts.count)
             let progress = min(
                 Double(manager.workouts.count) / Double(userManager.goalBadge),
                 1.0
             )
             animatedProgress = progress
             previousWorkoutsCount = manager.workouts.count
+
+            // ✅ Checagem na abertura do app
+            let currentGoal = userManager.nextGoalBadge(for: manager.workouts.count)
+            if manager.workouts.count >= currentGoal &&
+               currentGoal > userManager.lastUnlockedGoal {
+                userManager.lastUnlockedGoal = currentGoal
+                let nextBadgeName =
+                    userManager.bagdeNames.indices.contains(1)
+                    ? userManager.bagdeNames[1]
+                    : userManager.bagdeNames[0]
+
+                DispatchQueue.main.async {
+                    if let rootVC = UIApplication.topMostViewController() {
+                        MedalRevealCoordinator.showMedal(nextBadgeName, on: rootVC)
+                    } else {
+                        userManager.setPendingMedal(nextBadgeName)
+                    }
+                }
+            }
         }
         .onChange(of: manager.workouts.count) { _, newValue in
             let prev = previousWorkoutsCount
@@ -131,20 +148,17 @@ struct ProgressBarView: View {
 
             let nextGoal = userManager.nextGoalBadge(for: prev)
 
-            // Dispara medalha apenas quando atingir exatamente a meta
-            if newValue == nextGoal && nextGoal > userManager.lastUnlockedGoal {
+            // ✅ Agora dispara quando passa ou chega na meta
+            if newValue >= nextGoal && nextGoal > userManager.lastUnlockedGoal {
                 userManager.lastUnlockedGoal = nextGoal
                 let nextBadgeName =
                     userManager.bagdeNames.indices.contains(1)
-                    ? userManager.bagdeNames[1] // medalha conquistada
+                    ? userManager.bagdeNames[1]
                     : userManager.bagdeNames[0]
 
                 DispatchQueue.main.async {
                     if let rootVC = UIApplication.topMostViewController() {
-                        MedalRevealCoordinator.showMedal(
-                            nextBadgeName,
-                            on: rootVC
-                        )
+                        MedalRevealCoordinator.showMedal(nextBadgeName, on: rootVC)
                     } else {
                         userManager.setPendingMedal(nextBadgeName)
                     }
