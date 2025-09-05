@@ -3,7 +3,7 @@ import SwiftUI
 
 struct HomeView: View {
     @ObservedObject var manager: HealthManager
-    @ObservedObject var userManager: UserManager
+    @EnvironmentObject var userManager: UserManager
     @ObservedObject var wcSessionDelegate: PhoneWCSessionDelegate
     @State private var isGamesPresented = false
     @State var selectedDate: Date = Date()
@@ -95,7 +95,6 @@ struct HomeView: View {
                             VStack {
                                 TotalGames(
                                     manager: manager,
-                                    userManager: userManager,
                                     totalWorkouts: manager.totalWorkoutsCount
                                 )
                             }

@@ -113,9 +113,9 @@ struct EvolutionView: View {
             .background(Color.gray.opacity(0.1).ignoresSafeArea())
 
             // Carrega tudo ao entrar; o gráfico agrega por período em memória
-            .onAppear {
-                manager.fetchAllWorkouts()
-            }
+//            .onAppear {
+//                manager.fetchAllWorkouts()
+//            }
         }
     }
 
