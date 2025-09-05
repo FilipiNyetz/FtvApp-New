@@ -131,10 +131,13 @@ struct ProgressBarView: View {
 
             let nextGoal = userManager.nextGoalBadge(for: prev)
 
-            if prev < nextGoal && newValue >= nextGoal {
+            // Dispara medalha apenas quando atingir exatamente a meta
+            if newValue == nextGoal && nextGoal > userManager.lastUnlockedGoal {
+                userManager.lastUnlockedGoal = nextGoal
                 let nextBadgeName =
                     userManager.bagdeNames.indices.contains(1)
-                    ? userManager.bagdeNames[0] : userManager.bagdeNames[1]
+                    ? userManager.bagdeNames[1] // medalha conquistada
+                    : userManager.bagdeNames[0]
 
                 DispatchQueue.main.async {
                     if let rootVC = UIApplication.topMostViewController() {
@@ -156,7 +159,6 @@ struct ProgressBarView: View {
             )
             withAnimation(.easeInOut) { animatedProgress = progress }
         }
-
     }
 
     /// Interpola entre duas cores (#A2A2A2 -> #D6FF45) conforme o progresso
