@@ -17,8 +17,6 @@ struct StartView: View {
     @State private var savedWorkout: HKWorkout?
     @State private var selectedWorkoutType: HKWorkoutActivityType? = nil
     @StateObject private var jumpDetector = JumpDetector()
-    
-    @State var numeroWatch: Int = 0
 
     var workoutTypes: [HKWorkoutActivityType] = [.soccer]
 
@@ -70,24 +68,7 @@ struct StartView: View {
                         .ignoresSafeArea()
                     
                     VStack(spacing: 12) {
-                        
-                        HStack{
-                            Button(action: {
-                                numeroWatch -= 1
-                                wcSessionDelegate.sendMessage(message: ["number": numeroWatch])
-                            }, label: {
-                                Text("-")
-                            })
-                            
-                            Text("\(numeroWatch)")
-                            
-                            Button(action: {
-                                numeroWatch += 1
-                                wcSessionDelegate.sendMessage(message: ["number": numeroWatch])
-                            }, label: {
-                                Text("+")
-                            })
-                        }
+
                         
                         //Text("Seu desempenho será registrado em tempo real")
                         Text("Bem vindo ao SETE, vamos registrar sua performance e evoluir seu jogo")
