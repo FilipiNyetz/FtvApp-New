@@ -17,7 +17,6 @@ struct StartView: View {
     @State private var savedWorkout: HKWorkout?
     @State private var selectedWorkoutType: HKWorkoutActivityType? = nil
     @StateObject private var jumpDetector = JumpDetector()
-
     @State var numeroWatch: Int = 0
 
     var workoutTypes: [HKWorkoutActivityType] = [.soccer]
