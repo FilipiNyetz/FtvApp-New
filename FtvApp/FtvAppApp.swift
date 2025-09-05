@@ -22,8 +22,10 @@ struct FtvAppApp: App {
         }
     }
 
-    private func showPendingMedalIfNeeded() {
+    func showPendingMedalIfNeeded() {
         if let medalName = userManager.pendingMedal {
+            userManager.clearPendingMedal()
+
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                 if let topVC = UIApplication.topMostViewController() {
                     let medalView = MedalRevealView(medalImage: UIImage(named: medalName))
@@ -38,7 +40,6 @@ struct FtvAppApp: App {
                     ])
 
                     medalView.reveal()
-                    userManager.clearPendingMedal()
                 }
             }
         }

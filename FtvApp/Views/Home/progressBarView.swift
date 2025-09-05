@@ -6,31 +6,30 @@ struct ProgressBarView: View {
     @ObservedObject var userManager: UserManager
     @State private var animatedProgress: Double = 0
     @State private var previousWorkoutsCount: Int = 0
-    let goal: Int = 20 // meta inicial
-
+    let goal: Int = 20  // meta inicial
     
     var body: some View {
         HStack {
             VStack {
-                if userManager.bagdeNames.isEmpty{
+                if userManager.bagdeNames.isEmpty {
                     Image("1stGoal")
-                }else if manager.totalWorkoutsCount > 500{
+                } else if manager.totalWorkoutsCount > 500 {
                     Image(userManager.bagdeNames[0])
                         .resizable()
                         .frame(width: 60, height: 50)
-                }else{
+                } else {
                     Image(userManager.bagdeNames[0])
                         .resizable()
                         .frame(width: 45, height: 50)
                 }
-                
+
                 Text("\(userManager.badgeStartValue())")
                     .font(.footnote)
                     .foregroundStyle(Color.textGray)
                     .fontWeight(.medium)
-                    .animation(nil, value: manager.workouts.count) // bloqueia animação
+                    .animation(nil, value: manager.workouts.count)  // bloqueia animação
             }
-            
+
             VStack {
                 GeometryReader { geometry in
                     ZStack(alignment: .leading) {
@@ -39,44 +38,52 @@ struct ProgressBarView: View {
                             .frame(height: 8)
                             .foregroundColor(Color.backgroundProgressBar)
                             .cornerRadius(8)
-                        
+
                         // Progresso
-                        let progress = min(Double(manager.workouts.count) / Double(userManager.goalBadge), 1.0)
-                        
+                        let progress = min(
+                            Double(manager.workouts.count)
+                                / Double(userManager.goalBadge),
+                            1.0
+                        )
+
                         RoundedRectangle(cornerRadius: 8, style: .continuous)
                             .fill(
                                 LinearGradient(
                                     gradient: Gradient(colors: [
                                         interpolatedColor(progress: 0),
-                                        interpolatedColor(progress: animatedProgress)
+                                        interpolatedColor(
+                                            progress: animatedProgress
+                                        ),
                                     ]),
                                     startPoint: .leading,
                                     endPoint: .trailing
                                 )
                             )
-                            .frame(width: progress * geometry.size.width, height: 8)
-                        
+                            .frame(
+                                width: progress * geometry.size.width,
+                                height: 8
+                            )
+
                     }
                 }
                 .frame(width: 220, height: 16)
                 .padding(.bottom, -4)
-                
+
                 Text("\(manager.totalWorkoutsCount)")
                     .font(.footnote)
                     .foregroundStyle(Color.textGray)
                     .fontWeight(.medium)
-                    .animation(nil, value: manager.workouts.count) // bloqueia animação
+                    .animation(nil, value: manager.workouts.count)  // bloqueia animação
             }
-            
-            
+
             VStack {
-                if userManager.bagdeNames.isEmpty{
+                if userManager.bagdeNames.isEmpty {
                     Image("1stGoal")
-                }else if manager.totalWorkoutsCount > 650{
+                } else if manager.totalWorkoutsCount > 650 {
                     Image(userManager.bagdeNames[1])
                         .resizable()
                         .frame(width: 60, height: 50)
-                }else{
+                } else {
                     Image(userManager.bagdeNames[1])
                         .resizable()
                         .frame(width: 45, height: 50)
@@ -90,40 +97,51 @@ struct ProgressBarView: View {
         .frame(width: 361, height: 96)
         .background(
             LinearGradient(
-                gradient: Gradient(colors: [.progressBarBGDark,.progressBarBGDark, .progressBarBGLight]),
+                gradient: Gradient(colors: [
+                    .progressBarBGDark, .progressBarBGDark, .progressBarBGLight,
+                ]),
                 startPoint: .bottom,
                 endPoint: .top
             )
         )
         .overlay(
-            RoundedRectangle(cornerRadius: 8) // mesmo radius do Figma
+            RoundedRectangle(cornerRadius: 8)  // mesmo radius do Figma
                 .stroke(Color(.backgroundProgressBar), lineWidth: 0.3)
         )
         .shadow(
-            color: Color.black.opacity(0.3), // ajusta a opacidade
-            radius: 3, // blur
+            color: Color.black.opacity(0.3),  // ajusta a opacidade
+            radius: 3,  // blur
             x: 0,
             y: 2
         )
         .onAppear {
-                userManager.setBadgeTotalWorkout(totalWorkouts: manager.workouts.count)
-                let progress = min(Double(manager.workouts.count) / Double(userManager.goalBadge), 1.0)
-                animatedProgress = progress
-                previousWorkoutsCount = manager.workouts.count
-            }
-        .onChange(of: manager.workouts.count) {_, newValue in
+            userManager.setBadgeTotalWorkout(
+                totalWorkouts: manager.workouts.count
+            )
+            let progress = min(
+                Double(manager.workouts.count) / Double(userManager.goalBadge),
+                1.0
+            )
+            animatedProgress = progress
+            previousWorkoutsCount = manager.workouts.count
+        }
+        .onChange(of: manager.workouts.count) { _, newValue in
             let prev = previousWorkoutsCount
             previousWorkoutsCount = newValue
 
             let nextGoal = userManager.nextGoalBadge(for: prev)
-            
+
             if prev < nextGoal && newValue >= nextGoal {
-                let nextBadgeName = userManager.bagdeNames.indices.contains(1) ?
-                    userManager.bagdeNames[0] : userManager.bagdeNames[1]
-                
+                let nextBadgeName =
+                    userManager.bagdeNames.indices.contains(1)
+                    ? userManager.bagdeNames[0] : userManager.bagdeNames[1]
+
                 DispatchQueue.main.async {
                     if let rootVC = UIApplication.topMostViewController() {
-                        MedalRevealCoordinator.showMedal(nextBadgeName, on: rootVC)
+                        MedalRevealCoordinator.showMedal(
+                            nextBadgeName,
+                            on: rootVC
+                        )
                     } else {
                         userManager.setPendingMedal(nextBadgeName)
                     }
@@ -132,32 +150,38 @@ struct ProgressBarView: View {
 
             // Atualiza badges e progresso
             userManager.setBadgeTotalWorkout(totalWorkouts: newValue)
-            let progress = min(Double(newValue) / Double(userManager.goalBadge), 1.0)
+            let progress = min(
+                Double(newValue) / Double(userManager.goalBadge),
+                1.0
+            )
             withAnimation(.easeInOut) { animatedProgress = progress }
         }
 
-
-
-
     }
-    
+
     /// Interpola entre duas cores (#A2A2A2 -> #D6FF45) conforme o progresso
     func interpolatedColor(progress: Double) -> Color {
-        let clamped = max(0, min(progress, 1)) // garante que esteja entre 0 e 1
-        
-        let start = UIColor(hex: "#A2A2A2") // cinza
-        let end = UIColor(hex: "#D6FF45")   // verde limão
-        
-        var sR: CGFloat = 0, sG: CGFloat = 0, sB: CGFloat = 0, sA: CGFloat = 0
-        var eR: CGFloat = 0, eG: CGFloat = 0, eB: CGFloat = 0, eA: CGFloat = 0
-        
+        let clamped = max(0, min(progress, 1))  // garante que esteja entre 0 e 1
+
+        let start = UIColor(hex: "#A2A2A2")  // cinza
+        let end = UIColor(hex: "#D6FF45")  // verde limão
+
+        var sR: CGFloat = 0
+        var sG: CGFloat = 0
+        var sB: CGFloat = 0
+        var sA: CGFloat = 0
+        var eR: CGFloat = 0
+        var eG: CGFloat = 0
+        var eB: CGFloat = 0
+        var eA: CGFloat = 0
+
         start.getRed(&sR, green: &sG, blue: &sB, alpha: &sA)
         end.getRed(&eR, green: &eG, blue: &eB, alpha: &eA)
-        
+
         let r = sR + (eR - sR) * clamped
         let g = sG + (eG - sG) * clamped
         let b = sB + (eB - sB) * clamped
-        
+
         return Color(red: r, green: g, blue: b)
     }
 
@@ -166,32 +190,36 @@ struct ProgressBarView: View {
 // Extensão para converter hex em UIColor
 extension UIColor {
     convenience init(hex: String) {
-        var hexSanitized = hex.trimmingCharacters(in: .whitespacesAndNewlines).uppercased()
+        var hexSanitized = hex.trimmingCharacters(in: .whitespacesAndNewlines)
+            .uppercased()
         if hexSanitized.hasPrefix("#") {
             hexSanitized.remove(at: hexSanitized.startIndex)
         }
-        
+
         var rgb: UInt64 = 0
         Scanner(string: hexSanitized).scanHexInt64(&rgb)
-        
+
         let r = CGFloat((rgb & 0xFF0000) >> 16) / 255.0
         let g = CGFloat((rgb & 0x00FF00) >> 8) / 255.0
         let b = CGFloat(rgb & 0x0000FF) / 255.0
-        
+
         self.init(red: r, green: g, blue: b, alpha: 1.0)
     }
 }
 
 extension UIApplication {
-    static func topMostViewController(base: UIViewController? =
-        UIApplication.shared.connectedScenes
+    static func topMostViewController(
+        base: UIViewController? =
+            UIApplication.shared.connectedScenes
             .compactMap { ($0 as? UIWindowScene)?.keyWindow }
             .first?.rootViewController
     ) -> UIViewController? {
         if let nav = base as? UINavigationController {
             return topMostViewController(base: nav.visibleViewController)
         }
-        if let tab = base as? UITabBarController, let selected = tab.selectedViewController {
+        if let tab = base as? UITabBarController,
+            let selected = tab.selectedViewController
+        {
             return topMostViewController(base: selected)
         }
         if let presented = base?.presentedViewController {

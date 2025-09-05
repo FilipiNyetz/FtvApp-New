@@ -75,7 +75,6 @@ class UserManager: ObservableObject{
     
     func badgeStartValue() -> Int {
         switch bagdeNames.first {
-        case "1stGoal": return 0
         case "2ndGoal": return 10
         case "3rdGoal": return 50
         case "4thGoal": return 150
