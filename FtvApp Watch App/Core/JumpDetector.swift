@@ -10,67 +10,53 @@
 import Foundation
 import CoreMotion
 
-// MARK: - Jump Detector Simples
-
-/// Detector de saltos simples para futevôlei
 final class JumpDetector: ObservableObject {
     
-    // MARK: - 🎯 VARIÁVEIS PRINCIPAIS DOS SALTOS
-    
-    ///  Altura do último salto (em metros)
+    // MARK: - 🎯 Variáveis principais
     @Published var lastJumpHeight: Double = 0.0
-    
-    ///  ALTURA DO SALTO MAIS ALTO (em metros)  VARIÁVEL PRINCIPAL
     @Published var bestJumpHeight: Double = 0.0
     
-    // MARK: - Componentes do Sistema
-    
+    // MARK: - Componentes
     private let motionManager = CMMotionManager()
     private let operationQueue = OperationQueue()
     
-    // MARK: - Variáveis do Algoritmo
-    
+    // MARK: - Estado interno
     private var isInFlight = false
     private var takeoffTime: TimeInterval?
     private var landingTime: TimeInterval?
     private var freefallCount = 0
     private var groundCount = 0
-    private var stableCount = 0
     
-    // Filtro de suavização
+    // Filtro
     private var previousAccel: Double = 1.0
     private var accelHistory: [Double] = []
-    private let historySize = 5
     
-    // Contador para logs
+    // Logs
     private var logCounter = 0
     
-    // MARK: - ""NÃO MEXER"" CONFIGURAÇÕES OTIMIZADAS PARA MOVIMENTOS RÁPIDOS DO FUTEVÔLEI
+    // MARK: - Configurações extremamente rigorosas
+    private let freefallThreshold: Double = -1.0     // só considera decolagem se forte queda
+    private let groundThreshold: Double = 1.3        // pouso detectado se impacto forte
+    private let minFreefallSamples = 3
+    private let minGroundSamples = 4
+    private let minFlightTime: Double = 0.10
+    private let minJumpInterval: Double = 0.35       // debounce para evitar contagem dupla
+    private let maxJumpHeight: Double = 0.50
+    private var lastLandingTime: TimeInterval = 0
     
-    private let freefallThreshold: Double = 0.5     // Mais sensível para movimentos rápidos
-    private let groundThreshold: Double = 1.3       // Menos rigoroso para pousos rápidos
-    private let minFreefallSamples = 2              // Detecção mais rápida
-    private let minGroundSamples = 2                // Pouso mais rápido
-    private let minFlightTime: Double = 0.06        // Tempo mínimo mais baixo (60ms)
-    
-    // MARK: - Métodos Públicos
-    
-    /// Inicia a detecção de saltos
+    // MARK: - Início / parada
     func start() {
         guard motionManager.isDeviceMotionAvailable else {
             print("⚠️ Sensor de movimento não disponível")
             return
         }
         
-        //  CONFIGURAÇÃO ULTRA RESPONSIVA PARA MOVIMENTOS RÁPIDOS
-        motionManager.deviceMotionUpdateInterval = 1.0 / 100.0  // 100Hz para capturar movimentos muito rápidos
-        
-        // Configura fila de operações para processamento eficiente
+        motionManager.deviceMotionUpdateInterval = 1.0 / 100.0
         operationQueue.maxConcurrentOperationCount = 1
         operationQueue.qualityOfService = .userInitiated
         
         motionManager.startDeviceMotionUpdates(
-            using: .xArbitraryZVertical,  // Referência vertical estável
+            using: .xArbitraryZVertical,
             to: operationQueue
         ) { [weak self] deviceMotion, error in
             guard let self = self, let motion = deviceMotion else {
@@ -82,99 +68,93 @@ final class JumpDetector: ObservableObject {
             self.processMotion(motion)
         }
         
-//        print("🚀 Detector de saltos iniciado")
+        print("🚀 Detector de saltos iniciado")
     }
     
-    /// Para a detecção
     func stop() {
         motionManager.stopDeviceMotionUpdates()
         print("⏹️ Detector de saltos parado")
     }
     
-    // MARK: - ALGORITMO PRINCIPAL DE CÁLCULO DO SALTO
+    func reset() {
+          // Zere a altura do melhor pulo e qualquer outra variável de estado
+          bestJumpHeight = 0.0
+          print("Jump detector has been reset.")
+      }
     
-    /// Processa os dados do sensor de movimento com filtro inteligente
+    // MARK: - Processamento de movimento
     private func processMotion(_ deviceMotion: CMDeviceMotion) {
-        // Aplica filtro suave para reduzir ruído mantendo responsividade
-        let rawAcceleration = extractVerticalAcceleration(from: deviceMotion)
-        let acceleration = applySmoothingFilter(rawAcceleration)
-        let timestamp = deviceMotion.timestamp
+        let verticalAccRaw = extractVerticalAcceleration(from: deviceMotion)
         
-        // Log periódico para debug (a cada 60 amostras = ~1s)
+        // 🔹 Ajusta pela calibração
+        let baseline = CalibrationManager.shared.baselineGravity
+        let sensitivity = CalibrationManager.shared.sensitivity
+        let verticalAcc = applySmoothingFilter((verticalAccRaw - baseline) / sensitivity)
+        
+        let timestamp = deviceMotion.timestamp
         logCounter += 1
-        if logCounter % 60 == 0 {
-//            print("📊 Aceleração: \(String(format: "%.2f", acceleration))g | Em voo: \(isInFlight)")
-        }
         
         if isInFlight {
-            //  DURANTE O VOO - Detecta pouso
-            if acceleration > groundThreshold {
+            // Detecta pouso
+            if verticalAcc > groundThreshold {
                 groundCount += 1
                 if groundCount >= minGroundSamples {
                     landingTime = timestamp
-                    
-                    //  VALIDAÇÃO: Verifica se o tempo de voo é válido
                     if let takeoff = takeoffTime {
                         let flightTime = timestamp - takeoff
                         if flightTime >= minFlightTime {
                             calculateJumpHeight()
-                            print("🛬 Pouso detectado! (a=\(String(format: "%.2f", acceleration))g)")
-                        } else {
-                            print("⚠️ Movimento muito rápido, não é salto (t=\(String(format: "%.3f", flightTime))s)")
                         }
                     }
+                    lastLandingTime = timestamp
                     resetFlight()
+                    print("🛬 Pouso detectado! (a=\(String(format: "%.2f", verticalAcc))g)")
                 }
             } else {
                 groundCount = 0
             }
-            
         } else {
-            //  NO CHÃO - Detecta início do salto
-            
-            // Detecta queda livre (início do salto)
-            if acceleration < freefallThreshold {
-                freefallCount += 1
-                if freefallCount >= minFreefallSamples {
-                    takeoffTime = timestamp
-                    isInFlight = true
+            if timestamp - lastLandingTime > minJumpInterval {
+                if verticalAcc < freefallThreshold {
+                    freefallCount += 1
+                    if freefallCount >= minFreefallSamples {
+                        takeoffTime = timestamp
+                        isInFlight = true
+                        print("🛫 Decolagem detectada")
+                    }
+                } else {
                     freefallCount = 0
-//                    print("🛫 SALTO DETECTADO! (a=\(String(format: "%.2f", acceleration))g)")
                 }
-            } else {
-                freefallCount = 0
             }
-            
-            // Log apenas quando confirma o salto (reduz spam no console)
         }
     }
+
     
-    /// Extrai aceleração vertical do movimento do dispositivo
+    // MARK: - Extrai aceleração vertical
     private func extractVerticalAcceleration(from deviceMotion: CMDeviceMotion) -> Double {
-        let gravity = deviceMotion.gravity
-        let totalAccel = (
-            x: deviceMotion.userAcceleration.x + gravity.x,
-            y: deviceMotion.userAcceleration.y + gravity.y,
-            z: deviceMotion.userAcceleration.z + gravity.z
+        let userAcc = deviceMotion.userAcceleration
+        let grav = deviceMotion.gravity
+        let gravNorm = sqrt(grav.x * grav.x + grav.y * grav.y + grav.z * grav.z)
+        guard gravNorm > 0 else { return 0 }
+        let gravNormalized = (
+            x: grav.x / gravNorm,
+            y: grav.y / gravNorm,
+            z: grav.z / gravNorm
         )
-        
-        // Calcula magnitude da aceleração total
-        let magnitude = sqrt(totalAccel.x * totalAccel.x + 
-                           totalAccel.y * totalAccel.y + 
-                           totalAccel.z * totalAccel.z)
-        return magnitude
+        let verticalAcc = userAcc.x * gravNormalized.x +
+                          userAcc.y * gravNormalized.y +
+                          userAcc.z * gravNormalized.z
+        return verticalAcc
     }
     
-    ///  Aplica filtro otimizado para movimentos rápidos do futevôlei
+    // MARK: - Filtro rápido
     private func applySmoothingFilter(_ rawAcceleration: Double) -> Double {
-        // Janela ainda menor para máxima responsividade em movimentos rápidos
         accelHistory.append(rawAcceleration)
-        if accelHistory.count > 2 {  // Apenas 2 amostras para ultra responsividade
+        if accelHistory.count > 2 {
             accelHistory.removeFirst()
         }
         
-        // Filtro ponderado com ainda mais peso no valor atual
-        let weights = [0.7, 0.3]  // 70% no valor mais recente
+        let weights = [0.7, 0.3]
         var weightedSum = 0.0
         var totalWeight = 0.0
         
@@ -185,86 +165,57 @@ final class JumpDetector: ObservableObject {
         }
         
         let average = weightedSum / totalWeight
-        
-        // Filtro exponencial mais responsivo para movimentos rápidos
-        let alpha: Double = 0.6  // Muito responsivo para futevôlei
+        let alpha: Double = 0.6
         let smoothed = alpha * average + (1 - alpha) * previousAccel
         previousAccel = smoothed
-        
         return smoothed
     }
     
-    ///  CALCULA A ALTURA DO SALTO - ALGORITMO CALIBRADO E PRECISO
+    // MARK: - Cálculo de altura do salto
     private func calculateJumpHeight() {
         guard let start = takeoffTime, let end = landingTime else { return }
-        
-        // Tempo de voo total
-        let flightTime = end - start
-        
-        //  VALIDAÇÃO DO TEMPO DE VOO (menos rigorosa para movimentos rápidos)
-        guard flightTime >= minFlightTime && flightTime < 1.5 else { 
-//            print("⚠️ Tempo de voo inválido: \(String(format: "%.3f", flightTime))s")
-            return
-        }
-        
-        //  FÓRMULA FÍSICA APRIMORADA: h = g × t² / 8
+
+        var flightTime = end - start
+        // Limitar voos impossíveis
+        if flightTime < minFlightTime { flightTime = minFlightTime }
+        if flightTime > 0.6 { flightTime = 0.6 }  // para saltos reais até 50cm
+
         let gravity: Double = 9.81
-        var height = gravity * flightTime * flightTime / 8.0
-        
-        // 🔧 CALIBRAÇÃO MELHORADA PARA FUTEVÔLEI
-        // Compensação para delay de sensores (~30ms típico em movimentos rápidos)
-        let sensorDelay = 0.03  // 30ms
-        let adjustedTime = flightTime + sensorDelay
-        height = gravity * adjustedTime * adjustedTime / 8.0
-        
-        // Fator de calibração mais próximo da realidade
-        let calibrationFactor = 1.15  // Aumentado para compensar subestimação
-        height *= calibrationFactor
-        
-        //  VALIDAÇÃO FINAL DA ALTURA (mais permissiva)
-        guard height > 0.01 && height < 3.0 else { 
-            print("⚠️ Altura calculada fora do range: \(String(format: "%.0f", height * 100))cm")
-            return
-        }
-        
-        //  ATUALIZA AS VARIÁVEIS PRINCIPAIS
+        let height = min(maxJumpHeight, gravity * pow(flightTime, 2) / 8.0) // fórmula clássica
+
+        guard height > 0.01 else { return }
+
         DispatchQueue.main.async { [weak self] in
-            self?.lastJumpHeight = height
-            
-            //  ATUALIZA O SALTO MAIS ALTO 
-            if height > (self?.bestJumpHeight ?? 0) {
-                self?.bestJumpHeight = height
-//                print("🏆 Novo recorde: \(String(format: "%.0f", height * 100))cm")
+            guard let self else { return }
+            self.lastJumpHeight = height
+            if height > self.bestJumpHeight {
+                self.bestJumpHeight = height
+                print("🏆 Novo recorde: \(String(format: "%.0f", height * 100))cm")
             }
-            
-//            print("✅ Salto válido: \(String(format: "%.0f", height * 100))cm (t=\(String(format: "%.3f", flightTime))s)")
+            print("✅ Salto válido: \(String(format: "%.0f", height * 100))cm (t=\(String(format: "%.3f", flightTime))s)")
         }
     }
+
+
     
-    /// Reseta o estado do voo
+    // MARK: - Reset do voo
     private func resetFlight() {
         isInFlight = false
         takeoffTime = nil
         landingTime = nil
         groundCount = 0
         freefallCount = 0
-        stableCount = 0
     }
 }
 
 #else
 
-// MARK: - Stub para outras plataformas
-
+/// Stub para outras plataformas
 final class JumpDetector: ObservableObject {
     @Published var lastJumpHeight: Double = 0
     @Published var bestJumpHeight: Double = 0
-    
-    func start() {
-        print("⚠️ JumpDetector só funciona no watchOS")
-    }
-    
-    func stop() { }
+    func start() { print("⚠️ JumpDetector só funciona no watchOS") }
+    func stop() {}
 }
 
 #endif

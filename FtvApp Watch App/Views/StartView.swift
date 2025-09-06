@@ -8,6 +8,11 @@
 import HealthKit
 import SwiftUI
 
+enum JumpNavigationPath: Hashable {
+    case measure
+    case result(bestJump: Int)
+}
+
 struct StartView: View {
 
     @StateObject var manager = WorkoutManager()
@@ -17,12 +22,13 @@ struct StartView: View {
     @State private var savedWorkout: HKWorkout?
     @State private var selectedWorkoutType: HKWorkoutActivityType? = nil
     @StateObject private var jumpDetector = JumpDetector()
-    @State var numeroWatch: Int = 0
+    @State private var navigationPath: [JumpNavigationPath] = []
+    @State private var latestJumpMeasurement: Int? = nil
 
     var workoutTypes: [HKWorkoutActivityType] = [.soccer]
 
     var body: some View {
-        NavigationStack {
+        NavigationStack(path: $navigationPath) {
             if isWorkoutActive {
                 SessionPagingView(
                     manager: manager,
@@ -50,85 +56,105 @@ struct StartView: View {
             } else if isCountingDown, let workoutType = selectedWorkoutType {
                 CountdownScreen(onCountdownFinished: {
                     self.isCountingDown = false
+                    // Limpa o path caso o usuário tenha voltado
+                    self.navigationPath.removeAll()
                     manager.startWorkout(workoutType: workoutType)
                     isWorkoutActive = true
                 })
             } else {
-                //criar a logica de onboarding
-                ZStack {
-                    Image("LogoS")
-                        .resizable()
-                        .scaledToFill()
-                        .opacity(0.20)
-                        .ignoresSafeArea()
-                        .scaleEffect(0.7)
+                startScreenContent
+            }
+        }
+    }
 
-                    LinearGradient(
-                        gradient: Gradient(colors: [
-                            .gradiente1, .gradiente2, .gradiente2, .gradiente2,
-                        ]),
-                        startPoint: .bottomLeading,
-                        endPoint: .topTrailing
-                    )
-                    .opacity(0.85)
-                    .ignoresSafeArea()
+    var startScreenContent: some View {
+        ZStack {
+            Image("LogoS")
+                .resizable()
+                .scaledToFill()
+                .opacity(0.20)
+                .ignoresSafeArea()
+                .scaleEffect(0.7)
 
-                    VStack(spacing: 12) {
+            LinearGradient(
+                gradient: Gradient(colors: [
+                    .gradiente1, .gradiente2, .gradiente2, .gradiente2,
+                ]),
+                startPoint: .bottomLeading,
+                endPoint: .topTrailing
+            )
+            .opacity(0.85)
+            .ignoresSafeArea()
 
-                        //Text("Seu desempenho será registrado em tempo real")
-                        Text(
-                            "Seu desempenho será registrado"
-                        )
-                        .font(.title3)
-                        .fontWeight(.medium)
-                        .fontDesign(.rounded)
-                        .multilineTextAlignment(.center)
+            VStack(spacing: 12) {
+                Text("Seu desempenho será registrado")
+                    .font(.title3)
+                    .fontWeight(.medium)
+                    .fontDesign(.rounded)
+                    .multilineTextAlignment(.center)
+                    .foregroundStyle(.white)
+                    .padding(.top)
+
+                Button(action: {
+                    // Passa o pulo medido (se existir) para o manager
+                    manager.preWorkoutJumpHeight = self.latestJumpMeasurement
+                    self.selectedWorkoutType = .soccer
+                    self.isCountingDown = true
+                    // Limpa o valor para que não seja reutilizado no próximo treino
+                    self.latestJumpMeasurement = nil
+                }) {
+                    Text("Iniciar Treino")
+                        .font(.headline)
+                        .fontWeight(.bold)
+                        .foregroundStyle(.black)
+                        .frame(width: 180, height: 50)
+                        .background(Color.colorPrimal)
+                        .clipShape(RoundedRectangle(cornerRadius: 24))
+                }
+                .buttonStyle(.plain)
+
+                // 3. Botão simples que empilha a view de medição no nosso path
+                Button(action: {
+                    navigationPath.append(.measure)
+                }) {
+                    Text("Medir salto")
+                        .font(.headline)
+                        .fontWeight(.bold)
                         .foregroundStyle(.white)
+                        .frame(width: 180, height: 50)
+                        .background(Color.clear)
+                        .overlay( RoundedRectangle(cornerRadius: 24) .stroke(Color.colorPrimal, lineWidth: 2) )
 
-                        Button(action: {
-                            self.selectedWorkoutType = .soccer
-                            self.isCountingDown = true
-                        }) {
-                            Text("Iniciar Treino")
-                                .font(.headline)
-                                .fontWeight(.bold)
-                                .foregroundStyle(.black)
-                                .frame(maxWidth: .infinity)
-                                .frame(width: 180, height: 60)
-                                .background(Color.colorPrimal)
-                                .clipShape(RoundedRectangle(cornerRadius: 24))
-                                .padding(.horizontal)
-                        }
-                        .buttonStyle(.plain)
-
-                        // Botão "Medir salto" - cinza escuro com borda verde
-                        Button(action: {
-                            // Ação vazia conforme solicitado
-                        }) {
-                            Text("Medir salto")
-                                .font(.headline)
-                                .fontWeight(.bold)
-                                .foregroundColor(.white)
-                                .frame(maxWidth: .infinity)
-                                .frame(width: 180, height: 60)
-                                .background(Color.clear)
-                                .overlay(
-                                    RoundedRectangle(cornerRadius: 24)
-                                        .stroke(Color.colorPrimal, lineWidth: 2)
-                                )
-                                .cornerRadius(24)
-                                .padding(.horizontal)
-                        }
-                        .buttonStyle(PlainButtonStyle())
-
+                }
+                .buttonStyle(.plain)
+            }
+            .padding(.horizontal)
+        }
+        .onAppear {
+            manager.requestAuthorization()
+            wcSessionDelegate.startSession()
+        }
+        // 4. Aqui definimos o que cada valor do nosso enum deve mostrar
+        .navigationDestination(for: JumpNavigationPath.self) { path in
+            switch path {
+            case .measure:
+                JumpMeasureView(
+                    jumpDetector: jumpDetector,
+                    navigationPath: $navigationPath
+                )
+            case .result(let bestJump):
+                // Criamos a JumpResultView passando a LÓGICA nos parâmetros 'onStart' e 'onRedo'
+                JumpResultView(
+                    bestJump: bestJump,
+                    onStart: {
+                        // Salva o resultado do pulo no estado temporário
+                        self.latestJumpMeasurement = bestJump
+                        self.navigationPath.removeAll()
+                    },
+                    onRedo: {
+                        self.navigationPath.removeLast()
                     }
-                    .padding(.horizontal)
-                }
-
-                .onAppear {
-                    manager.requestAuthorization()
-                    wcSessionDelegate.startSession()
-                }
+                )
             }
         }
     }

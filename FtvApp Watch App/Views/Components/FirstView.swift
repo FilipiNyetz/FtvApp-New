@@ -43,6 +43,7 @@ struct FirstView: View {
                     .multilineTextAlignment(.center)
                     .foregroundStyle(.white)
                     .padding(.bottom, 12)
+                    .foregroundStyle(Color.colorPrimal)
 
                     Button(action: {
                         self.hasCompletedOnboarding = true

@@ -44,6 +44,7 @@ class WorkoutManager: NSObject, ObservableObject {
     @Published var activeEnergy: Double = 0
     @Published var distance: Double = 0
     @Published var workout: HKWorkout?
+    @Published var preWorkoutJumpHeight: Int? = nil
     private var isEndingWorkout = false
 
     var timer: Timer?
