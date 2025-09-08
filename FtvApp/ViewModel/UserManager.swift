@@ -5,105 +5,132 @@
 //  Created by Filipi Romão on 23/08/25.
 //
 
+//
+//  UserManager.swift
+//  FtvApp
+//
+//  Created by Filipi Romão on 23/08/25.
+//
+
 import Foundation
 import SwiftUI
 
-class UserManager: ObservableObject{
+class UserManager: ObservableObject {
     
+    // MARK: - Published Properties
     @Published var bagdeNames: [String] = []
     @Published var goalBadge: Int = 10
+    
+    // Medalha pendente para ser exibida quando o app abrir
     @Published var pendingMedal: String? {
-            didSet {
-                if let m = pendingMedal {
-                    UserDefaults.standard.set(m, forKey: Self.pendingKey)
-                } else {
-                    UserDefaults.standard.removeObject(forKey: Self.pendingKey)
-                }
+        didSet {
+            if let m = pendingMedal {
+                UserDefaults.standard.set(m, forKey: Self.pendingKey)
+            } else {
+                UserDefaults.standard.removeObject(forKey: Self.pendingKey)
             }
         }
-        private static let pendingKey = "pendingMedal"
+    }
+    
+    // ✅ NOVO: Lista de medalhas que o usuário já ganhou. É a chave da nova lógica.
+    @Published var earnedMedals: [String] = [] {
+        didSet {
+            UserDefaults.standard.set(earnedMedals, forKey: Self.earnedMedalsKey)
+        }
+    }
+    
+    // MARK: - Keys for UserDefaults
+    private static let pendingKey = "pendingMedal"
+    private static let earnedMedalsKey = "earnedMedalsKey"
+    
+    // ✅ NOVO: Mapeamento centralizado de todas as metas e nomes de medalhas.
+    // Isso remove a lógica duplicada e simplifica a verificação.
+    private let medalGoals: [(name: String, requiredWorkouts: Int)] = [
+        ("2ndGoal", 10),
+        ("3rdGoal", 50),
+        ("4thGoal", 150),
+        ("5thGoal", 250),
+        ("6thGoal", 350),
+        ("7thGoal", 500),
+        ("8thGoal", 650),
+        ("9thGoal", 750),
+        ("10thGoal", 850),
+        ("11thGoal", 1000)
+    ]
 
-        init() {
-            // carrega pending salvo (se houver)
-            pendingMedal = UserDefaults.standard.string(forKey: Self.pendingKey)
-        }
+    init() {
+        // Carrega os dados salvos ao iniciar o app
+        self.pendingMedal = UserDefaults.standard.string(forKey: Self.pendingKey)
+        self.earnedMedals = UserDefaults.standard.stringArray(forKey: Self.earnedMedalsKey) ?? []
+    }
     
-    func setBadgeTotalWorkout(totalWorkouts: Int){
-        switch totalWorkouts {
-        case totalWorkouts where totalWorkouts < 10:
+    // MARK: - Medal Logic
+    
+    /// ✅ NOVO: Verifica se uma nova medalha foi conquistada com base no total de treinos.
+    /// Retorna o nome da medalha a ser exibida, ou nil se nenhuma nova foi ganha.
+    func checkForNewMedal(totalWorkouts: Int) -> String? {
+        print("🔎 Verificando medalhas para \(totalWorkouts) treinos. Medalhas já ganhas: \(earnedMedals)")
+        
+        // Encontra a primeira medalha que o usuário atingiu a meta, mas que ainda não ganhou.
+        if let newMedal = medalGoals.first(where: { goal in
+            // Condição 1: O total de treinos é suficiente?
+            let condition1 = totalWorkouts >= goal.requiredWorkouts
+            // Condição 2: A medalha já foi ganha?
+            let condition2 = !earnedMedals.contains(goal.name)
+            
+            if condition1 && !condition2 {
+                print("  - Checando meta '\(goal.name)': O usuário tem treinos suficientes, MAS JÁ GANHOU esta medalha.")
+            }
+            
+            return condition1 && condition2
+        }) {
+            print("  -> Encontrou medalha para premiar: \(newMedal.name)")
+            return newMedal.name
+        }
+        
+        print("  -> Nenhuma medalha nova encontrada.")
+        return nil
+    }
+    
+    /// ✅ NOVO: Adiciona uma medalha à lista de conquistadas e salva.
+    func awardMedal(_ medalName: String) {
+        guard !earnedMedals.contains(medalName) else { return }
+        earnedMedals.append(medalName)
+    }
+
+    // MARK: - Badge Display Logic (UI)
+    
+    /// Define os ícones de badge atual e próximo a serem exibidos na ProgressBar.
+    func setBadgeTotalWorkout(totalWorkouts: Int) {
+        if totalWorkouts < 10 {
             bagdeNames = ["1stGoal", "2ndGoal"]
-            
-            
-        case totalWorkouts where totalWorkouts < 50:
-            bagdeNames = ["2ndGoal", "3rdGoal"]
-            goalBadge = 50
-            
-        case totalWorkouts where totalWorkouts < 150:
-            bagdeNames = ["3rdGoal", "4thGoal"]
-            goalBadge = 150
-            
-        case totalWorkouts where totalWorkouts < 250:
-            bagdeNames = ["4thGoal", "5thGoal"]
-            goalBadge = 250
-            
-        case totalWorkouts where totalWorkouts < 350:
-            bagdeNames = ["5thGoal", "6thGoal"]
-            goalBadge = 350
-            
-        case totalWorkouts where totalWorkouts < 500:
-            bagdeNames = ["6thGoal", "7thGoal"]
-            goalBadge = 500
-            
-        case totalWorkouts where totalWorkouts < 650:
-            bagdeNames = ["7thGoal", "8thGoal"]
-            goalBadge = 650
-        case totalWorkouts where totalWorkouts < 750:
-            bagdeNames = ["8thGoal", "9thGoal"]
-            goalBadge = 750
-            
-        case totalWorkouts where totalWorkouts < 850:
-            bagdeNames = ["9thGoal", "10thGoal"]
-            goalBadge = 850
-            
-        case totalWorkouts where totalWorkouts < 1000:
-            bagdeNames = ["10thGoal", "11thGoal"]
-            goalBadge = 1000
-        default :
-            print("O icone vai ser 11")
+            goalBadge = 10
+        } else if let nextGoalIndex = medalGoals.firstIndex(where: { totalWorkouts < $0.requiredWorkouts }) {
+            // O usuário está entre duas metas
+            let currentGoal = medalGoals[nextGoalIndex - 1]
+            let nextGoal = medalGoals[nextGoalIndex]
+            bagdeNames = [currentGoal.name, nextGoal.name]
+            goalBadge = nextGoal.requiredWorkouts
+        } else {
+            // O usuário atingiu a última meta
+            if let lastGoal = medalGoals.last {
+                bagdeNames = [lastGoal.name, lastGoal.name] // Mostra a última medalha
+                goalBadge = lastGoal.requiredWorkouts
+            }
         }
     }
     
+    /// Retorna o valor inicial da barra de progresso.
     func badgeStartValue() -> Int {
-        switch bagdeNames.first {
-        case "2ndGoal": return 10
-        case "3rdGoal": return 50
-        case "4thGoal": return 150
-        case "5thGoal": return 250
-        case "6thGoal": return 350
-        case "7thGoal": return 500
-        case "8thGoal": return 650
-        case "9thGoal": return 750
-        case "10thGoal": return 850
-        case "11thGoal": return 1000
-        default: return 0
+        // Encontra a maior meta que o usuário já alcançou
+        if let lastAchievedGoal = medalGoals.last(where: { earnedMedals.contains($0.name) }) {
+            return lastAchievedGoal.requiredWorkouts
         }
+        // Se nenhuma foi alcançada (ou só a primeira), o início é 0
+        return 0
     }
-    func nextGoalBadge(for totalWorkouts: Int) -> Int {
-        switch totalWorkouts {
-        case ..<10: return 10
-        case ..<50: return 50
-        case ..<150: return 150
-        case ..<250: return 250
-        case ..<350: return 350
-        case ..<500: return 500
-        case ..<650: return 650
-        case ..<750: return 750
-        case ..<850: return 850
-        case ..<1000: return 1000
-        default: return 0
-        }
-    }
-    
+
+    // MARK: - Pending Medal Management
     func setPendingMedal(_ name: String) {
         pendingMedal = name
     }
@@ -111,6 +138,4 @@ class UserManager: ObservableObject{
     func clearPendingMedal() {
         pendingMedal = nil
     }
-    
-    
 }

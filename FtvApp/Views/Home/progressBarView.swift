@@ -3,11 +3,11 @@ import UIKit
 
 struct ProgressBarView: View {
     @ObservedObject var manager: HealthManager
-    @ObservedObject var userManager: UserManager
+    @EnvironmentObject var userManager: UserManager
     @State private var animatedProgress: Double = 0
     @State private var previousWorkoutsCount: Int = 0
     let goal: Int = 20  // meta inicial
-    
+
     var body: some View {
         HStack {
             VStack {
@@ -116,47 +116,49 @@ struct ProgressBarView: View {
         )
         .onAppear {
             userManager.setBadgeTotalWorkout(
-                totalWorkouts: manager.workouts.count
+                totalWorkouts: manager.totalWorkoutsCount
             )
             let progress = min(
-                Double(manager.workouts.count) / Double(userManager.goalBadge),
+                Double(manager.totalWorkoutsCount)
+                    / Double(userManager.goalBadge),
                 1.0
             )
             animatedProgress = progress
-            previousWorkoutsCount = manager.workouts.count
         }
-        .onChange(of: manager.workouts.count) { _, newValue in
-            let prev = previousWorkoutsCount
-            previousWorkoutsCount = newValue
+        .onChange(of: manager.totalWorkoutsCount) { _, newTotalWorkouts in
+            print("--- onChange Disparado! Novo total de treinos: \(newTotalWorkouts) ---")
 
-            let nextGoal = userManager.nextGoalBadge(for: prev)
+            // 1. Verifica se há uma nova medalha para conceder
+            if let medalNameToAward = userManager.checkForNewMedal(totalWorkouts: newTotalWorkouts) {
+                print("✅ SUCESSO: Nova medalha encontrada para premiar: \(medalNameToAward)")
+                userManager.awardMedal(medalNameToAward)
 
-            if prev < nextGoal && newValue >= nextGoal {
-                let nextBadgeName =
-                    userManager.bagdeNames.indices.contains(1)
-                    ? userManager.bagdeNames[0] : userManager.bagdeNames[1]
-
+                // 3. Tenta mostrar a animação
                 DispatchQueue.main.async {
+                    print("▶️ Tentando exibir a animação na main thread.")
                     if let rootVC = UIApplication.topMostViewController() {
+                        print("  ✅ View controller encontrado com sucesso: \(rootVC.classForCoder)")
                         MedalRevealCoordinator.showMedal(
-                            nextBadgeName,
+                            medalNameToAward,
                             on: rootVC
                         )
                     } else {
-                        userManager.setPendingMedal(nextBadgeName)
+                        print("  ❌ ERRO: UIApplication.topMostViewController() retornou nulo. Salvando medalha como pendente.")
+                        userManager.setPendingMedal(medalNameToAward)
                     }
                 }
+            }else{
+                print("❌ NENHUMA MEDALHA NOVA: A função checkForNewMedal retornou nulo.")
             }
 
-            // Atualiza badges e progresso
-            userManager.setBadgeTotalWorkout(totalWorkouts: newValue)
+            // 4. Atualiza a UI da barra de progresso
+            userManager.setBadgeTotalWorkout(totalWorkouts: newTotalWorkouts)
             let progress = min(
-                Double(newValue) / Double(userManager.goalBadge),
+                Double(newTotalWorkouts) / Double(userManager.goalBadge),
                 1.0
             )
             withAnimation(.easeInOut) { animatedProgress = progress }
         }
-
     }
 
     /// Interpola entre duas cores (#A2A2A2 -> #D6FF45) conforme o progresso

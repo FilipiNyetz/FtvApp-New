@@ -15,6 +15,7 @@ struct FtvAppApp: App {
     var body: some Scene {
         WindowGroup {
             MainView()
+                .environmentObject(userManager)
                 .preferredColorScheme(.dark)
                 .onReceive(NotificationCenter.default.publisher(for: UIApplication.didBecomeActiveNotification)) { _ in
                     showPendingMedalIfNeeded()
@@ -24,22 +25,12 @@ struct FtvAppApp: App {
 
     func showPendingMedalIfNeeded() {
         if let medalName = userManager.pendingMedal {
-            userManager.clearPendingMedal()
-
+            // Adiciona um pequeno delay para garantir que a UI esteja pronta
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                 if let topVC = UIApplication.topMostViewController() {
-                    let medalView = MedalRevealView(medalImage: UIImage(named: medalName))
-                    medalView.translatesAutoresizingMaskIntoConstraints = false
-                    topVC.view.addSubview(medalView)
-
-                    NSLayoutConstraint.activate([
-                        medalView.centerXAnchor.constraint(equalTo: topVC.view.centerXAnchor),
-                        medalView.centerYAnchor.constraint(equalTo: topVC.view.centerYAnchor),
-                        medalView.widthAnchor.constraint(equalToConstant: 220),
-                        medalView.heightAnchor.constraint(equalToConstant: 220)
-                    ])
-
-                    medalView.reveal()
+                    // ✅ USA O COORDENADOR DIRETAMENTE
+                    MedalRevealCoordinator.showMedal(medalName, on: topVC)
+                    userManager.clearPendingMedal() // Limpa após disparar a animação
                 }
             }
         }

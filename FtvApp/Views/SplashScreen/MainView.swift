@@ -11,7 +11,7 @@ struct MainView: View {
     
     // Instâncias dos managers
     @StateObject var healthManager = HealthManager()
-    @StateObject var userManager = UserManager()
+    @EnvironmentObject var userManager: UserManager
     @StateObject var wcSessionDelegate = PhoneWCSessionDelegate()
     
     // Criar ModelContainer como State
@@ -24,7 +24,7 @@ struct MainView: View {
 
             if !isLoading {
                 if let container {
-                    HomeView(manager: healthManager, userManager: userManager, wcSessionDelegate: wcSessionDelegate)
+                    HomeView(manager: healthManager, wcSessionDelegate: wcSessionDelegate)
                         .environment(\.modelContext, container.mainContext)
                         .opacity(startViewOpacity)
                 } else {
