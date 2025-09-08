@@ -9,6 +9,7 @@ import HealthKit
 import SwiftUI
 
 enum JumpNavigationPath: Hashable {
+    case instruction
     case measure
     case result(bestJump: Int)
 }
@@ -48,7 +49,6 @@ struct StartView: View {
                 ) { workout in
                     SummaryView(
                         wcSessionDelegate: wcSessionDelegate,
-                        jumpDetector: jumpDetector,
                         workout: workout
                     )
                     .environmentObject(manager)
@@ -115,7 +115,7 @@ struct StartView: View {
 
                 // 3. Botão simples que empilha a view de medição no nosso path
                 Button(action: {
-                    navigationPath.append(.measure)
+                    navigationPath.append(.instruction)
                 }) {
                     Text("Medir salto")
                         .font(.headline)
@@ -123,10 +123,13 @@ struct StartView: View {
                         .foregroundStyle(.white)
                         .frame(width: 180, height: 50)
                         .background(Color.clear)
-                        .overlay( RoundedRectangle(cornerRadius: 24) .stroke(Color.colorPrimal, lineWidth: 2) )
-
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 24)
+                                .stroke(Color.colorPrimal, lineWidth: 2)
+                        )
                 }
                 .buttonStyle(.plain)
+
             }
             .padding(.horizontal)
         }
@@ -137,17 +140,19 @@ struct StartView: View {
         // 4. Aqui definimos o que cada valor do nosso enum deve mostrar
         .navigationDestination(for: JumpNavigationPath.self) { path in
             switch path {
+            case .instruction:
+                JumpInstructionView(navigationPath: $navigationPath)
+
             case .measure:
                 JumpMeasureView(
                     jumpDetector: jumpDetector,
                     navigationPath: $navigationPath
                 )
+
             case .result(let bestJump):
-                // Criamos a JumpResultView passando a LÓGICA nos parâmetros 'onStart' e 'onRedo'
                 JumpResultView(
                     bestJump: bestJump,
                     onStart: {
-                        // Salva o resultado do pulo no estado temporário
                         self.latestJumpMeasurement = bestJump
                         self.navigationPath.removeAll()
                     },
