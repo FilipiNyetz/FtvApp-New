@@ -19,7 +19,7 @@ struct JumpResultView: View {
         VStack(spacing: 8) {
             VStack(spacing: 2) {
                 Text("Seu maior pulo foi")
-                    .font(.subheadline)
+                    .font(.headline)
                     .foregroundStyle(Color.colorPrimal)
                     .padding(.top, 12)
                 
@@ -41,7 +41,7 @@ struct JumpResultView: View {
                     .font(.headline)
                     .fontWeight(.bold)
                     .foregroundStyle(.black)
-                    .frame(width: 180, height: 50)
+                    .frame(width: 160, height: 45)
                     .background(Color.colorPrimal)
                     .clipShape(RoundedRectangle(cornerRadius: 24))
             }
@@ -54,7 +54,7 @@ struct JumpResultView: View {
                     .font(.headline)
                     .fontWeight(.bold)
                     .foregroundColor(.white)
-                    .frame(width: 180, height: 50)
+                    .frame(width: 160, height: 45)
                     .background(Color.clear)
                     .overlay(
                         RoundedRectangle(cornerRadius: 24)

@@ -16,13 +16,12 @@ struct JumpMeasureView: View {
     
     var body: some View {
         VStack(spacing: 12) {
-            Text("Coloque as mãos na cintura e dê quantos pulos quiser")
+            Text("Agora cada salto está sendo registrado")
                 .font(.headline)
                 .fontWeight(.bold)
                 .multilineTextAlignment(.center)
                 .lineLimit(nil)
                 .fixedSize(horizontal: false, vertical: true)
-                .padding()
                 .foregroundStyle(Color.colorPrimal)
 
             Text("\(jumpDetector.lastJumpHeight * 100, specifier: "%.0f") cm")
@@ -35,11 +34,11 @@ struct JumpMeasureView: View {
                 // Adiciona a tela de resultado ao path, passando o dado junto
                 navigationPath.append(.result(bestJump: bestJumpInCm))
             }) {
-                Text("Terminar")
+                Text("Concluir Saltos")
                     .font(.headline)
                     .fontWeight(.bold)
                     .foregroundStyle(.black)
-                    .frame(width: 180, height: 50)
+                    .frame(width: 160, height: 50)
                     .background(Color.colorPrimal)
                     .clipShape(RoundedRectangle(cornerRadius: 24))
             }
