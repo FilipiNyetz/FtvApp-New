@@ -24,7 +24,7 @@ struct JumpResultView: View {
                     .padding(.top, 12)
                 
                 Text("\(bestJump)")
-                    .font(.title)
+                    .font(.title2)
                     .fontWeight(.semibold)
                 
                 Text("cm")

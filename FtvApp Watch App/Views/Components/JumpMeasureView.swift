@@ -25,6 +25,9 @@ struct JumpMeasureView: View {
                 .padding()
                 .foregroundStyle(Color.colorPrimal)
 
+            Text("\(jumpDetector.lastJumpHeight * 100, specifier: "%.0f") cm")
+                .font(.title2)
+                .foregroundStyle(.white)
             
             Button(action: {
                 jumpDetector.stop()

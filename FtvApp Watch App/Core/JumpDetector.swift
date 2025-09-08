@@ -35,8 +35,8 @@ final class JumpDetector: ObservableObject {
     private var logCounter = 0
     
     // MARK: - Configurações extremamente rigorosas
-    private let freefallThreshold: Double = -1.0     // só considera decolagem se forte queda
-    private let groundThreshold: Double = 1.3        // pouso detectado se impacto forte
+    private let freefallThreshold: Double = -0.8     // só considera decolagem se forte queda
+    private let groundThreshold: Double = 1.0       // pouso detectado se impacto forte
     private let minFreefallSamples = 3
     private let minGroundSamples = 4
     private let minFlightTime: Double = 0.10
@@ -46,6 +46,10 @@ final class JumpDetector: ObservableObject {
     
     // MARK: - Início / parada
     func start() {
+        CalibrationManager.shared.startCalibration {
+            print("✅ Calibração concluída: baseline=\(CalibrationManager.shared.baselineGravity), sens=\(CalibrationManager.shared.sensitivity)")
+        }
+        
         guard motionManager.isDeviceMotionAvailable else {
             print("⚠️ Sensor de movimento não disponível")
             return
@@ -88,7 +92,7 @@ final class JumpDetector: ObservableObject {
         
         // 🔹 Ajusta pela calibração
         let baseline = CalibrationManager.shared.baselineGravity
-        let sensitivity = CalibrationManager.shared.sensitivity
+        let sensitivity = max(0.5, CalibrationManager.shared.sensitivity) // garante >= 0.5
         let verticalAcc = applySmoothingFilter((verticalAccRaw - baseline) / sensitivity)
         
         let timestamp = deviceMotion.timestamp
@@ -153,48 +157,55 @@ final class JumpDetector: ObservableObject {
         if accelHistory.count > 2 {
             accelHistory.removeFirst()
         }
-        
+
+        guard !accelHistory.isEmpty else { return previousAccel }
+
         let weights = [0.7, 0.3]
         var weightedSum = 0.0
         var totalWeight = 0.0
-        
+
         for (index, value) in accelHistory.enumerated() {
             let weight = weights[min(index, weights.count - 1)]
             weightedSum += value * weight
             totalWeight += weight
         }
-        
+
+        guard totalWeight > 0 else { return previousAccel }
+
         let average = weightedSum / totalWeight
         let alpha: Double = 0.6
         let smoothed = alpha * average + (1 - alpha) * previousAccel
         previousAccel = smoothed
         return smoothed
     }
+
     
     // MARK: - Cálculo de altura do salto
     private func calculateJumpHeight() {
         guard let start = takeoffTime, let end = landingTime else { return }
-
         var flightTime = end - start
-        // Limitar voos impossíveis
+        if flightTime.isNaN || flightTime.isInfinite || flightTime < 0 { return }
+
+        // clamp
         if flightTime < minFlightTime { flightTime = minFlightTime }
-        if flightTime > 0.6 { flightTime = 0.6 }  // para saltos reais até 50cm
+        if flightTime > 0.6 { flightTime = 0.6 }
 
         let gravity: Double = 9.81
-        let height = min(maxJumpHeight, gravity * pow(flightTime, 2) / 8.0) // fórmula clássica
+        let height = min(maxJumpHeight, gravity * pow(flightTime, 2) / 8.0)
 
-        guard height > 0.01 else { return }
+        guard height > 0.01, height.isFinite else { return }
 
         DispatchQueue.main.async { [weak self] in
             guard let self else { return }
             self.lastJumpHeight = height
             if height > self.bestJumpHeight {
                 self.bestJumpHeight = height
-                print("🏆 Novo recorde: \(String(format: "%.0f", height * 100))cm")
+                print("🏆 Novo recorde: \(Int(height * 100))cm")
             }
-            print("✅ Salto válido: \(String(format: "%.0f", height * 100))cm (t=\(String(format: "%.3f", flightTime))s)")
+            print("✅ Salto válido: \(Int(height * 100))cm (t=\(String(format: "%.3f", flightTime))s)")
         }
     }
+
 
 
     

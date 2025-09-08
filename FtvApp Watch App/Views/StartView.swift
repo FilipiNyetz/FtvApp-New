@@ -48,7 +48,6 @@ struct StartView: View {
                 ) { workout in
                     SummaryView(
                         wcSessionDelegate: wcSessionDelegate,
-                        jumpDetector: jumpDetector,
                         workout: workout
                     )
                     .environmentObject(manager)
