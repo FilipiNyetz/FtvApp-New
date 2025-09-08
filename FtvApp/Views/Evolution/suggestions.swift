@@ -25,7 +25,7 @@ struct SuggestionsDynamic: View {
                 SugestaoCard(
                     icone: card.icone,
                     titulo: card.tituloKey,
-                    descricao: Text(card.descricaoKey)
+                    descricao: card.descricaoKey
                 )
             }
         }
@@ -51,51 +51,51 @@ struct SuggestionsDynamic: View {
                 return [
                     .init("figure",
                           Text("Físicas"),
-                          "Invista em treinos aeróbicos leves como corridas contínuas, isso aumenta sua resistência e fortalece sua capacidade cardíaca."),
+                          Text("Invista em treinos aeróbicos leves como corridas contínuas, isso aumenta sua resistência e fortalece sua capacidade cardíaca.")),
                     
                         .init("book.fill",
                               Text("Técnicas"),
-                              "Aprenda a controlar sua respiração entre cada ponto, estabilizando o corpo e ajudando a reduzir batimentos acelerados."),
+                             Text("Aprenda a controlar sua respiração entre cada ponto, estabilizando o corpo e ajudando a reduzir batimentos acelerados.")),
                     
                         .init("mappin.and.ellipse",
                               Text("Estratégias"),
-                              "Reduza seu ritmo em jogadas menos decisivas, assim você preserva energia para momentos realmente importantes no jogo.")
+                              Text("Reduza seu ritmo em jogadas menos decisivas, assim você preserva energia para momentos realmente importantes no jogo."))
                 ]
             } else if maxValue < 150 {
                 return [
                     .init("figure",
                           Text("Físicas"),
-                          "Faça corridas contínuas de vinte minutos em intensidade moderada, isso melhora condicionamento e mantém o coração eficiente."),
+                          Text("Faça corridas contínuas de vinte minutos em intensidade moderada, isso melhora condicionamento e mantém o coração eficiente.")),
                     .init("book.fill",
                           Text("Técnicas"),
-                          "Treine sincronizar respiração com seus movimentos de ataque, esse hábito ajuda a manter controle corporal durante o esforço."),
+                         Text( "Treine sincronizar respiração com seus movimentos de ataque, esse hábito ajuda a manter controle corporal durante o esforço.")),
                     .init("mappin.and.ellipse",
                           Text("Estratégias"),
-                          "Utilize pausas curtas entre pontos para recuperar fôlego, acelerando sua recuperação e mantendo o desempenho estável.")
+                          Text("Utilize pausas curtas entre pontos para recuperar fôlego, acelerando sua recuperação e mantendo o desempenho estável."))
                 ]
             } else if maxValue < 180 {
                 return [
                     .init("figure",
                           Text("Físicas"),
-                          "Trabalhe treinos curtos de alta intensidade, aumentando sua recuperação cardíaca e melhorando a resistência."),
+                          Text("Trabalhe treinos curtos de alta intensidade, aumentando sua recuperação cardíaca e melhorando a resistência.")),
                     .init("book.fill",
                           Text("Técnicas"),
-                          "Estabeleça um ritmo de jogo constante, isso reduz oscilações desnecessárias nos seus batimentos cardíacos."),
+                          Text("Estabeleça um ritmo de jogo constante, isso reduz oscilações desnecessárias nos seus batimentos cardíacos.")),
                     .init("mappin.and.ellipse",
                           Text("Estratégias"),
-                          "Use seu bom condicionamento para impor pressão constante, pois manter essa intensidade desgasta o adversário.")
+                          Text("Use seu bom condicionamento para impor pressão constante, pois manter essa intensidade desgasta o adversário."))
                 ]
             }else {
                 return [
                     .init("figure",
                           Text("Físicas"),
-                          ""),
+                          Text("")),
                     .init("book.fill",
                           Text("Técnicas"),
-                          ""),
+                          Text("")),
                     .init("mappin.and.ellipse",
                           Text("Estratégias"),
-                          "")
+                          Text(""))
                 ]
             }
             
@@ -104,55 +104,55 @@ struct SuggestionsDynamic: View {
                 return [
                     .init("figure",
                           Text("Físicas"),
-                          "Movimente-se mais durante os pontos, pois aumentando o gasto calórico ajuda diretamente na melhora do seu condicionamento físico."),
+                         Text( "Movimente-se mais durante os pontos, pois aumentando o gasto calórico ajuda diretamente na melhora do seu condicionamento físico.")),
                     
                         .init("book.fill",
                               Text("Técnicas"),
-                              "Envolva-se em todas as jogadas evitando ficar parado, garantindo participação ativa e mais energia gasta no jogo."),
+                              Text("Envolva-se em todas as jogadas evitando ficar parado, garantindo participação ativa e mais energia gasta no jogo.")),
                     
                         .init("mappin.and.ellipse",
                               Text("Estratégias"),
-                              "Use movimentação constante para desgastar o adversário, esse estilo aumenta seu gasto calórico e cria vantagem estratégica.")
+                              Text("Use movimentação constante para desgastar o adversário, esse estilo aumenta seu gasto calórico e cria vantagem estratégica."))
                 ]
             } else if maxValue < 600 {
                 return [
                     .init("figure",
                           Text("Físicas"),
-                          "Intensifique treinos físicos fora da quadra, pois gastar mais calorias melhora sua preparação e fortalece seu condicionamento."),
+                         Text( "Intensifique treinos físicos fora da quadra, pois gastar mais calorias melhora sua preparação e fortalece seu condicionamento.")),
                     
                         .init("book.fill",
                               Text("Técnicas"),
-                              "Trabalhe deslocamentos laterais contínuos, pois além de gastar energia isso melhora sua capacidade defensiva contra ataques."),
+                             Text( "Trabalhe deslocamentos laterais contínuos, pois além de gastar energia isso melhora sua capacidade defensiva contra ataques.")),
                     
                         .init("mappin.and.ellipse",
                               Text("Estratégias"),
-                              "Eleve a intensidade nos pontos mais decisivos, gastando energia adicional e forçando erros importantes do adversário.")
+                              Text("Eleve a intensidade nos pontos mais decisivos, gastando energia adicional e forçando erros importantes do adversário."))
                 ]
             } else if maxValue < 800{
                 return [
                     .init("figure",
                           Text("Físicas"),
-                          "Varie exercícios funcionais com foco em agilidade, aumentando o gasto calórico e melhorando a eficiência dos movimentos."),
+                         Text( "Varie exercícios funcionais com foco em agilidade, aumentando o gasto calórico e melhorando a eficiência dos movimentos.")),
                     
                         .init("book.fill",
                               Text("Técnicas"),
-                              "Participe de ataques e defesas rápidas em sequência, isso exige energia e fortalece sua resistência em quadra."),
+                              Text("Participe de ataques e defesas rápidas em sequência, isso exige energia e fortalece sua resistência em quadra.")),
                     
                         .init("mappin.and.ellipse",
                               Text("Estratégias"),
-                              "Mantenha ritmo acelerado contra adversários mais lentos, isso aumenta o gasto energético e cria vantagem competitiva.")
+                              Text("Mantenha ritmo acelerado contra adversários mais lentos, isso aumenta o gasto energético e cria vantagem competitiva."))
                 ]
             } else {
                 return [
                     .init("figure",
                           Text("Físicas"),
-                          ""),
+                          Text("")),
                     .init("book.fill",
                           Text("Técnicas"),
-                          ""),
+                          Text("")),
                     .init("mappin.and.ellipse",
                           Text("Estratégias"),
-                          "")
+                          Text(""))
                 ]
             }
             
@@ -161,55 +161,55 @@ struct SuggestionsDynamic: View {
                 return [
                     .init("figure",
                           Text("Físicas"),
-                          "Movimente-se mais durante os pontos, pois percorrer maiores distâncias ajuda no condicionamento físico e resistência em geral."),
+                          Text("Movimente-se mais durante os pontos, pois percorrer maiores distâncias ajuda no condicionamento físico e resistência em geral.")),
                     
                         .init("book.fill",
                               Text("Técnicas"),
-                              "Treine deslocamentos longos em quadra, isso aumenta sua recuperação e melhora a cobertura em bolas difíceis."),
+                              Text("Treine deslocamentos longos em quadra, isso aumenta sua recuperação e melhora a cobertura em bolas difíceis.")),
                     
                         .init("mappin.and.ellipse",
                               Text("Estratégias"),
-                              "Ajuste seu posicionamento para compensar percursos curto, ajudando a manter eficiência mesmo com menor distância.")
+                             Text( "Ajuste seu posicionamento para compensar percursos curto, ajudando a manter eficiência mesmo com menor distância."))
                 ]
             } else if maxValue < 1500 {
                 return [
                     .init("figure",
                           Text("Físicas"),
-                          "Acrescente corridas leves em treinos, isso acostuma seu corpo a percorrer mais distância com menor desgaste físico."),
+                          Text("Acrescente corridas leves em treinos, isso acostuma seu corpo a percorrer mais distância com menor desgaste físico.")),
                     
                         .init("book.fill",
                               Text("Técnicas"),
-                              "Trabalhe perseguição da bola em pontos longos, esse treino aumenta alcance e melhora o deslocamento durante os jogos."),
+                              Text("Trabalhe perseguição da bola em pontos longos, esse treino aumenta alcance e melhora o deslocamento durante os jogos.")),
                     
                         .init("mappin.and.ellipse",
                               Text("Estratégias"),
-                              "Movimente-se intencionalmente para abrir espaços em quadra, essa movimentação gera confusão e dificulta leitura do adversário.")
+                              Text("Movimente-se intencionalmente para abrir espaços em quadra, essa movimentação gera confusão e dificulta leitura do adversário."))
                 ]
             } else if maxValue < 2500{
                 return [
                     .init("figure",
                           Text("Físicas"),
-                          "Fortaleça resistência muscular com exercícios de longa duração, ajudando você a suportar bem percursos maiores na quadra."),
+                          Text("Fortaleça resistência muscular com exercícios de longa duração, ajudando você a suportar bem percursos maiores na quadra.")),
                     
                         .init("book.fill",
                               Text("Técnicas"),
-                              "Aprimore técnica de deslocamento rápido em distâncias maiores, isso permite percorrer espaço sem perder eficiência."),
+                              Text("Aprimore técnica de deslocamento rápido em distâncias maiores, isso permite percorrer espaço sem perder eficiência.")),
                     
                         .init("mappin.and.ellipse",
                               Text("Estratégias"),
-                              "Use sua capacidade de percorrer grandes distâncias para cobrir o parceiro e garantir defesa mais eficaz e completa.")
+                              Text("Use sua capacidade de percorrer grandes distâncias para cobrir o parceiro e garantir defesa mais eficaz e completa."))
                 ]
             }else {
                 return [
                     .init("figure",
                           Text("Físicas"),
-                          ""),
+                          Text("")),
                     .init("book.fill",
                           Text("Técnicas"),
-                          ""),
+                          Text("")),
                     .init("mappin.and.ellipse",
                           Text("Estratégias"),
-                          "")
+                          Text(""))
                 ]
             }
             
@@ -220,43 +220,43 @@ struct SuggestionsDynamic: View {
                 return [
                     .init("figure",
                           Text("Físicas"),
-                          "Agachamento e prancha 2–3×/sem criam base p/ saltar."),
+                          Text("Agachamento e prancha 2–3×/sem criam base p/ saltar.")),
                     
                         .init("book.fill",
                               Text("Técnicas"),
-                              "Joelhos flexionados, tronco estável e braços coordenados."),
+                              Text("Joelhos flexionados, tronco estável e braços coordenados.")),
                     
                         .init("mappin.and.ellipse",
                               Text("Estratégias"),
-                              "Aterre com joelhos levemente flexionados para proteger joelhos.")
+                              Text("Aterre com joelhos levemente flexionados para proteger joelhos."))
                 ]
             } else if maxValue < 0.40 {
                 return [
                     .init("figure",
                           Text("Físicas"),
-                          "Pliometria leve: saltos na caixa 3×8 repetições."),
+                          Text("Pliometria leve: saltos na caixa 3×8 repetições.")),
                     
                         .init("book.fill",
                               Text("Técnicas"),
-                              "Padronize corrida de aproximação antes do salto."),
+                              Text("Padronize corrida de aproximação antes do salto.")),
                     
                         .init("mappin.and.ellipse",
                               Text("Estratégias"),
-                              "Evite fadiga excessiva para preservar a técnica do salto.")
+                              Text("Evite fadiga excessiva para preservar a técnica do salto."))
                 ]
             } else {
                 return [
                     .init("figure",
                           Text("Físicas"),
-                          "Inclua contrast training (força + pliometria) 1–2×/sem."),
+                          Text("Inclua contrast training (força + pliometria) 1–2×/sem.")),
                     
                         .init("book.fill",
                               Text("Técnicas"),
-                              "Video-feedback para corrigir braços e timing."),
+                              Text("Video-feedback para corrigir braços e timing.")),
                     
                         .init("mappin.and.ellipse",
                               Text("Estratégias"),
-                              "Mobilidade tornozelo/quadril para aterrisagens seguras.")
+                              Text("Mobilidade tornozelo/quadril para aterrisagens seguras."))
                 ]
             }
             
@@ -264,15 +264,15 @@ struct SuggestionsDynamic: View {
             return [
                 .init("figure",
                       Text("Físicas"),
-                      "Use os cartões de Máx/Mín para calibrar metas do próximo treino."),
+                      Text("Use os cartões de Máx/Mín para calibrar metas do próximo treino.")),
                 
                     .init("book.fill",
                           Text("Técnicas"),
-                          "Defina 2–3 focos por semana (força, técnica, volume)."),
+                         Text("Defina 2–3 focos por semana (força, técnica, volume).")),
                 
                     .init("mappin.and.ellipse",
                           Text("Estratégias"),
-                          "Compare evolução mensal e ajuste cargas.")
+                          Text("Compare evolução mensal e ajuste cargas."))
             ]
         }
     }
@@ -280,8 +280,8 @@ struct SuggestionsDynamic: View {
     struct Card {
         let icone: String
         let tituloKey: Text
-        let descricaoKey: String
-        init(_ icone: String, _ titulo: Text, _ descricao: String) {
+        let descricaoKey: Text
+        init(_ icone: String, _ titulo: Text, _ descricao: Text) {
             self.icone = icone; self.tituloKey = titulo; self.descricaoKey = descricao
         }
     }
