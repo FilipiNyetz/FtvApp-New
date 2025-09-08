@@ -15,9 +15,9 @@ struct EvolutionView: View {
     @ObservedObject var manager: HealthManager
     @State private var selectedWorkout: Workout?
     
-
+    
     var body: some View {
-
+        
         NavigationStack {
             HeaderEvolution(selectedMetricId: $selectedMetricId)
             
@@ -29,7 +29,7 @@ struct EvolutionView: View {
                     period: periodKey,
                     selectedMetricId: selectedMetricId
                 )
-
+                
                 VStack {
                     VStack{
                         HStack {
@@ -43,7 +43,7 @@ struct EvolutionView: View {
                             Spacer()
                         }
                         .padding()
-
+                        
                         // Gráfico
                         GraphicChart(
                             data: chartData,
@@ -69,7 +69,7 @@ struct EvolutionView: View {
                     .padding(.bottom, -7)
                     Divider()
                     //.padding(.horizontal)
-
+                    
                     // Cards Máx / Mín conforme métrica selecionada
                     jumpdata(data: chartData, selectedMetric: selectedMetricId)
                         .padding()
@@ -87,8 +87,12 @@ struct EvolutionView: View {
                 .padding(.bottom, -8)
                 Divider()
                 
-                suggestions()
-                    .padding()
+                SuggestionsDynamic(
+                    selectedMetricId: selectedMetricId,
+                    maxValue: maxValueForMetric
+                )
+                .padding(.horizontal)
+                .padding(.bottom, 24)
             }
             .scrollIndicators(.hidden)
             .navigationBarTitleDisplayMode(.inline)
@@ -109,16 +113,16 @@ struct EvolutionView: View {
                 }
             }
             .toolbarBackground(Color.black, for: .navigationBar)
-         //   .toolbarBackground(.visible, for: .navigationBar)
+            //   .toolbarBackground(.visible, for: .navigationBar)
             .background(Color.gray.opacity(0.1).ignoresSafeArea())
-
+            
             // Carrega tudo ao entrar; o gráfico agrega por período em memória
             .onAppear {
                 manager.fetchAllWorkouts()
             }
         }
     }
-
+    
     func selectedselection() -> String {
         switch selectedSelection {
         case "D": return "Hoje"
@@ -129,7 +133,7 @@ struct EvolutionView: View {
         default:  return "Este Mês"
         }
     }
-
+    
     func Period(selection: String) -> String {
         switch selection {
         case "D":  return "day"
@@ -138,6 +142,21 @@ struct EvolutionView: View {
         case "6M": return "sixmonth"
         case "A":  return "year"
         default:   return "month"
+        }
+    }
+    /// Máximo da métrica selecionada (usado pelas Sugestões)
+    private var maxValueForMetric: Double {
+        switch selectedMetricId {
+        case "heartRate":
+            return Double(manager.workouts.map(\.frequencyHeart).max() ?? 0)
+        case "calories":
+            return Double(manager.workouts.map(\.calories).max() ?? 0)
+        case "distance":
+            return Double(manager.workouts.map(\.distance).max() ?? 0)
+        case "height":
+            return 0 // se adicionar altura no modelo, troque por Double(workout.height ?? 0)
+        default:
+            return 0
         }
     }
 }
