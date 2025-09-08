@@ -7,6 +7,9 @@
 
 import Foundation
 import HealthKit
+import CoreMotion
+import Combine
+import CoreGraphics
 
 class WorkoutManager: NSObject, ObservableObject {
 
@@ -46,6 +49,22 @@ class WorkoutManager: NSObject, ObservableObject {
     @Published var workout: HKWorkout?
     @Published var preWorkoutJumpHeight: Int? = nil
     private var isEndingWorkout = false
+    
+    let motionManager = CMMotionManager()
+    
+    // Dados de Posição (PDR)
+    @Published var currentPosition: CGPoint = .zero
+    @Published var path: [CGPoint] = []
+    
+    // Referência unificada: YAW do CoreMotion (em radianos)
+    var refYawRad: Double?
+    
+    // Constantes de detecção de passo (ajuste fino conforme necessário)
+    let STEP_THRESHOLD_HIGH: Double = 0.20
+    let STEP_THRESHOLD_LOW:  Double = 0.12
+    let ROTATION_LIMIT:      Double = 1.0   // rad/s para ignorar giro de punho
+    let STEP_LENGTH:         Double = 0.6  // metros por passo (aprox.)
+    var isStepInProgress = false
 
     var timer: Timer?
     var startDate: Date?

@@ -18,8 +18,9 @@ struct MainView: View {
                 .opacity(isLoading ? splashOpacity : 0)
 
             if !isLoading {
-                StartView()
-                    .opacity(startViewOpacity)
+                //calibration()
+//                StartView()
+//                    .opacity(startViewOpacity)
             }
         }
         .task {

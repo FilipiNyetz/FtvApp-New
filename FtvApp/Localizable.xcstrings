@@ -718,7 +718,7 @@
         }
       }
     },
-    "Estratégia" : {
+    "Estratégias" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -748,40 +748,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Estratégia"
-          }
-        }
-      }
-    },
-    "Evolua nos jogos com as dicas certas" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Level up in your games with the right tips"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Mejora en los juegos con los consejos correctos"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Progresse dans les jeux grâce aux bons conseils"
-          }
-        },
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Verbessere dich in den Spielen mit den richtigen Tipps"
-          }
-        },
-        "pt-BR" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Evolua nos jogos com as dicas certas"
           }
         }
       }
@@ -820,41 +786,7 @@
         }
       }
     },
-    "Faça agachamento, salto na caixa e prancha isométrica. Isso fortalece pernas e core — essenciais para pular mais alto com estabilidade." : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Do squats, box jumps, and planks. These strengthen your legs and core — essential for jumping higher with stability."
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Haz sentadillas, saltos al cajón y planchas isométricas. Esto fortalece piernas y core — esenciales para saltar más alto con estabilidad."
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Faites des squats, des sauts sur boîte et des planches. Cela renforce vos jambes et votre sangle abdominale — essentiels pour sauter plus haut avec stabilité."
-          }
-        },
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Mache Kniebeugen, Boxsprünge und Planks. Das stärkt Beine und Core – entscheidend, um höher und stabiler zu springen."
-          }
-        },
-        "pt-BR" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Faça agachamento, salto na caixa e prancha isométrica. Isso fortalece pernas e core — essenciais para pular mais alto com estabilidade."
-          }
-        }
-      }
-    },
-    "Física" : {
+    "Físicas" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -952,40 +884,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Jogos do dia"
-          }
-        }
-      }
-    },
-    "Jogue mais partidas focando em prever a jogada adversária." : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Play more matches focusing on anticipating your opponent’s moves."
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Juega más partidas centrándote en anticipar los movimientos de tu oponente."
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Jouez plus de parties en vous concentrant sur l’anticipation des mouvements de votre adversaire."
-          }
-        },
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Spiele mehr Partien und konzentriere dich darauf, die Züge deines Gegners vorherzusehen."
-          }
-        },
-        "pt-BR" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Jogue mais partidas focando em prever a jogada adversária."
           }
         }
       }
@@ -1466,7 +1364,7 @@
         }
       }
     },
-    "Técnica" : {
+    "Técnicas" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -1666,40 +1564,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Total de jogos"
-          }
-        }
-      }
-    },
-    "Treine saltos com passada controlada e aterrissagem suave. Tente corrigir postura e alinhar braços, tronco e pernas no movimento." : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Practice jumps with controlled steps and soft landings. Try to correct your posture and align your arms, torso, and legs during the movement."
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Entrena saltos con pasos controlados y aterrizajes suaves. Intenta corregir la postura y alinear brazos, tronco y piernas durante el movimiento."
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Entraînez vos sauts avec des pas contrôlés et des atterrissages doux. Essayez de corriger votre posture et d’aligner vos bras, votre tronc et vos jambes pendant le mouvement."
-          }
-        },
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Trainiere Sprünge mit kontrollierten Schritten und sanften Landungen. Versuche, deine Haltung zu korrigieren und Arme, Rumpf und Beine während der Bewegung auszurichten."
-          }
-        },
-        "pt-BR" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Treine saltos com passada controlada e aterrissagem suave. Tente corrigir postura e alinhar braços, tronco e pernas no movimento."
           }
         }
       }
