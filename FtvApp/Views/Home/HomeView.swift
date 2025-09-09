@@ -65,6 +65,7 @@ struct HomeView: View {
                                                 .id("card-top")
                                         } else if hasWorkoutsToday {
                                             // Há treinos na data selecionada
+                                            Image("mapacalor")
                                             ButtonDiaryGames(
                                                 manager: manager,
                                                 userManager: userManager,
