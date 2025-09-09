@@ -86,52 +86,48 @@ struct StartView: View {
             .opacity(0.85)
             .ignoresSafeArea()
 
-            VStack(spacing: 12) {
+            VStack(spacing: 8) {
                 Text("Seu desempenho será registrado")
-                    .font(.title3)
+                    .font(.headline)  // headline em vez de title3 → mais compacto
                     .fontWeight(.medium)
                     .fontDesign(.rounded)
                     .multilineTextAlignment(.center)
                     .foregroundStyle(.white)
-                    .padding(.top)
+                    .padding(.horizontal)
 
                 Button(action: {
-                    // Passa o pulo medido (se existir) para o manager
                     manager.preWorkoutJumpHeight = self.latestJumpMeasurement
                     self.selectedWorkoutType = .soccer
                     self.isCountingDown = true
-                    // Limpa o valor para que não seja reutilizado no próximo treino
                     self.latestJumpMeasurement = nil
                 }) {
                     Text("Iniciar Treino")
-                        .font(.headline)
-                        .fontWeight(.bold)
+                        .font(.headline.bold())
+                        .frame(maxWidth: .infinity, maxHeight: 50)  // preenche largura disponível
                         .foregroundStyle(.black)
-                        .frame(width: 180, height: 50)
                         .background(Color.colorPrimal)
                         .clipShape(RoundedRectangle(cornerRadius: 24))
                 }
                 .buttonStyle(.plain)
-
-                // 3. Botão simples que empilha a view de medição no nosso path
-                Button(action: {
-                    navigationPath.append(.instruction)
-                }) {
+                
+                Button(action: { navigationPath.append(.instruction) }) {
                     Text("Medir salto")
                         .font(.headline)
                         .fontWeight(.bold)
                         .foregroundStyle(.white)
-                        .frame(width: 180, height: 50)
+                        .frame(maxWidth: .infinity, maxHeight: 50)
                         .background(Color.clear)
                         .overlay(
-                            RoundedRectangle(cornerRadius: 24)
-                                .stroke(Color.colorPrimal, lineWidth: 2)
+                            RoundedRectangle(cornerRadius: 24).stroke(
+                                Color.colorPrimal,
+                                lineWidth: 2
+                            )
                         )
                 }
                 .buttonStyle(.plain)
 
             }
-            .padding(.horizontal)
+            .padding(.horizontal, 12)
         }
         .onAppear {
             manager.requestAuthorization()
