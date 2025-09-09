@@ -1,13 +1,13 @@
 import SwiftUI
 
 struct WorkoutStatsCard: View {
-
+    
     @ObservedObject var userManager: UserManager
     @ObservedObject var healthManager: HealthManager
-
+    
     let workout: Workout
     let totalWorkouts: Int
-
+    
     var timeFormatter: DateComponentsFormatter {
         let formatter = DateComponentsFormatter()
         formatter.allowedUnits = [.hour, .minute, .second]
@@ -15,11 +15,11 @@ struct WorkoutStatsCard: View {
         formatter.zeroFormattingBehavior = .pad
         return formatter
     }
-
+    
     var formattedDistance: String {
         if workout.distance > 999 {
             let km = Double(workout.distance) / 1000.0
-            return String(format: "%.1f", km)  // 1 casa decimal
+            return String(format: "%.1f", km) // 1 casa decimal
         } else {
             return "\(workout.distance)"
         }
@@ -28,9 +28,10 @@ struct WorkoutStatsCard: View {
     var distanceUnit: String {
         return workout.distance > 999 ? "km" : "m"
     }
-
+    
     var body: some View {
         VStack(spacing: 16) {
+            // Linha de cima
             HStack {
                 statItem(
                     title: Text("BATIMENTO"),
@@ -45,23 +46,29 @@ struct WorkoutStatsCard: View {
                     unit: "cal",
                     icon: "flame.fill"
                 )
+                Divider().frame(height: 40).background(Color.white.opacity(0.4))
+                statItem(
+                    title: Text("ALTURA"),
+                    value: "\(Double(workout.higherJump!))",
+                    unit: "cm",
+                    icon: "flame.fill"
+                )
             }
+            
 
-            VStack {
+            VStack{
                 Text("TEMPO")
                     .font(.caption)
                     .fontWeight(.regular)
                     .fontDesign(.rounded)
                     .foregroundColor(.gray)
-
-                Text(
-                    timeFormatter.string(from: TimeInterval(workout.duration))
-                        ?? "00:00:00"
-                )
-                .font(.system(size: 28, weight: .medium, design: .rounded))
-                .foregroundColor(.white)
+                
+                Text(timeFormatter.string(from: TimeInterval(workout.duration)) ?? "00:00:00")
+                    .font(.system(size: 28, weight: .medium, design: .rounded))
+                    .foregroundColor(.white)
             }
-
+            
+            // Linha de baixo
             HStack {
                 statItem(
                     title: Text("DISTÂNCIA"),
@@ -71,42 +78,29 @@ struct WorkoutStatsCard: View {
                 )
             }
             
-            if userManager.bagdeNames.isEmpty {
-                NavigationLink(
-                    destination: TemplateMainView(
-                        workout: workout,
-                        totalWorkouts: totalWorkouts,
-                        currentStreak: healthManager.currentStreak,
-                        badgeImage: "1stGoal"
-                    )
-                ) {
+            if userManager.bagdeNames.isEmpty{
+                NavigationLink(destination: TemplateMainView(workout: workout, totalWorkouts: totalWorkouts, currentStreak: healthManager.currentStreak, badgeImage: "1stGoal")) {
                     Text("Compartilhar treino")
                         .font(.headline)
                         .foregroundColor(.black)
                         .padding(.vertical, 10)
                         .padding(.horizontal, 20)
-                        .background(Color.colorPrimal)
+                        .background(Color.colorPrimal).opacity(0.9)
                         .cornerRadius(12)
                 }
-            } else {
-                NavigationLink(
-                    destination: TemplateMainView(
-                        workout: workout,
-                        totalWorkouts: totalWorkouts,
-                        currentStreak: healthManager.currentStreak,
-                        badgeImage: userManager.bagdeNames[0]
-                    )
-                ) {
+            }else{
+                NavigationLink(destination: TemplateMainView(workout: workout, totalWorkouts: totalWorkouts, currentStreak: healthManager.currentStreak, badgeImage: userManager.bagdeNames[0])) {
                     Text("Compartilhar treino")
                         .font(.headline)
                         .foregroundColor(.black)
                         .padding(.vertical, 10)
                         .padding(.horizontal, 20)
-                        .background(Color.colorPrimal)
+                        .background(Color.colorPrimal).opacity(0.9)
                         .cornerRadius(12)
                 }
             }
-
+            
+            
         }
         .padding()
         .background(
@@ -114,13 +108,13 @@ struct WorkoutStatsCard: View {
                 .stroke(Color.backgroundProgressBar, lineWidth: 0.3)
                 .fill(Color(.secondarySystemBackground))
                 .opacity(0.5)
-
+                
         )
         .onAppear {
             userManager.setBadgeTotalWorkout(totalWorkouts: totalWorkouts)
         }
     }
-
+    
     private func statItem(
         title: Text,
         value: String,
@@ -133,7 +127,7 @@ struct WorkoutStatsCard: View {
                 .fontWeight(.regular)
                 .fontDesign(.rounded)
                 .foregroundColor(.gray)
-
+            
             HStack(spacing: 4) {
                 Image(systemName: icon)
                     .foregroundColor(Color("ColorSecond"))
@@ -143,7 +137,7 @@ struct WorkoutStatsCard: View {
                     )
                     .foregroundColor(.white)
             }
-
+            
             if !unit.isEmpty {
                 Text(unit)
                     .font(
@@ -154,5 +148,5 @@ struct WorkoutStatsCard: View {
         }
         .frame(maxWidth: .infinity)
     }
-
+    
 }

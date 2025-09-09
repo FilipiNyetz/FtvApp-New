@@ -7,6 +7,9 @@
 
 import Foundation
 import HealthKit
+import CoreMotion
+import Combine
+import CoreGraphics
 
 class WorkoutManager: NSObject, ObservableObject {
 
@@ -44,7 +47,24 @@ class WorkoutManager: NSObject, ObservableObject {
     @Published var activeEnergy: Double = 0
     @Published var distance: Double = 0
     @Published var workout: HKWorkout?
+    @Published var preWorkoutJumpHeight: Int? = nil
     private var isEndingWorkout = false
+    
+    let motionManager = CMMotionManager()
+    
+    // Dados de Posição (PDR)
+    @Published var currentPosition: CGPoint = .zero
+    @Published var path: [CGPoint] = []
+    
+    // Referência unificada: YAW do CoreMotion (em radianos)
+    var refYawRad: Double?
+    
+    // Constantes de detecção de passo (ajuste fino conforme necessário)
+    let STEP_THRESHOLD_HIGH: Double = 0.20
+    let STEP_THRESHOLD_LOW:  Double = 0.12
+    let ROTATION_LIMIT:      Double = 1.0   // rad/s para ignorar giro de punho
+    let STEP_LENGTH:         Double = 0.6  // metros por passo (aprox.)
+    var isStepInProgress = false
 
     var timer: Timer?
     var startDate: Date?
@@ -56,6 +76,7 @@ class WorkoutManager: NSObject, ObservableObject {
     // MARK: - Workout Control
 
     func startWorkout(workoutType: HKWorkoutActivityType) {
+        // 1. Zera todo o estado anterior
         self.accumulatedTime = 0
         self.elapsedTime = 0
         self.heartRate = 0
@@ -66,6 +87,7 @@ class WorkoutManager: NSObject, ObservableObject {
         self.isEndingWorkout = false
         self.resetTimer()
 
+        // 2. Configura e cria a nova sessão
         let configuration = HKWorkoutConfiguration()
         configuration.activityType = workoutType
         configuration.locationType = .outdoor
@@ -81,6 +103,7 @@ class WorkoutManager: NSObject, ObservableObject {
         session.delegate = self
         builder.delegate = self
 
+        // 3. Inicia o treino
         startDate = Date()
         session.startActivity(with: startDate!)
         builder.beginCollection(withStart: startDate!) { _, _ in }
@@ -190,6 +213,7 @@ class WorkoutManager: NSObject, ObservableObject {
 extension WorkoutManager: HKWorkoutSessionDelegate {
     func workoutSession(_ workoutSession: HKWorkoutSession, didChangeTo toState: HKWorkoutSessionState, from fromState: HKWorkoutSessionState, date: Date) {
         DispatchQueue.main.async {
+            // ✅ A LINHA QUE FALTAVA FOI ADICIONADA DE VOLTA
             self.running = toState == .running
             
             print("HK Session State Changed to: \(toState.rawValue) -> Running is \(self.running)")

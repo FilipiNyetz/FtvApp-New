@@ -8,40 +8,50 @@
 import SwiftUI
 
 struct MenuView: View {
-
-    @Binding var selectedMetric: String
-
-    let metrics: [(name: String, icon: String)] = [
-        (NSLocalizedString("Batimento", comment: ""), "heart.fill"),
-        (NSLocalizedString("Caloria", comment: ""),   "flame.fill"),
-        (NSLocalizedString("Distância", comment: ""), "location.fill")
-    ]
-
-    private var currentMetricIcon: String {
-        metrics.first(where: { $0.name == selectedMetric })?.icon ?? "arrow.up.and.down"
+    
+    @Binding var selectedMetricId: String   // binding único
+    
+    struct Metric {
+        let id: String        // chave fixa
+        let name: String      // texto localizável
+        let icon: String
     }
-
+    
+    let metrics: [Metric] = [
+        Metric(id: "heartRate", name: NSLocalizedString("Batimento", comment: ""), icon: "heart.fill"),
+        Metric(id: "calories", name: NSLocalizedString("Caloria", comment: ""), icon: "flame.fill"),
+        Metric(id: "distance", name: NSLocalizedString("Distância", comment: ""), icon: "location.fill"),
+        Metric(id: "height", name: NSLocalizedString("Altura", comment: ""), icon: "location.fill")
+    ]
+    
+    private var currentMetric: Metric? {
+        metrics.first(where: { $0.id == selectedMetricId })
+    }
+    
     var body: some View {
         Menu {
-            ForEach(metrics, id: \.name) { metric in
-                Button(action:{
-                    selectedMetric = metric.name
-                },label:{
-                    HStack{
+            ForEach(metrics, id: \.id) { metric in
+                Button {
+                    selectedMetricId = metric.id
+                } label: {
+                    HStack {
                         Text(LocalizedStringKey(metric.name))
                         Image(systemName: metric.icon)
                     }
-                })
+                }
             }
         } label: {
             HStack(spacing: 8) {
-                Image(systemName: currentMetricIcon)
+                Image(systemName: currentMetric?.icon ?? "arrow.up.and.down")
                     .font(.body)
                     .foregroundColor(.colorSecond)
-                Text(selectedMetric == "Velocidade máx" ? "Vel. máx" : selectedMetric)
+                
+                Text(currentMetric?.name ?? "")
                     .font(.body)
                     .lineLimit(1)
+                
                 Spacer(minLength: 0)
+                
                 Image(systemName: "chevron.up.chevron.down")
                     .font(.caption)
                     .opacity(0.85)

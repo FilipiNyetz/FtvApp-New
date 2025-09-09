@@ -7,10 +7,12 @@
 
 import HealthKit
 import SwiftUI
+import WatchConnectivity
 
 struct SummaryView: View {
     @Environment(\.dismiss) var dismiss
     @EnvironmentObject var manager: WorkoutManager
+    @ObservedObject var wcSessionDelegate: WatchWCSessionDelegate
 
     let workout: HKWorkout
 
@@ -63,6 +65,14 @@ struct SummaryView: View {
                     ) + " bpm",
                     color: .red
                 )
+                
+                if let bestJump = manager.preWorkoutJumpHeight {
+                    SummaryMetricView(
+                        title: "Best Jump",
+                        value: "\(bestJump) cm",
+                        color: .orange // Uma cor para destacar
+                    )
+                }
 
                 Button("Done") {
                     dismiss()
@@ -73,6 +83,16 @@ struct SummaryView: View {
         }
         .navigationTitle("Summary")
         .navigationBarTitleDisplayMode(.inline)
+        .onAppear(){
+//            jumpDetector.stop()
+            
+            let bestJumpValue: Int? = manager.preWorkoutJumpHeight
+            print("Vai enviar o melhor pulo (\(bestJumpValue ?? -1)) para o iphone")
+            wcSessionDelegate.sendMessage(message: [
+                "pulo": bestJumpValue as Any,
+                "workoutId": workout.uuid.uuidString
+            ])
+        }
     }
 }
 

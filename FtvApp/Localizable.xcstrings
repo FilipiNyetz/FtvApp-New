@@ -106,6 +106,278 @@
         }
       }
     },
+    "Acrescente corridas leves em treinos, isso acostuma seu corpo a percorrer mais distância com menor desgaste físico." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Add light runs to your workouts — they help your body get used to covering more distance with less physical strain.\""
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Acrescente corridas leves em treinos, isso acostuma seu corpo a percorrer mais distância com menor desgaste físico."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ajoutez des courses légères à vos entraînements. Cela habitue votre corps à parcourir de plus longues distances avec moins de fatigue."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Füge leichte Läufe in dein Training ein. Dies gewöhnt deinen Körper daran, größere Strecken mit weniger körperlicher Belastung zurückzulegen."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Acrescente corridas leves em treinos, isso acostuma seu corpo a percorrer mais distância com menor desgaste físico."
+          }
+        }
+      }
+    },
+    "Agachamento e prancha 2–3×/sem criam base p/ saltar." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Do squats and planks 2–3×/week to boost your jump."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sentadillas y planchas 2–3 veces por semana crean una base sólida para saltar."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Les squats et les planches 2 à 3 fois par semaine construisent une base solide pour les sauts."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kniebeugen und Planks 2–3 Mal pro Woche schaffen eine solide Basis für Sprünge."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Agachamento e prancha 2–3×/sem criam base p/ saltar."
+          }
+        }
+      }
+    },
+    "Ajuste seu posicionamento para compensar percursos curto, ajudando a manter eficiência mesmo com menor distância." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Adjust your positioning to make up for shorter routes, helping you stay efficient even with less distance."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ajusta tu posición para compensar recorridos cortos y mantener la eficiencia incluso a distancias menores."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ajustez votre position pour compenser les trajets courts et rester efficace même sur de courtes distances."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Passe deine Position an kurze Wege an, um die Effizienz auch auf kürzeren Distanzen zu erhalten."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ajuste seu posicionamento para compensar percursos curto, ajudando a manter eficiência mesmo com menor distância."
+          }
+        }
+      }
+    },
+    "Altura" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Height"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Altura"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hauteur"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Höhe"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Altura"
+          }
+        }
+      }
+    },
+    "ALTURA" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "HEIGHT"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ALTURA"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "HAUTEUR"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "HÖHE"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ALTURA"
+          }
+        }
+      }
+    },
+    "Aprenda a controlar sua respiração entre cada ponto, estabilizando o corpo e ajudando a reduzir batimentos acelerados." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Control your breathing between points to stay steady and lower your heart rate."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aprende a controlar tu respiración entre cada punto para estabilizar tu cuerpo y reducir los latidos acelerados."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Apprenez à contrôler votre respiration entre chaque point pour stabiliser votre corps et réduire les battements accélérés."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lerne, deine Atmung zwischen den Punkten zu kontrollieren, um deinen Körper zu stabilisieren und schnelle Herzschläge zu reduzieren."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aprenda a controlar sua respiração entre cada ponto, estabilizando o corpo e ajudando a reduzir batimentos acelerados."
+          }
+        }
+      }
+    },
+    "Aprimore técnica de deslocamento rápido em distâncias maiores, isso permite percorrer espaço sem perder eficiência." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Improve your quick-movement technique over longer distances — it helps you cover ground without losing efficiency."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mejora tu técnica de desplazamiento rápido en distancias más largas para cubrir terreno sin perder eficiencia."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Améliorez votre technique de déplacement rapide sur de plus grandes distances pour couvrir le terrain sans perdre en efficacité."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verbessere deine Technik für schnelle Bewegungen über größere Distanzen, um Raum zu überwinden, ohne Effizienz zu verlieren."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aprimore técnica de deslocamento rápido em distâncias maiores, isso permite percorrer espaço sem perder eficiência."
+          }
+        }
+      }
+    },
+    "Aterre com joelhos levemente flexionados para proteger joelhos." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Land with your knees slightly bent to protect them."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aterriza con las rodillas ligeramente flexionadas para protegerlas."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Atterrissez avec les genoux légèrement fléchis pour les protéger."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Landet mit leicht gebeugten Knien, um die Knie zu schützen."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aterre com joelhos levemente flexionados para proteger joelhos."
+          }
+        }
+      }
+    },
     "Batimento" : {
       "localizations" : {
         "en" : {
@@ -272,6 +544,40 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "CALORIA"
+          }
+        }
+      }
+    },
+    "Compare evolução mensal e ajuste cargas." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Check progress monthly and tune your weights."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Compara tu evolución mensual y ajusta las cargas."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Comparez votre progression mensuelle et ajustez les charges."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vergleiche deine monatliche Entwicklung und passe die Belastungen an."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Compare evolução mensal e ajuste cargas."
           }
         }
       }
@@ -480,6 +786,40 @@
         }
       }
     },
+    "Defina 2–3 focos por semana (força, técnica, volume)." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pick 2–3 weekly focuses — strength, technique, or volume."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Define 2–3 enfoques por semana (fuerza, técnica, volumen)."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Définissez 2 à 3 axes par semaine (force, technique, volume).\""
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lege 2–3 Schwerpunkte pro Woche fest (Kraft, Technik, Umfang)."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Defina 2–3 focos por semana (força, técnica, volume)."
+          }
+        }
+      }
+    },
     "Dia" : {
       "localizations" : {
         "en" : {
@@ -616,7 +956,143 @@
         }
       }
     },
-    "Estratégia" : {
+    "Eleve a intensidade nos pontos mais decisivos, gastando energia adicional e forçando erros importantes do adversário." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Raise the intensity in the most decisive points, using extra energy to force key mistakes from your opponent."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aumenta la intensidad en los puntos más decisivos, gastando energía adicional y provocando errores importantes en tu adversario."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Augmentez l’intensité sur les points décisifs, dépensez plus d’énergie et provoquez des erreurs importantes chez votre adversaire."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Erhöhe die Intensität in den entscheidenden Momenten, setze zusätzliche Energie ein und provoziere wichtige Fehler des Gegners."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Eleve a intensidade nos pontos mais decisivos, gastando energia adicional e forçando erros importantes do adversário."
+          }
+        }
+      }
+    },
+    "Envolva-se em todas as jogadas evitando ficar parado, garantindo participação ativa e mais energia gasta no jogo." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Engage in every play instead of standing still, ensuring active participation and burning more energy during the game."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Involúcrate en cada jugada sin quedarte quieto para asegurar participación activa y gastar más energía durante el juego."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Impliquez-vous dans chaque action sans rester immobile pour assurer une participation active et dépenser plus d’énergie pendant le jeu."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Beteilige dich an allen Spielzügen, vermeide es stehenzubleiben und sichere dir so aktive Teilnahme und einen höheren Energieverbrauch im Spiel."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Envolva-se em todas as jogadas evitando ficar parado, garantindo participação ativa e mais energia gasta no jogo."
+          }
+        }
+      }
+    },
+    "Erro ao inicializar base de dados" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Error initializing database"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Error al inicializar la base de datos"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Erreur lors de l’initialisation de la base de données"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fehler beim Initialisieren der Datenbank"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Erro ao inicializar base de dados"
+          }
+        }
+      }
+    },
+    "Estabeleça um ritmo de jogo constante, isso reduz oscilações desnecessárias nos seus batimentos cardíacos." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Set a steady game pace — this helps reduce unnecessary fluctuations in your heart rate."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Establece un ritmo de juego constante para reducir las oscilaciones innecesarias de tus latidos."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Maintenez un rythme de jeu constant pour réduire les fluctuations inutiles de votre fréquence cardiaque."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Etabliere ein gleichmäßiges Spieltempo – das verringert unnötige Schwankungen deiner Herzfrequenz."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Estabeleça um ritmo de jogo constante, isso reduz oscilações desnecessárias nos seus batimentos cardíacos."
+          }
+        }
+      }
+    },
+    "Estratégias" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -650,36 +1126,36 @@
         }
       }
     },
-    "Evolua nos jogos com as dicas certas" : {
+    "Evite fadiga excessiva para preservar a técnica do salto." : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Level up in your games with the right tips"
+            "value" : "Avoid excessive fatigue to maintain proper jumping technique."
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Mejora en los juegos con los consejos correctos"
+            "value" : "Evita la fatiga excesiva para preservar la técnica del salto."
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Progresse dans les jeux grâce aux bons conseils"
+            "value" : "Évitez une fatigue excessive pour préserver votre technique de saut."
           }
         },
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Verbessere dich in den Spielen mit den richtigen Tipps"
+            "value" : "Vermeide übermäßige Ermüdung, um die Sprungtechnik zu erhalten."
           }
         },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Evolua nos jogos com as dicas certas"
+            "value" : "Evite fadiga excessiva para preservar a técnica do salto."
           }
         }
       }
@@ -718,41 +1194,41 @@
         }
       }
     },
-    "Faça agachamento, salto na caixa e prancha isométrica. Isso fortalece pernas e core — essenciais para pular mais alto com estabilidade." : {
+    "Faça corridas contínuas de vinte minutos em intensidade moderada, isso melhora condicionamento e mantém o coração eficiente." : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Do squats, box jumps, and planks. These strengthen your legs and core — essential for jumping higher with stability."
+            "value" : "Do continuous 20-minute runs at moderate intensity — this improves conditioning and keeps your heart efficient."
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Haz sentadillas, saltos al cajón y planchas isométricas. Esto fortalece piernas y core — esenciales para saltar más alto con estabilidad."
+            "value" : "Realiza carreras continuas de veinte minutos a intensidad moderada para mejorar el acondicionamiento y mantener el corazón eficiente."
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Faites des squats, des sauts sur boîte et des planches. Cela renforce vos jambes et votre sangle abdominale — essentiels pour sauter plus haut avec stabilité."
+            "value" : "Faites des courses continues de vingt minutes à intensité modérée pour améliorer votre condition physique et maintenir l’efficacité cardiaque."
           }
         },
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Mache Kniebeugen, Boxsprünge und Planks. Das stärkt Beine und Core – entscheidend, um höher und stabiler zu springen."
+            "value" : "Laufe zwanzig Minuten am Stück in moderater Intensität – das verbessert die Kondition und hält das Herz leistungsfähig."
           }
         },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Faça agachamento, salto na caixa e prancha isométrica. Isso fortalece pernas e core — essenciais para pular mais alto com estabilidade."
+            "value" : "Faça corridas contínuas de vinte minutos em intensidade moderada, isso melhora condicionamento e mantém o coração eficiente."
           }
         }
       }
     },
-    "Física" : {
+    "Físicas" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -782,6 +1258,40 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Física"
+          }
+        }
+      }
+    },
+    "Fortaleça resistência muscular com exercícios de longa duração, ajudando você a suportar bem percursos maiores na quadra." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Build muscular endurance with long-duration exercises, helping you handle longer distances on the court."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fortalece la resistencia muscular con ejercicios de larga duración para soportar mejor recorridos más largos en la cancha."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Renforcez votre endurance musculaire avec des exercices de longue durée pour mieux supporter de plus grands déplacements sur le terrain."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Stärke deine Muskel­ausdauer mit längeren Übungen – so kannst du längere Strecken auf dem Spielfeld besser durchhalten."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fortaleça resistência muscular com exercícios de longa duração, ajudando você a suportar bem percursos maiores na quadra."
           }
         }
       }
@@ -820,6 +1330,142 @@
         }
       }
     },
+    "Inclua contrast training (força + pliometria) 1–2×/sem." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Include contrast training (strength + plyometrics) 1–2×/week."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Incluye entrenamiento contrastado (fuerza + pliometría) 1–2 veces por semana."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Intégrez le contrast training (force + pliométrie) 1 à 2 fois par semaine."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Baue Contrast Training (Kraft + Plyometrie) 1–2× pro Woche ein."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Inclua contrast training (força + pliometria) 1–2×/sem."
+          }
+        }
+      }
+    },
+    "Intensifique treinos físicos fora da quadra, pois gastar mais calorias melhora sua preparação e fortalece seu condicionamento." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Increase physical training off the court — burning more calories improves your preparation and strengthens your conditioning.\""
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Intensifica los entrenamientos físicos fuera de la cancha, ya que gastar más calorías mejora tu preparación y fortalece tu acondicionamiento."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Renforcez vos entraînements physiques hors du terrain. Dépenser plus de calories améliore votre préparation et renforce votre condition physique."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Intensiviere das Training außerhalb des Spielfelds – mehr Kalorienverbrauch verbessert deine Vorbereitung und stärkt deine Fitness."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Intensifique treinos físicos fora da quadra, pois gastar mais calorias melhora sua preparação e fortalece seu condicionamento."
+          }
+        }
+      }
+    },
+    "Invista em treinos aeróbicos leves como corridas contínuas, isso aumenta sua resistência e fortalece sua capacidade cardíaca." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Invest in light aerobic training like steady runs — this increases your endurance and strengthens your heart capacity."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Invierte en entrenamientos aeróbicos suaves como carreras continuas. Esto aumenta tu resistencia y fortalece tu capacidad cardíaca."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Investissez dans des entraînements aérobies légers comme des courses continues. Cela augmente votre endurance et renforce votre capacité cardiaque."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Setze auf leichtes Ausdauertraining wie Dauerläufe, das steigert deine Ausdauer und stärkt die Herzleistung."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Invista em treinos aeróbicos leves como corridas contínuas, isso aumenta sua resistência e fortalece sua capacidade cardíaca."
+          }
+        }
+      }
+    },
+    "Joelhos flexionados, tronco estável e braços coordenados." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Knees bent, torso stable, and arms coordinated."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rodillas flexionadas, torso estable y brazos coordinados."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Genoux fléchis, torse stable et bras coordonnés."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Knie gebeugt, Rumpf stabil und Arme koordiniert."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Joelhos flexionados, tronco estável e braços coordenados."
+          }
+        }
+      }
+    },
     "Jogos do dia" : {
       "localizations" : {
         "en" : {
@@ -854,40 +1500,6 @@
         }
       }
     },
-    "Jogue mais partidas focando em prever a jogada adversária." : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Play more matches focusing on anticipating your opponent’s moves."
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Juega más partidas centrándote en anticipar los movimientos de tu oponente."
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Jouez plus de parties en vous concentrant sur l’anticipation des mouvements de votre adversaire."
-          }
-        },
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Spiele mehr Partien und konzentriere dich darauf, die Züge deines Gegners vorherzusehen."
-          }
-        },
-        "pt-BR" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Jogue mais partidas focando em prever a jogada adversária."
-          }
-        }
-      }
-    },
     "Jogue suas partidas e conquiste insígnias" : {
       "localizations" : {
         "en" : {
@@ -918,6 +1530,40 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Jogue suas partidas e conquiste insígnias"
+          }
+        }
+      }
+    },
+    "Mantenha ritmo acelerado contra adversários mais lentos, isso aumenta o gasto energético e cria vantagem competitiva." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Maintain a fast pace against slower opponents — this boosts energy expenditure and creates a competitive advantage."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mantén un ritmo rápido contra oponentes más lentos. Esto aumenta el gasto energético y crea ventaja competitiva."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mantenha ritmo acelerado contra adversários mais lentos, isso aumenta o gasto energético e cria vantagem competitiva."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Behalte ein hohes Tempo gegen langsamere Gegner bei, das erhöht den Energieverbrauch und verschafft dir einen Wettbewerbsvorteil."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mantenha ritmo acelerado contra adversários mais lentos, isso aumenta o gasto energético e cria vantagem competitiva."
           }
         }
       }
@@ -990,6 +1636,142 @@
         }
       }
     },
+    "Mobilidade tornozelo/quadril para aterrisagens seguras." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ankle and hip mobility for safe landings."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Movilidad de tobillos y caderas para aterrizajes seguros."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mobilité des chevilles et des hanches pour des atterrissages sûrs."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gelenkigkeit von Sprunggelenk und Hüfte für sichere Landungen."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mobilidade tornozelo/quadril para aterrisagens seguras."
+          }
+        }
+      }
+    },
+    "Movimente-se intencionalmente para abrir espaços em quadra, essa movimentação gera confusão e dificulta leitura do adversário." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Move intentionally to create space on the court — this movement causes confusion and makes it harder for your opponent to read the game."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Muévete intencionalmente para abrir espacios en la cancha. Este movimiento genera confusión y dificulta que el adversario lea el juego."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Déplacez-vous intentionnellement pour créer des espaces sur le terrain. Ce mouvement désoriente votre adversaire et complique sa lecture du jeu."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bewege dich gezielt, um Platz auf dem Spielfeld zu schaffen, diese Bewegung erzeugt Verwirrung und erschwert die Spielübersicht des Gegners."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Movimente-se intencionalmente para abrir espaços em quadra, essa movimentação gera confusão e dificulta leitura do adversário."
+          }
+        }
+      }
+    },
+    "Movimente-se mais durante os pontos, pois aumentando o gasto calórico ajuda diretamente na melhora do seu condicionamento físico." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Move more during points — increasing calorie burn directly improves your physical conditioning."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Muévete más durante los puntos. Aumentar el gasto calórico mejora directamente tu acondicionamiento físico."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bougez davantage pendant les points. Augmenter la dépense calorique améliore directement votre condition physique."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bewege dich während der Spielzüge mehr, da ein höherer Kalorienverbrauch direkt deine Fitness verbessert."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Movimente-se mais durante os pontos, pois aumentando o gasto calórico ajuda diretamente na melhora do seu condicionamento físico."
+          }
+        }
+      }
+    },
+    "Movimente-se mais durante os pontos, pois percorrer maiores distâncias ajuda no condicionamento físico e resistência em geral." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Move more during points — covering longer distances helps improve overall conditioning and endurance."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Muévete más durante los puntos. Recorrer mayores distancias mejora tu acondicionamiento físico y tu resistencia general."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bougez davantage pendant les points. Parcourir de plus grandes distances améliore votre condition physique et votre endurance globale."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bewege dich während der Spielzüge mehr, da längere Laufwege deine Fitness und Ausdauer insgesamt verbessern."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Movimente-se mais durante os pontos, pois percorrer maiores distâncias ajuda no condicionamento físico e resistência em geral."
+          }
+        }
+      }
+    },
     "Nenhum treino nesse dia" : {
       "localizations" : {
         "en" : {
@@ -1020,6 +1802,74 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Nenhum treino nesse dia"
+          }
+        }
+      }
+    },
+    "Padronize corrida de aproximação antes do salto." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Standardize your approach run before jumping."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Estandariza la carrera de aproximación antes del salto."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Standardisez votre course d’approche avant le saut."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Standardisiere den Anlauf vor dem Sprung."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Padronize corrida de aproximação antes do salto."
+          }
+        }
+      }
+    },
+    "Participe de ataques e defesas rápidas em sequência, isso exige energia e fortalece sua resistência em quadra." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Engage in fast attacks and defenses in sequence — this requires energy and strengthens your on-court endurance."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Participa en ataques y defensas rápidas en secuencia. Esto requiere energía y fortalece tu resistencia en la cancha."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Participez à des attaques et défenses rapides en série. Cela demande de l’énergie et renforce votre endurance sur le terrain."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nimm an schnellen Angriffs- und Verteidigungsaktionen in Folge teil, das erfordert Energie und stärkt deine Ausdauer auf dem Spielfeld."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Participe de ataques e defesas rápidas em sequência, isso exige energia e fortalece sua resistência em quadra."
           }
         }
       }
@@ -1058,6 +1908,40 @@
         }
       }
     },
+    "Pliometria leve: saltos na caixa 3×8 repetições." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Light plyometrics: box jumps 3×8 reps."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pliometría ligera: saltos en caja 3×8 repeticiones."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pliométrie légère : sauts sur la boîte 3×8 répétitions"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Leichte Plyometrie: Sprünge auf die Box 3×8 Wiederholungen."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pliometria leve: saltos na caixa 3×8 repetições."
+          }
+        }
+      }
+    },
     "QUA" : {
       "localizations" : {
         "en" : {
@@ -1088,6 +1972,40 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "QUA"
+          }
+        }
+      }
+    },
+    "Reduza seu ritmo em jogadas menos decisivas, assim você preserva energia para momentos realmente importantes no jogo." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Slow down on less decisive plays — this preserves energy for truly important moments in the game."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reduce tu ritmo en jugadas menos decisivas para conservar energía para los momentos realmente importantes del juego."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ralentissez le rythme sur les actions moins décisives pour préserver votre énergie pour les moments vraiment importants du jeu."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reduziere dein Tempo bei weniger entscheidenden Spielzügen, so sparst du Energie für wirklich wichtige Momente im Spiel."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reduza seu ritmo em jogadas menos decisivas, assim você preserva energia para momentos realmente importantes no jogo."
           }
         }
       }
@@ -1364,7 +2282,7 @@
         }
       }
     },
-    "Técnica" : {
+    "Técnicas" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -1568,36 +2486,172 @@
         }
       }
     },
-    "Treine saltos com passada controlada e aterrissagem suave. Tente corrigir postura e alinhar braços, tronco e pernas no movimento." : {
+    "Trabalhe deslocamentos laterais contínuos, pois além de gastar energia isso melhora sua capacidade defensiva contra ataques." : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Practice jumps with controlled steps and soft landings. Try to correct your posture and align your arms, torso, and legs during the movement."
+            "value" : "Keep moving laterally to burn energy and boost defense."
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Entrena saltos con pasos controlados y aterrizajes suaves. Intenta corregir la postura y alinear brazos, tronco y piernas durante el movimiento."
+            "value" : "Trabaja desplazamientos laterales continuos. Esto, además de gastar energía, mejora tu capacidad defensiva ante los ataques."
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Entraînez vos sauts avec des pas contrôlés et des atterrissages doux. Essayez de corriger votre posture et d’aligner vos bras, votre tronc et vos jambes pendant le mouvement."
+            "value" : "Travaillez les déplacements latéraux continus. Cela brûle de l’énergie et améliore votre capacité défensive face aux attaques."
           }
         },
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Trainiere Sprünge mit kontrollierten Schritten und sanften Landungen. Versuche, deine Haltung zu korrigieren und Arme, Rumpf und Beine während der Bewegung auszurichten."
+            "value" : "Arbeite kontinuierlich an seitlichen Bewegungen, denn das verbraucht Energie und verbessert deine Defensivfähigkeit gegen Angriffe."
           }
         },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Treine saltos com passada controlada e aterrissagem suave. Tente corrigir postura e alinhar braços, tronco e pernas no movimento."
+            "value" : "Trabalhe deslocamentos laterais contínuos, pois além de gastar energia isso melhora sua capacidade defensiva contra ataques."
+          }
+        }
+      }
+    },
+    "Trabalhe perseguição da bola em pontos longos, esse treino aumenta alcance e melhora o deslocamento durante os jogos." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Chase the ball in long points to extend reach and improve movement."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Trabaja la persecución de la pelota en puntos largos. Este entrenamiento aumenta tu alcance y mejora tus desplazamientos durante los partidos."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Travaillez la poursuite de la balle lors de longs échanges. Cet entraînement augmente votre portée et améliore vos déplacements pendant les matchs."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Trainiere das Verfolgen des Balls in langen Ballwechseln, dieses Training vergrößert die Reichweite und verbessert die Beweglichkeit während der Spiele."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Trabalhe perseguição da bola em pontos longos, esse treino aumenta alcance e melhora o deslocamento durante os jogos."
+          }
+        }
+      }
+    },
+    "Trabalhe treinos curtos de alta intensidade, aumentando sua recuperação cardíaca e melhorando a resistência." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Short, intense sessions boost heart recovery and endurance."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Realiza entrenamientos cortos de alta intensidad para mejorar tu recuperación cardíaca y aumentar la resistencia."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Faites des séances courtes à haute intensité pour améliorer votre récupération cardiaque et renforcer votre endurance."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Führe kurze, intensive Trainingseinheiten durch, das steigert die Herzfrequenzregeneration und verbessert die Ausdauer."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Trabalhe treinos curtos de alta intensidade, aumentando sua recuperação cardíaca e melhorando a resistência."
+          }
+        }
+      }
+    },
+    "Treine deslocamentos longos em quadra, isso aumenta sua recuperação e melhora a cobertura em bolas difíceis." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Train long court runs to boost recovery and cover tough shots."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Entrena desplazamientos largos en la cancha. Esto mejora tu recuperación y la cobertura en bolas difíciles."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Entraînez-vous aux déplacements longs sur le terrain. Cela améliore votre récupération et votre couverture sur les balles difficiles."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Trainiere lange Bewegungen auf dem Spielfeld, das verbessert deine Erholung und die Abdeckung bei schwierigen Bällen."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Treine deslocamentos longos em quadra, isso aumenta sua recuperação e melhora a cobertura em bolas difíceis."
+          }
+        }
+      }
+    },
+    "Treine sincronizar respiração com seus movimentos de ataque, esse hábito ajuda a manter controle corporal durante o esforço." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sync your breath with attacks to stay in control under effort."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Entrena para sincronizar la respiración con tus movimientos de ataque. Este hábito ayuda a mantener el control corporal durante el esfuerzo."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Entraînez-vous à synchroniser votre respiration avec vos mouvements d’attaque. Cette habitude aide à maintenir le contrôle du corps lors de l’effort."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Trainiere die Atmung mit deinen Angriffsbewegungen zu synchronisieren, diese Gewohnheit hilft, die Körperkontrolle während der Anstrengung zu bewahren."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Treine sincronizar respiração com seus movimentos de ataque, esse hábito ajuda a manter controle corporal durante o esforço."
           }
         }
       }
@@ -1632,6 +2686,40 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Treino %lld"
+          }
+        }
+      }
+    },
+    "Use movimentação constante para desgastar o adversário, esse estilo aumenta seu gasto calórico e cria vantagem estratégica." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Keep moving to tire your opponent, burn calories, and gain an edge."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Usa movimiento constante para desgastar al adversario. Este estilo aumenta tu gasto calórico y crea ventaja estratégica."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Utilisez un mouvement constant pour fatiguer votre adversaire. Ce style augmente votre dépense calorique et crée un avantage stratégique."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nutze konstante Bewegung, um den Gegner zu ermüden, dieser Stil erhöht den Kalorienverbrauch und verschafft strategische Vorteile."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Use movimentação constante para desgastar o adversário, esse estilo aumenta seu gasto calórico e cria vantagem estratégica."
           }
         }
       }
@@ -1704,6 +2792,142 @@
         }
       }
     },
+    "Use os cartões de Máx/Mín para calibrar metas do próximo treino." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Use the Max/Min cards to set targets for your next workout."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Usa las tarjetas de Máx/Mín para ajustar los objetivos de tu próximo entrenamiento."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Utilisez les cartes Max/Min pour ajuster les objectifs de votre prochaine séance."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verwende die Max/Min-Karten, um die Ziele für das nächste Training zu kalibrieren."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Use os cartões de Máx/Mín para calibrar metas do próximo treino."
+          }
+        }
+      }
+    },
+    "Use seu bom condicionamento para impor pressão constante, pois manter essa intensidade desgasta o adversário." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Use your good conditioning to apply constant pressure. Maintaining this intensity wears down your opponent."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Usa tu buena condición física para imponer presión constante. Mantener esta intensidad desgasta al adversario."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Utilisez votre bonne condition physique pour exercer une pression constante. Maintenir cette intensité fatigue votre adversaire."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nutze deine gute Kondition, um konstant Druck auszuüben, da das Aufrechterhalten dieser Intensität den Gegner ermüdet."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Use seu bom condicionamento para impor pressão constante, pois manter essa intensidade desgasta o adversário."
+          }
+        }
+      }
+    },
+    "Use sua capacidade de percorrer grandes distâncias para cobrir o parceiro e garantir defesa mais eficaz e completa." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Use your ability to cover long distances to support your partner and ensure more effective, complete defense."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Usa tu capacidad de recorrer grandes distancias para cubrir a tu compañero y garantizar una defensa más eficaz y completa."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Utilisez votre capacité à parcourir de grandes distances pour soutenir votre partenaire et assurer une défense plus efficace et complète."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nutze deine Fähigkeit, lange Strecken zurückzulegen, um den Partner abzudecken und eine effektivere und vollständige Verteidigung zu gewährleisten."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Use sua capacidade de percorrer grandes distâncias para cobrir o parceiro e garantir defesa mais eficaz e completa."
+          }
+        }
+      }
+    },
+    "Utilize pausas curtas entre pontos para recuperar fôlego, acelerando sua recuperação e mantendo o desempenho estável." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Take short breaks between points to catch your breath, speed up recovery, and maintain steady performance."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Utiliza pausas cortas entre los puntos para recuperar el aliento, acelerar la recuperación y mantener un rendimiento estable."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Prenez de courtes pauses entre les points pour reprendre votre souffle, accélérer votre récupération et maintenir des performances stables."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nutze kurze Pausen zwischen den Punkten, um Luft zu holen, deine Erholung zu beschleunigen und die Leistung stabil zu halten."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Utilize pausas curtas entre pontos para recuperar fôlego, acelerando sua recuperação e mantendo o desempenho estável."
+          }
+        }
+      }
+    },
     "valor" : {
       "localizations" : {
         "en" : {
@@ -1734,6 +2958,74 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "valor"
+          }
+        }
+      }
+    },
+    "Varie exercícios funcionais com foco em agilidade, aumentando o gasto calórico e melhorando a eficiência dos movimentos." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vary functional exercises focusing on agility to burn more calories and improve movement efficiency."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Varía los ejercicios funcionales enfocados en agilidad para aumentar el gasto calórico y mejorar la eficiencia de los movimientos."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Variez les exercices fonctionnels axés sur l’agilité pour augmenter la dépense calorique et améliorer l’efficacité des mouvements."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Variiere funktionelle Übungen mit Fokus auf Agilität, das erhöht den Kalorienverbrauch und verbessert die Effizienz der Bewegungen."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Varie exercícios funcionais com foco em agilidade, aumentando o gasto calórico e melhorando a eficiência dos movimentos."
+          }
+        }
+      }
+    },
+    "Video-feedback para corrigir braços e timing." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Use video feedback to correct arm movements and timing."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Usa video-feedback para corregir los movimientos de los brazos y el timing."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Utilisez le vidéo-feedback pour corriger les mouvements des bras et le timing."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Video-Feedback zur Korrektur von Armen und Timing."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Video-feedback para corrigir braços e timing."
           }
         }
       }

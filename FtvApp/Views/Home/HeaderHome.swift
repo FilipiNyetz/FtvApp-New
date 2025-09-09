@@ -9,6 +9,8 @@ import SwiftUI
 
 struct HeaderHome: View {
     @ObservedObject var manager: HealthManager
+    @ObservedObject var wcSessionDelegate: PhoneWCSessionDelegate
+   
 
     var nivelFogo: Int {
         let s = manager.currentStreak
@@ -30,7 +32,6 @@ struct HeaderHome: View {
         HStack {
 
             VStack(alignment: .leading, spacing: 4) {
-
                 Text("Seus jogos")
                     .font(.title.bold())
                     .foregroundColor(.white)
@@ -56,7 +57,7 @@ struct HeaderHome: View {
 
             Spacer()
 
-            NavigationLink(destination: EvolutionView()) {
+            NavigationLink(destination: EvolutionView(wcSessionDelegate: wcSessionDelegate, manager: manager)) {
                 Circle()
                     .fill(Color.colorPrimal)
                     .frame(width: 54, height: 54)

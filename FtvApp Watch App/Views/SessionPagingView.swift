@@ -11,6 +11,7 @@ import WatchKit
 struct SessionPagingView: View {
     @Environment(\.isLuminanceReduced) var isLuminationReduced
     @ObservedObject var manager: WorkoutManager
+    @ObservedObject var wcSessionDelegate: WatchWCSessionDelegate
     @State private var selection: Tab = .metrics
     
     enum Tab {
@@ -20,7 +21,7 @@ struct SessionPagingView: View {
     var body: some View {
         TabView(selection: $selection) {
             ControlsView(
-                manager: manager, 
+                manager: manager,
                 onNextMatch: {
                     // Navega para MetricsView quando "Próxima partida" é clicada
                     displayMetricsView()
@@ -31,7 +32,7 @@ struct SessionPagingView: View {
                 }
             )
                 .tag(Tab.controls)
-            MetricsView(workoutManager: manager)
+            MetricsView(workoutManager: manager, wcSessionDelegate: wcSessionDelegate)
                 .tag(Tab.metrics)
         }
         //.navigationTitle("Futevôlei")

@@ -17,7 +17,7 @@ struct FtvApp_Watch_AppApp: App {
     
     var body: some Scene {
         WindowGroup {
-            MainView()
+            ContentView()
         }
     }
 }
@@ -25,12 +25,12 @@ struct FtvApp_Watch_AppApp: App {
 //@main
 //struct MyWorkouts_Watch_AppApp: App {
 //    @StateObject var workoutManager = WorkoutManager()
-//    
+//
 //    @SceneBuilder var body: some Scene {
 //        WindowGroup {
 //            NavigationView{
 //                StartView()
-//                    
+//
 //            }
 //            .sheet(isPresented: $workoutManager.showingSummaryView){
 //                SummaryView()

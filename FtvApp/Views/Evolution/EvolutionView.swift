@@ -9,32 +9,32 @@ import Charts
 
 struct EvolutionView: View {
     @Environment(\.dismiss) private var dismiss
-
+    @ObservedObject var wcSessionDelegate: PhoneWCSessionDelegate
     @State private var selectedSelection = "M"
-    @State private var selectedMetric: String = "Batimento"
-    @StateObject var healthManager = HealthManager()
+    @State private var selectedMetricId: String = "heartRate"
+    @ObservedObject var manager: HealthManager
     @State private var selectedWorkout: Workout?
-
+    
+    
     var body: some View {
-
+        
         NavigationStack {
-
-            HeaderEvolution(selectedMetric: $selectedMetric)
-
+            HeaderEvolution(selectedMetricId: $selectedMetricId)
+            
             ScrollView {
+                // Dados do gráfico (filtrados/agregados p/ período + métrica)
                 let periodKey = Period(selection: selectedSelection)
                 let chartData = dataForChart(
-                    healthManager: healthManager,
+                    manager: manager,
                     period: periodKey,
-                    selectedMetric: selectedMetric
+                    selectedMetricId: selectedMetricId
                 )
-
+                
                 VStack {
-                    VStack {
+                    VStack{
                         HStack {
                             Picker("Período", selection: $selectedSelection) {
-                                ForEach(["D", "S", "M", "6M", "A"], id: \.self)
-                                { periodo in
+                                ForEach(["D","S","M","6M","A"], id: \.self) { periodo in
                                     Text(periodo).tag(periodo)
                                 }
                             }
@@ -43,10 +43,11 @@ struct EvolutionView: View {
                             Spacer()
                         }
                         .padding()
-
+                        
+                        // Gráfico
                         GraphicChart(
                             data: chartData,
-                            selectedMetric: selectedMetric,
+                            selectedMetric: selectedMetricId,
                             period: periodKey,
                             selectedWorkout: $selectedWorkout
                         )
@@ -58,11 +59,7 @@ struct EvolutionView: View {
                         RoundedRectangle(cornerRadius: 0, style: .continuous)
                             .fill(
                                 LinearGradient(
-                                    colors: [
-                                        Color.progressBarBGLight,
-                                        Color.progressBarBGDark,
-                                        Color.progressBarBGDark,
-                                    ],
+                                    colors: [Color.progressBarBGLight, Color.progressBarBGDark,Color.progressBarBGDark],
                                     startPoint: .top,
                                     endPoint: .bottom
                                 )
@@ -71,16 +68,15 @@ struct EvolutionView: View {
                     )
                     .padding(.bottom, -7)
                     Divider()
-
-                    jumpdata(data: chartData, selectedMetric: selectedMetric)
+                    //.padding(.horizontal)
+                    
+                    // Cards Máx / Mín conforme métrica selecionada
+                    jumpdata(data: chartData, selectedMetric: selectedMetricId)
                         .padding()
                 }
                 .background(
                     LinearGradient(
-                        gradient: Gradient(colors: [
-                            Color.gradiente2, Color.gradiente2,
-                            Color.gradiente1,
-                        ]),
+                        gradient: Gradient(colors: [Color.gradiente2, Color.gradiente2, Color.gradiente1]),
                         startPoint: .topLeading,
                         endPoint: .bottomTrailing
                     )
@@ -90,9 +86,13 @@ struct EvolutionView: View {
                 .padding(.top, -8)
                 .padding(.bottom, -8)
                 Divider()
-
-                suggestions()
-                    .padding()
+                
+                SuggestionsDynamic(
+                    selectedMetricId: selectedMetricId,
+                    maxValue: maxValueForMetric
+                )
+                .padding(.horizontal)
+                .padding(.bottom, 24)
             }
             .scrollIndicators(.hidden)
             .navigationBarTitleDisplayMode(.inline)
@@ -113,13 +113,16 @@ struct EvolutionView: View {
                 }
             }
             .toolbarBackground(Color.black, for: .navigationBar)
+            //   .toolbarBackground(.visible, for: .navigationBar)
             .background(Color.gray.opacity(0.1).ignoresSafeArea())
-            .onAppear {
-                healthManager.fetchAllWorkouts()
-            }
+            
+            // Carrega tudo ao entrar; o gráfico agrega por período em memória
+//            .onAppear {
+//                manager.fetchAllWorkouts()
+//            }
         }
     }
-
+    
     func selectedselection() -> String {
         switch selectedSelection {
         case "D": return "Hoje"
@@ -127,23 +130,33 @@ struct EvolutionView: View {
         case "M": return "Este Mês"
         case "6M": return "Este Semestre"
         case "A": return "Este Ano"
-        default: return "Este Mês"
+        default:  return "Este Mês"
         }
     }
-
+    
     func Period(selection: String) -> String {
         switch selection {
-        case "D": return "day"
-        case "S": return "week"
-        case "M": return "month"
+        case "D":  return "day"
+        case "S":  return "week"
+        case "M":  return "month"
         case "6M": return "sixmonth"
-        case "A": return "year"
-        default: return "month"
+        case "A":  return "year"
+        default:   return "month"
         }
     }
-}
-
-#Preview {
-    EvolutionView()
-        .preferredColorScheme(.dark)
+    /// Máximo da métrica selecionada (usado pelas Sugestões)
+    private var maxValueForMetric: Double {
+        switch selectedMetricId {
+        case "heartRate":
+            return Double(manager.workouts.map(\.frequencyHeart).max() ?? 0)
+        case "calories":
+            return Double(manager.workouts.map(\.calories).max() ?? 0)
+        case "distance":
+            return Double(manager.workouts.map(\.distance).max() ?? 0)
+        case "height":
+            return 0 // se adicionar altura no modelo, troque por Double(workout.height ?? 0)
+        default:
+            return 0
+        }
+    }
 }
