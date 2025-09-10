@@ -13,6 +13,7 @@ struct SummaryView: View {
     @Environment(\.dismiss) var dismiss
     @EnvironmentObject var manager: WorkoutManager
     @ObservedObject var wcSessionDelegate: WatchWCSessionDelegate
+    @ObservedObject var positionManager: managerPosition
 
     let workout: HKWorkout
 
@@ -90,7 +91,9 @@ struct SummaryView: View {
             print("Vai enviar o melhor pulo (\(bestJumpValue ?? -1)) para o iphone")
             wcSessionDelegate.sendMessage(message: [
                 "pulo": bestJumpValue as Any,
-                "workoutId": workout.uuid.uuidString
+                "workoutId": workout.uuid.uuidString,
+                "workoutPath": positionManager.serializablePath
+                
             ])
         }
     }

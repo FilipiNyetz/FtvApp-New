@@ -9,6 +9,11 @@ import Foundation
 import SwiftData
 
 
+struct PathPoint: Codable {
+    let x: Double
+    let y: Double
+}
+
 @Model
 final class JumpEntity {
     @Attribute(.unique) var id: UUID
@@ -24,7 +29,31 @@ final class JumpEntity {
     }
 }
 
-struct Workout: Identifiable, Hashable{
+@Model
+final class WorkoutPathEntity {
+    @Attribute(.unique) var id: UUID
+    var workoutId: UUID
+    var pathData: Data  // aqui fica o array serializado
+    var createdAt: Date
+    
+    init(workoutId: UUID, path: [PathPoint]) {
+        self.id = UUID()
+        self.workoutId = workoutId
+        self.createdAt = Date()
+        
+        // Codifica o array de pontos em JSON
+        let encoder = JSONEncoder()
+        self.pathData = (try? encoder.encode(path)) ?? Data()
+    }
+    
+    // Helper para recuperar o array de pontos
+    func decodedPath() -> [PathPoint] {
+        let decoder = JSONDecoder()
+        return (try? decoder.decode([PathPoint].self, from: pathData)) ?? []
+    }
+}
+
+struct Workout: Identifiable, Hashable, Codable{
     let id: UUID
     let idWorkoutType: Int
     let duration: TimeInterval
@@ -33,4 +62,5 @@ struct Workout: Identifiable, Hashable{
     let frequencyHeart: Double
     let dateWorkout: Date
     let higherJump: Double?
+    let pointsPath: [[Double]]
 }

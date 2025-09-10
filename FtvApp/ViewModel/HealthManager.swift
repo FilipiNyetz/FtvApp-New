@@ -200,7 +200,12 @@ class HealthManager: ObservableObject, @unchecked Sendable {
                     Task { @MainActor in
                         let jumps = await self.wcSessionDelegate?.fetchJumps(for: workout.uuid) ?? []
                         let higherJump = jumps.map { $0.height }.max() ?? 0.0
+                        
+                        let pointForMap = await self.wcSessionDelegate?.fetchWorkoutPath(for: workout.uuid) ?? []
+                        
                         print("Jumps encontrados: \(jumps.count) para workout \(workout.uuid)")
+                        
+                        print("Pontos encontrados: \(pointForMap.count) para workout \(workout.uuid)")
                         
                         let summary = Workout(
                             id: workout.uuid,
@@ -210,7 +215,8 @@ class HealthManager: ObservableObject, @unchecked Sendable {
                             distance: Int(workout.totalDistance?.doubleValue(for: .meter()) ?? 0),
                             frequencyHeart: bpm,
                             dateWorkout: workout.endDate,
-                            higherJump: higherJump
+                            higherJump: higherJump,
+                            pointsPath: pointForMap.map { PathPoint(x: $0.x, y: $0.y) }
                         )
                         
                         // Adiciona ao array temporário
@@ -301,6 +307,9 @@ class HealthManager: ObservableObject, @unchecked Sendable {
                         let jumps = await self.wcSessionDelegate?.fetchJumps(for: workout.uuid) ?? []
                         let higherJump = jumps.map { $0.height }.max() ?? 0.0
                         
+                        let pointForMap = await self.wcSessionDelegate?.fetchWorkoutPath(for: workout.uuid) ?? []
+                        let pathPoints: [[Double]] = pointForMap.map { [$0.x, $0.y] }
+                        
                         let summary = Workout(
                             id: workout.uuid,
                             idWorkoutType: Int(workout.workoutActivityType.rawValue),
@@ -309,7 +318,8 @@ class HealthManager: ObservableObject, @unchecked Sendable {
                             distance: Int(workout.totalDistance?.doubleValue(for: .meter()) ?? 0),
                             frequencyHeart: bpm,
                             dateWorkout: workout.endDate,
-                            higherJump: higherJump
+                            higherJump: higherJump,
+                            pointsPath: pathPoints
                         )
                         
                         self.newWorkouts.append(summary)

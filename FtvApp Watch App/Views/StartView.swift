@@ -25,6 +25,8 @@ struct StartView: View {
     @StateObject private var jumpDetector = JumpDetector()
     @State private var navigationPath: [JumpNavigationPath] = []
     @State private var latestJumpMeasurement: Int? = nil
+    
+    @StateObject var positionManager = managerPosition()
 
     var workoutTypes: [HKWorkoutActivityType] = [.soccer]
 
@@ -49,7 +51,10 @@ struct StartView: View {
                 ) { workout in
                     SummaryView(
                         wcSessionDelegate: wcSessionDelegate,
+                        positionManager: positionManager,
                         workout: workout
+                        
+                        
                     )
                     .environmentObject(manager)
                 }
