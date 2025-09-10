@@ -15,6 +15,8 @@ class managerPosition: NSObject, ObservableObject {
     
     private let motionManager = CMMotionManager()
     
+    static let shared = managerPosition()
+    
     @Published var localizacaoRodando: Bool = false
     @Published var origemDefinida: Bool = false
     @Published var posicaoInicial: CGPoint = .zero
@@ -33,7 +35,7 @@ class managerPosition: NSObject, ObservableObject {
     // Constantes
     private let STEP_THRESHOLD_HIGH: Double = 0.15
     private let STEP_THRESHOLD_LOW:  Double = 0.08
-
+    
     private let ROTATION_LIMIT:      Double = 1.0
     private var isStepInProgress = false
     
@@ -55,7 +57,7 @@ class managerPosition: NSObject, ObservableObject {
     // Propriedades adicionais
     private let driftCorrectionThreshold: CGFloat = 0.5 // metros, tolerância para corrigir
     private let smoothingFactor: CGFloat = 0.1 // suavização da posição
-
+    
     func applyDriftCorrection() {
         // Distância do ponto atual ao ponto inicial
         let dx = currentPosition.x - posicaoInicial.x
@@ -69,7 +71,7 @@ class managerPosition: NSObject, ObservableObject {
             currentPosition.y = posicaoInicial.y * smoothingFactor + currentPosition.y * (1 - smoothingFactor)
         }
     }
-
+    
     
     @MainActor
     func startMotionUpdates() {
@@ -84,7 +86,7 @@ class managerPosition: NSObject, ObservableObject {
         
         // Agora usamos heading magnético para reduzir drift
         motionManager.deviceMotionUpdateInterval = 1.0 / 100.0
-
+        
         let queue = OperationQueue()
         
         motionManager.startDeviceMotionUpdates(using: .xMagneticNorthZVertical, to: queue) { [weak self] motion, error in
@@ -101,14 +103,15 @@ class managerPosition: NSObject, ObservableObject {
         localizacaoRodando = true
     }
     
+    @MainActor
     func processDeviceMotion(_ motion: CMDeviceMotion) {
         let forwardAccel = motion.userAcceleration.y
         let rotation = motion.rotationRate
         
         // Filtro anti-giro de punho
         let isRotatingWrist = abs(rotation.x) > ROTATION_LIMIT ||
-                              abs(rotation.y) > ROTATION_LIMIT ||
-                              abs(rotation.z) > ROTATION_LIMIT
+        abs(rotation.y) > ROTATION_LIMIT ||
+        abs(rotation.z) > ROTATION_LIMIT
         
         // Atualiza filtro de yaw (suavização)
         let alpha = 0.2
@@ -160,18 +163,19 @@ class managerPosition: NSObject, ObservableObject {
     }
     
     @MainActor
-    func stopMotionUpdates() {
+    func stopMotionUpdates() async -> [[String: Double]] {
         motionManager.stopDeviceMotionUpdates()
+        
+        try? await Task.sleep(nanoseconds: 50_000_000)
+        
         print("Treino finalizado. Pontos coletados: \(path.count)")
         
-        guard !path.isEmpty else {
-            print("ERRO: array 'path' está vazio.")
-            return
-        }
+        guard !path.isEmpty else { return [] }
         
         serializablePath = path.map { ["x": Double($0.x), "y": Double($0.y)] }
         
-        
-        print("Dados enviados ao iPhone: \(path.count) pontos.")
+        print("Serializable dentro da funcao stopMotion: \(serializablePath.count)")
+        return serializablePath
     }
+    
 }

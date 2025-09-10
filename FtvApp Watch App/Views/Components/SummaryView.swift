@@ -13,7 +13,7 @@ struct SummaryView: View {
     @Environment(\.dismiss) var dismiss
     @EnvironmentObject var manager: WorkoutManager
     @ObservedObject var wcSessionDelegate: WatchWCSessionDelegate
-    @ObservedObject var positionManager: managerPosition
+    @ObservedObject var positionManager = managerPosition.shared
 
     let workout: HKWorkout
 
@@ -88,11 +88,12 @@ struct SummaryView: View {
             Task {
                 let bestJumpValue: Int? = manager.preWorkoutJumpHeight
                 
-                let workoutPath = await positionManager.stopMotionUpdates()
+                let workoutPath = manager.serializablePath
                 
-                print("Vai enviar o melhor pulo (\(bestJumpValue ?? -1)) para o iphone")
-                print("Quantidade de pontos: \(workoutPath.count)")
                 
+                print("Vai enviar o melhor pulo (\(bestJumpValue ?? -1)) para o iPhone")
+                print("Vai enviar o pacote de pontos (\(workoutPath)) para o iPhone")
+                print(workoutPath)
                 wcSessionDelegate.sendMessage(message: [
                     "pulo": bestJumpValue as Any,
                     "workoutId": workout.uuid.uuidString,
