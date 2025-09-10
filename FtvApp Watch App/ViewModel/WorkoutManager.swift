@@ -171,7 +171,7 @@ class WorkoutManager: NSObject, ObservableObject {
                 }
             }
         }
-//        PositionManager.stopMotionUpdates()
+        PositionManager.stopMotionUpdates()
         resetTimer()
     }
 
