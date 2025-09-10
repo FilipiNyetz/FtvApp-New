@@ -17,8 +17,9 @@ final class JumpDetector: ObservableObject {
     @Published var bestJumpHeight: Double = 0.0
     
     // MARK: - Componentes
-    private let motionManager = CMMotionManager()
-    private let operationQueue = OperationQueue()
+    private var motionManager = CMMotionManager()
+    private var operationQueue = OperationQueue()
+    private var isActive = false
     
     // MARK: - Estado interno
     private var isInFlight = false
@@ -46,6 +47,10 @@ final class JumpDetector: ObservableObject {
     
     // MARK: - Início / parada
     func start() {
+        isActive = true
+        operationQueue = OperationQueue() // <- fila nova
+        operationQueue.maxConcurrentOperationCount = 1
+
         CalibrationManager.shared.startCalibration {
             print("✅ Calibração concluída: baseline=\(CalibrationManager.shared.baselineGravity), sens=\(CalibrationManager.shared.sensitivity)")
         }
@@ -59,10 +64,7 @@ final class JumpDetector: ObservableObject {
         operationQueue.maxConcurrentOperationCount = 1
         operationQueue.qualityOfService = .userInitiated
         
-        motionManager.startDeviceMotionUpdates(
-            using: .xArbitraryZVertical,
-            to: operationQueue
-        ) { [weak self] deviceMotion, error in
+        motionManager.startDeviceMotionUpdates(using: .xArbitraryZVertical, to: operationQueue) { [weak self] deviceMotion, error in
             guard let self = self, let motion = deviceMotion else {
                 if let error = error {
                     print("⚠️ Erro no sensor: \(error.localizedDescription)")
@@ -75,8 +77,17 @@ final class JumpDetector: ObservableObject {
         print("🚀 Detector de saltos iniciado")
     }
     
+    private var stopTimestamp: TimeInterval?
+
     func stop() {
+        isActive = false
+        stopTimestamp = Date().timeIntervalSince1970
+
         motionManager.stopDeviceMotionUpdates()
+        motionManager = CMMotionManager() // 🔥 recria do zero
+
+        operationQueue.cancelAllOperations()
+        resetFlight()
         print("⏹️ Detector de saltos parado")
     }
     
@@ -88,6 +99,11 @@ final class JumpDetector: ObservableObject {
     
     // MARK: - Processamento de movimento
     private func processMotion(_ deviceMotion: CMDeviceMotion) {
+        guard isActive else { return }
+        if let stopTs = stopTimestamp, deviceMotion.timestamp > stopTs {
+            return // ignora leitura que chegou depois do stop
+        }
+        
         let verticalAccRaw = extractVerticalAcceleration(from: deviceMotion)
         
         // 🔹 Ajusta pela calibração

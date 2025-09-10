@@ -68,6 +68,7 @@ class PhoneWCSessionDelegate: NSObject, WCSessionDelegate,ObservableObject {
         
         print("📩 Recebido jump \(valor) para workoutId \(workoutId)")
         
+        print("Vai receber workoutPath...")
         // 🔹 Recebendo o path
         var workoutPath: [CGPoint] = []
         if let rawPath = message["workoutPath"] as? [[String: Double]] {

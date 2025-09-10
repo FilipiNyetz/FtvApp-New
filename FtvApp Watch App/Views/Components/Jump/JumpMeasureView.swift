@@ -50,6 +50,7 @@ struct JumpMeasureView: View {
             jumpDetector.reset()
             jumpDetector.start()
         }
+        
         .padding()
         .navigationBarBackButtonHidden(true)
         .toolbar(.hidden)

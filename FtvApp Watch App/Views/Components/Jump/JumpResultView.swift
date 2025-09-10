@@ -9,6 +9,8 @@ import HealthKit
 import SwiftUI
 
 struct JumpResultView: View {
+    
+    @ObservedObject var jumpDetector: JumpDetector
     let bestJump: Int
     
     // Ações são passadas como closures, em vez de usar Bindings para o estado da outra view
@@ -64,6 +66,9 @@ struct JumpResultView: View {
             .buttonStyle(.plain)
             
         }
+//        .onAppear{
+//            jumpDetector.stop()
+//        }
         .navigationBarBackButtonHidden(true)
         .ignoresSafeArea(edges: .bottom)
         .frame(maxWidth: .infinity, maxHeight: .infinity)

@@ -158,7 +158,7 @@ class managerPosition: NSObject, ObservableObject {
             isStepInProgress = false
         }
     }
-    
+    @MainActor
     func stopMotionUpdates() {
         motionManager.stopDeviceMotionUpdates()
         print("Treino finalizado. Pontos coletados: \(path.count)")

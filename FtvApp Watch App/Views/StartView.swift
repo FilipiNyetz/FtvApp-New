@@ -41,7 +41,7 @@ struct StartView: View {
                     manager.onWorkoutEnded = { workout in
                         self.savedWorkout = workout
                     }
-                    jumpDetector.start()
+                    //jumpDetector.start()
                 }
                 .sheet(
                     item: $savedWorkout,
@@ -160,6 +160,7 @@ struct StartView: View {
 
             case .result(let bestJump):
                 JumpResultView(
+                    jumpDetector: jumpDetector,
                     bestJump: bestJump,
                     onStart: {
                         self.latestJumpMeasurement = bestJump
