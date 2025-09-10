@@ -53,7 +53,7 @@ final class WorkoutPathEntity {
     }
 }
 
-struct Workout: Identifiable, Hashable, Codable{
+struct Workout: Identifiable, Hashable, Codable {
     let id: UUID
     let idWorkoutType: Int
     let duration: TimeInterval
@@ -63,4 +63,27 @@ struct Workout: Identifiable, Hashable, Codable{
     let dateWorkout: Date
     let higherJump: Double?
     let pointsPath: [[Double]]
+
+    init(
+        id: UUID,
+        idWorkoutType: Int,
+        duration: TimeInterval,
+        calories: Int,
+        distance: Int,
+        frequencyHeart: Double,
+        dateWorkout: Date,
+        higherJump: Double? = nil,
+        pointsPath: [[Double]] = []   // <- default
+    ) {
+        self.id = id
+        self.idWorkoutType = idWorkoutType
+        self.duration = duration
+        self.calories = calories
+        self.distance = distance
+        self.frequencyHeart = frequencyHeart
+        self.dateWorkout = dateWorkout
+        self.higherJump = higherJump
+        self.pointsPath = pointsPath
+    }
 }
+

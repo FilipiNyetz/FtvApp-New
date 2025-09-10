@@ -25,7 +25,7 @@ struct StartView: View {
     @StateObject private var jumpDetector = JumpDetector()
     @State private var navigationPath: [JumpNavigationPath] = []
     @State private var latestJumpMeasurement: Int? = nil
-    
+    @State private var isCalibratingOrigin = false
     @StateObject var positionManager = managerPosition()
 
     var workoutTypes: [HKWorkoutActivityType] = [.soccer]
@@ -58,14 +58,21 @@ struct StartView: View {
                     )
                     .environmentObject(manager)
                 }
+            } else if isCalibratingOrigin {
+                CalibrateOriginView(positionManager: positionManager) {
+                    // Callback quando calibrar origem
+                    self.isCalibratingOrigin = false
+                    self.isCountingDown = true
+                }
+
             } else if isCountingDown, let workoutType = selectedWorkoutType {
                 CountdownScreen(onCountdownFinished: {
                     self.isCountingDown = false
-                    // Limpa o path caso o usuário tenha voltado
                     self.navigationPath.removeAll()
                     manager.startWorkout(workoutType: workoutType)
                     isWorkoutActive = true
                 })
+                
             } else {
                 startScreenContent
             }
@@ -103,17 +110,18 @@ struct StartView: View {
                 Button(action: {
                     manager.preWorkoutJumpHeight = self.latestJumpMeasurement
                     self.selectedWorkoutType = .soccer
-                    self.isCountingDown = true
+                    self.isCalibratingOrigin = true   // <- novo estado
                     self.latestJumpMeasurement = nil
                 }) {
                     Text("Iniciar Treino")
                         .font(.headline.bold())
-                        .frame(maxWidth: .infinity, maxHeight: 50)  // preenche largura disponível
+                        .frame(maxWidth: .infinity, maxHeight: 50)
                         .foregroundStyle(.black)
                         .background(Color.colorPrimal)
                         .clipShape(RoundedRectangle(cornerRadius: 24))
                 }
                 .buttonStyle(.plain)
+
                 
                 Button(action: { navigationPath.append(.instruction) }) {
                     Text("Medir salto")

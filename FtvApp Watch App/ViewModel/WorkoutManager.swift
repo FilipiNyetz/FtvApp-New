@@ -7,6 +7,7 @@
 
 import Foundation
 import HealthKit
+import SwiftUI
 import CoreMotion
 import Combine
 import CoreGraphics
@@ -49,11 +50,12 @@ class WorkoutManager: NSObject, ObservableObject {
     @Published var workout: HKWorkout?
     @Published var preWorkoutJumpHeight: Int? = nil
     private var isEndingWorkout = false
+    @ObservedObject var PositionManager: managerPosition = managerPosition()
     
     //Variaveis para posicao no mapa
     private let motionManager = CMMotionManager()
     
-    let PositionManager = managerPosition()
+//    let PositionManager = managerPosition()
     
 //    @Published var localizacaoRodando: Bool = false
 //    

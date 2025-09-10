@@ -202,6 +202,7 @@ class HealthManager: ObservableObject, @unchecked Sendable {
                         let higherJump = jumps.map { $0.height }.max() ?? 0.0
                         
                         let pointForMap = await self.wcSessionDelegate?.fetchWorkoutPath(for: workout.uuid) ?? []
+                        let pathPoints: [[Double]] = pointForMap.map { [$0.x, $0.y] }
                         
                         print("Jumps encontrados: \(jumps.count) para workout \(workout.uuid)")
                         
@@ -216,7 +217,7 @@ class HealthManager: ObservableObject, @unchecked Sendable {
                             frequencyHeart: bpm,
                             dateWorkout: workout.endDate,
                             higherJump: higherJump,
-                            pointsPath: pointForMap.map { PathPoint(x: $0.x, y: $0.y) }
+                            pointsPath: pathPoints
                         )
                         
                         // Adiciona ao array temporário
