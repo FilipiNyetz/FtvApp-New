@@ -14,7 +14,8 @@ struct ButtonDiaryGames: View {
                 VStack {
                     WorkoutMenu(workouts: workoutsDoDia, selectedIndex: $selectedIndex)
                     //WorkoutMenu(workouts: workoutsDoDia, selectedIndex: $opcaoDeTreinoParaMostrarCard)
-                    
+                    Image("mapacalor")
+                    HeatmapResultView(Workout: workoutsDoDia[selectedIndex])
                     WorkoutCardView(
                                            workouts: workoutsDoDia,
                                            selectedIndex: selectedIndex,
