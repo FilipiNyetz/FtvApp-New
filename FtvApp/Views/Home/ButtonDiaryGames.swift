@@ -13,9 +13,11 @@ struct ButtonDiaryGames: View {
             if let workoutsDoDia = manager.workoutsByDay[Calendar.current.startOfDay(for: selectedDate)] {
                 VStack {
                     WorkoutMenu(workouts: workoutsDoDia, selectedIndex: $selectedIndex)
-                    //WorkoutMenu(workouts: workoutsDoDia, selectedIndex: $opcaoDeTreinoParaMostrarCard)
+                    //WorkoutMenu(workouts: workoutsDoDia, selectedIndex: $opcaoDeTreinoParaMostrarCard)]
+                    Text("\(workoutsDoDia.last?.pointsPath)")
                     Image("mapacalor")
                     HeatmapResultView(Workout: workoutsDoDia[selectedIndex])
+                   
                     WorkoutCardView(
                                            workouts: workoutsDoDia,
                                            selectedIndex: selectedIndex,

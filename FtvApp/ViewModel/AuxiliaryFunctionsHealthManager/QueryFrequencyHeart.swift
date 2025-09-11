@@ -28,7 +28,7 @@ func queryFrequenciaCardiaca(
         options: .discreteAverage
     ) { _, result, error in
         if let error = error {
-            print("Erro ao buscar frequência cardíaca: \(error.localizedDescription)")
+//            print("Erro ao buscar frequência cardíaca: \(error.localizedDescription)")
             completionHandler(0)
             return
         }

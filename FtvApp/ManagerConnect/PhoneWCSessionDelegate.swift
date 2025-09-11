@@ -68,7 +68,6 @@ class PhoneWCSessionDelegate: NSObject, WCSessionDelegate,ObservableObject {
         
         print("📩 Recebido jump \(valor) para workoutId \(workoutId)")
         
-        print("Vai receber workoutPath...")
         // 🔹 Recebendo o path
         var workoutPath: [CGPoint] = []
         if let rawPath = message["workoutPath"] as? [[String: Double]] {
@@ -78,32 +77,28 @@ class PhoneWCSessionDelegate: NSObject, WCSessionDelegate,ObservableObject {
                 }
                 return nil
             }
-            print("📍 Recebi \(workoutPath.count) pontos do trajeto")
+            print("📍 Recebi \(workoutPath.count) pontos do trajeto para workoutId \(workoutId)")
         }
-        
-        DispatchQueue.main.async { [self] in
+
+        DispatchQueue.main.async {
             self.higherJump = valor
             self.pulos.append(valor)
-            
-            Task {
-                guard container != nil else {
-                    print("❌ Container não inicializado, não é possível salvar jump")
+
+            Task { @MainActor in
+                guard self.container != nil else {
+                    print("❌ Container não inicializado")
                     return
                 }
-                
-                self.saveJump(value: valor, workoutId: workoutId)
-                
-                // 🔹 Aqui você já pode salvar o path junto do workout
-                if !workoutPath.isEmpty {
-                    self.saveWorkoutPath(path: workoutPath, workoutId: workoutId)
-                }
+
+                // 🔹 Salvar apenas dados extras
+                await self.saveJump(value: valor, workoutId: workoutId)
+                await self.saveWorkoutPath(path: workoutPath, workoutId: workoutId)
             }
         }
     }
 
-        
     @MainActor
-    func saveJump(value: Double, workoutId: UUID) {
+    func saveJump(value: Double, workoutId: UUID) async {
         guard let container else { return }
         
         let jump = JumpEntity(height: value, date: Date(), workoutId: workoutId)
@@ -111,14 +106,15 @@ class PhoneWCSessionDelegate: NSObject, WCSessionDelegate,ObservableObject {
         
         do {
             try container.mainContext.save()
+            print("✅ Jump salvo: \(value) para workoutId \(workoutId)")
         } catch {
-            print("Erro ao salvar jump: \(error)")
+            print("❌ Erro ao salvar jump: \(error)")
         }
     }
-    
-    
+
     @MainActor
     func fetchJumps(for workoutId: UUID) async -> [JumpEntity] {
+        print("Funcao fetchJump")
         guard let container else { return [] }
         let descriptor = FetchDescriptor<JumpEntity>(
             predicate: #Predicate { $0.workoutId == workoutId }
@@ -126,48 +122,73 @@ class PhoneWCSessionDelegate: NSObject, WCSessionDelegate,ObservableObject {
         do {
             return try container.mainContext.fetch(descriptor)
         } catch {
-            print("Erro ao buscar jumps: \(error)")
+            print("❌ Erro ao buscar jumps: \(error)")
             return []
         }
     }
-    
+
     @MainActor
-    func saveWorkoutPath(path: [CGPoint], workoutId: UUID) {
+    func saveWorkoutPath(path: [CGPoint], workoutId: UUID) async {
         guard let container else { return }
         
         // Converte CGPoint -> PathPoint
         let points = path.map { PathPoint(x: Double($0.x), y: Double($0.y)) }
         
-        // Cria entidade já com path
-        let workoutPathEntity = WorkoutPathEntity(workoutId: workoutId, path: points)
-        container.mainContext.insert(workoutPathEntity)
+        // Verifica se já existe entidade para esse workout
+        let descriptor = FetchDescriptor<WorkoutPathEntity>(
+            predicate: #Predicate { $0.workoutId == workoutId }
+        )
+        
+        if let existing = try? container.mainContext.fetch(descriptor).first {
+            existing.pathData = (try? JSONEncoder().encode(points)) ?? Data()
+            existing.createdAt = Date()
+            print("♻️ Atualizado WorkoutPathEntity existente com \(points.count) pontos")
+        } else {
+            let workoutPathEntity = WorkoutPathEntity(workoutId: workoutId, path: points)
+            container.mainContext.insert(workoutPathEntity)
+            print("🆕 Criado WorkoutPathEntity com \(points.count) pontos")
+        }
         
         do {
             try container.mainContext.save()
-            print("✅ \(points.count) pontos salvos para workoutId \(workoutId)")
+            print("✅ WorkoutPath salvo para workoutId \(workoutId)")
         } catch {
             print("❌ Erro ao salvar pontos: \(error)")
         }
     }
-    
+
     @MainActor
     func fetchWorkoutPath(for workoutId: UUID) async -> [CGPoint] {
-        guard let container else { return [] }
+        print("🔹 Iniciando fetchWorkoutPath para workoutId: \(workoutId)")
+        
+        guard let container else {
+            print("❌ Container não inicializado")
+            return []
+        }
         
         let descriptor = FetchDescriptor<WorkoutPathEntity>(
             predicate: #Predicate { $0.workoutId == workoutId }
         )
         
         do {
-            if let entity = try container.mainContext.fetch(descriptor).first {
-                return entity.decodedPath().map { CGPoint(x: $0.x, y: $0.y) }
+            let results = try container.mainContext.fetch(descriptor)
+            print("📦 Encontrados \(results.count) WorkoutPathEntity para workoutId: \(workoutId)")
+            
+            if let entity = results.first {
+                let decoded = entity.decodedPath()
+                print("⚡ Decodificado \(decoded.count) pontos do path: \(decoded)")
+                return decoded.map { CGPoint(x: $0.x, y: $0.y) }
+            } else {
+                print("⚠️ Nenhum WorkoutPathEntity encontrado para workoutId: \(workoutId)")
             }
+            
         } catch {
             print("❌ Erro ao buscar workoutPath: \(error)")
         }
         
         return []
     }
+
 
 
 }

@@ -196,18 +196,19 @@ class HealthManager: ObservableObject, @unchecked Sendable {
                         calories = totalEnergy.doubleValue(for: .kilocalorie())
                     }
                     
-                    // ⚡️ Aqui criamos um Task para acessar async fetchJumps
                     Task { @MainActor in
+                        // 🔹 Busca jumps e path do SwiftData
+                        
+                        print("Vai buscar pulos")
                         let jumps = await self.wcSessionDelegate?.fetchJumps(for: workout.uuid) ?? []
                         let higherJump = jumps.map { $0.height }.max() ?? 0.0
                         
-                        let pointForMap = await self.wcSessionDelegate?.fetchWorkoutPath(for: workout.uuid) ?? []
-                        let pathPoints: [[Double]] = pointForMap.map { [$0.x, $0.y] }
+                        print("Vai buscar pontos")
+                        let pathPointsCG = await self.wcSessionDelegate?.fetchWorkoutPath(for: workout.uuid) ?? []
+
+                        let pathPoints: [[Double]] = pathPointsCG.map { [$0.x, $0.y] }
                         
-                        print("Jumps encontrados: \(jumps.count) para workout \(workout.uuid)")
-                        
-                        print("Pontos encontrados: \(pointForMap.count) para workout \(workout.uuid)")
-                        
+                        // Monta Workout temporário para exibição
                         let summary = Workout(
                             id: workout.uuid,
                             idWorkoutType: Int(workout.workoutActivityType.rawValue),
@@ -220,7 +221,6 @@ class HealthManager: ObservableObject, @unchecked Sendable {
                             pointsPath: pathPoints
                         )
                         
-                        // Adiciona ao array temporário
                         tempWorkouts.append(summary)
                         group.leave()
                     }

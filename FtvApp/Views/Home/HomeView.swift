@@ -66,6 +66,7 @@ struct HomeView: View {
                                         } else if hasWorkoutsToday {
                                             // Há treinos na data selecionada
                                             
+                                           
                                             
                                             ButtonDiaryGames(
                                                 manager: manager,

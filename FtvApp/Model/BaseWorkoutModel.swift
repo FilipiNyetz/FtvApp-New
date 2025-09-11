@@ -1,23 +1,22 @@
-////
-////  BaseWorkoutModel.swift
-////  FtvApp
-////
-////  Created by Filipi Romão on 14/08/25.
-////
+//
+//  BaseWorkoutModel.swift
+//  FtvApp
+//
 
 import Foundation
 import SwiftData
 
-
+// MARK: - Estrutura de um ponto do trajeto
 struct PathPoint: Codable {
     let x: Double
     let y: Double
 }
 
+// MARK: - Pulos
 @Model
 final class JumpEntity {
     @Attribute(.unique) var id: UUID
-    var workoutId: UUID  // UUID do workout no HealthStore
+    var workoutId: UUID        // UUID do workout no HealthKit
     var height: Double
     var date: Date
     
@@ -29,11 +28,12 @@ final class JumpEntity {
     }
 }
 
+// MARK: - Trajetória do workout (pontos)
 @Model
 final class WorkoutPathEntity {
     @Attribute(.unique) var id: UUID
     var workoutId: UUID
-    var pathData: Data  // aqui fica o array serializado
+    var pathData: Data          // Array de PathPoint serializado
     var createdAt: Date
     
     init(workoutId: UUID, path: [PathPoint]) {
@@ -46,44 +46,23 @@ final class WorkoutPathEntity {
         self.pathData = (try? encoder.encode(path)) ?? Data()
     }
     
-    // Helper para recuperar o array de pontos
+    // Helper para decodificar o array de pontos
     func decodedPath() -> [PathPoint] {
         let decoder = JSONDecoder()
         return (try? decoder.decode([PathPoint].self, from: pathData)) ?? []
     }
 }
 
-struct Workout: Identifiable, Hashable, Codable {
-    let id: UUID
+// MARK: - Modelo temporário para exibição
+// Não será salvo no SwiftData, apenas usado para agrupar os dados
+struct Workout {
+    let id: UUID                 // UUID do HealthKit workout
     let idWorkoutType: Int
-    let duration: TimeInterval
+    let duration: Double
     let calories: Int
     let distance: Int
     let frequencyHeart: Double
     let dateWorkout: Date
     let higherJump: Double?
-    let pointsPath: [[Double]]
-
-    init(
-        id: UUID,
-        idWorkoutType: Int,
-        duration: TimeInterval,
-        calories: Int,
-        distance: Int,
-        frequencyHeart: Double,
-        dateWorkout: Date,
-        higherJump: Double? = nil,
-        pointsPath: [[Double]] = []   // <- default
-    ) {
-        self.id = id
-        self.idWorkoutType = idWorkoutType
-        self.duration = duration
-        self.calories = calories
-        self.distance = distance
-        self.frequencyHeart = frequencyHeart
-        self.dateWorkout = dateWorkout
-        self.higherJump = higherJump
-        self.pointsPath = pointsPath
-    }
+    let pointsPath: [[Double]]   // Convertido de WorkoutPathEntity
 }
-

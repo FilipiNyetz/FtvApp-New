@@ -177,6 +177,7 @@ class WorkoutManager: NSObject, ObservableObject {
             let collectedPath = await positionManager.stopMotionUpdates()
             DispatchQueue.main.async {
                 self.serializablePath = collectedPath
+                print(self.serializablePath)
                 print("📌 Path salvo no WorkoutManager: \(self.serializablePath.count) pontos")
             }
         }

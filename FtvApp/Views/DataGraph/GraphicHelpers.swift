@@ -117,7 +117,8 @@ func aggregateByDay(workouts: [Workout], selectedMetricId: String) -> [Workout] 
             distance: distance,
             frequencyHeart: frequencyHeart,
             dateWorkout: date,
-            higherJump: higherJump
+            higherJump: higherJump,
+            pointsPath: []
         )
 
         result.append(workout)
@@ -166,7 +167,8 @@ func aggregateByMonth(workouts: [Workout], selectedMetricId : String) -> [Workou
             distance: distance,
             frequencyHeart: frequencyHeart,
             dateWorkout: date,
-            higherJump: higherJump
+            higherJump: higherJump,
+            pointsPath: []
         )
 
         result.append(workout)

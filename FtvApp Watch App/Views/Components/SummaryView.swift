@@ -90,6 +90,8 @@ struct SummaryView: View {
                 
                 let workoutPath = manager.serializablePath
                 
+                print(workoutPath)
+                
                 
                 print("Vai enviar o melhor pulo (\(bestJumpValue ?? -1)) para o iPhone")
                 print("Vai enviar o pacote de pontos (\(workoutPath)) para o iPhone")
