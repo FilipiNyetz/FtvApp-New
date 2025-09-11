@@ -35,7 +35,7 @@ struct MainView: View {
         .task {
             // Inicializa o ModelContainer de forma segura
             do {
-                container = try ModelContainer(for: JumpEntity.self)
+                container = try ModelContainer(for: JumpEntity.self, WorkoutPathEntity.self, WorkoutExtras.self)
                 wcSessionDelegate.container = container
             } catch {
                 print("Erro ao criar ModelContainer: \(error)")

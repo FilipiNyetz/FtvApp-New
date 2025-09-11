@@ -197,18 +197,7 @@ class HealthManager: ObservableObject, @unchecked Sendable {
                     }
                     
                     Task { @MainActor in
-                        // 🔹 Busca jumps e path do SwiftData
-                        
-                        print("Vai buscar pulos")
-                        let jumps = await self.wcSessionDelegate?.fetchJumps(for: workout.uuid) ?? []
-                        let higherJump = jumps.map { $0.height }.max() ?? 0.0
-                        
-                        print("Vai buscar pontos")
-                        let pathPointsCG = await self.wcSessionDelegate?.fetchWorkoutPath(for: workout.uuid) ?? []
-
-                        let pathPoints: [[Double]] = pathPointsCG.map { [$0.x, $0.y] }
-                        
-                        // Monta Workout temporário para exibição
+                        // Monta Workout básico primeiro (sem dados extras)
                         let summary = Workout(
                             id: workout.uuid,
                             idWorkoutType: Int(workout.workoutActivityType.rawValue),
@@ -217,8 +206,8 @@ class HealthManager: ObservableObject, @unchecked Sendable {
                             distance: Int(workout.totalDistance?.doubleValue(for: .meter()) ?? 0),
                             frequencyHeart: bpm,
                             dateWorkout: workout.endDate,
-                            higherJump: higherJump,
-                            pointsPath: pathPoints
+                            higherJump: 0.0,  // Será preenchido no merge posterior
+                            pointsPath: []    // Será preenchido no merge posterior
                         )
                         
                         tempWorkouts.append(summary)
@@ -230,7 +219,11 @@ class HealthManager: ObservableObject, @unchecked Sendable {
             group.notify(queue: .main) {
                 Task { @MainActor in
                     let uniqueWorkouts = Array(Dictionary(grouping: tempWorkouts, by: { $0.id }).values.map { $0.first! })
-                    self.newWorkouts = uniqueWorkouts.sorted { $0.dateWorkout < $1.dateWorkout }
+                    
+                    // 🔹 Fazer merge com dados extras do SwiftData
+                    let enrichedWorkouts = await self.enrichWorkoutsWithExtras(uniqueWorkouts)
+                    
+                    self.newWorkouts = enrichedWorkouts.sorted { $0.dateWorkout < $1.dateWorkout }
                     self.workouts = self.newWorkouts
                     self.totalWorkoutsCount = self.workouts.count
                     self.updateWorkoutsByDay(filtered: self.workouts)
@@ -240,11 +233,49 @@ class HealthManager: ObservableObject, @unchecked Sendable {
         
         healthStore.execute(query)
     }
-
-
     
-    
-    
+    // MARK: - Enrichment com dados extras
+    /// Enriquece workouts básicos com dados extras (higherJump e pointPath) do SwiftData
+    /// Executa uma única query para buscar todos os extras necessários
+    @MainActor
+    private func enrichWorkoutsWithExtras(_ workouts: [Workout]) async -> [Workout] {
+        guard let wcSessionDelegate = wcSessionDelegate else {
+            print("⚠️ wcSessionDelegate não disponível")
+            return workouts
+        }
+        
+        let workoutIDs = workouts.map { $0.id.uuidString }
+        
+        do {
+            let extrasRepository = wcSessionDelegate.getExtrasRepository()
+            let extrasMap = try await extrasRepository.fetchExtrasMap(for: workoutIDs)
+            
+            print("📦 Fazendo merge de \(workouts.count) workouts com \(extrasMap.count) extras")
+            
+            return workouts.map { workout in
+                let workoutIDString = workout.id.uuidString
+                if let extras = extrasMap[workoutIDString] {
+                    return Workout(
+                        id: workout.id,
+                        idWorkoutType: workout.idWorkoutType,
+                        duration: workout.duration,
+                        calories: workout.calories,
+                        distance: workout.distance,
+                        frequencyHeart: workout.frequencyHeart,
+                        dateWorkout: workout.dateWorkout,
+                        higherJump: extras.higherJump ?? 0.0,
+                        pointsPath: extras.pointPath ?? []
+                    )
+                } else {
+                    // Sem dados extras, mantém os valores padrão
+                    return workout
+                }
+            }
+        } catch {
+            print("❌ Erro ao buscar extras: \(error)")
+            return workouts
+        }
+    }
     
     // MARK: - Fetch por período (mantida!)
     func fetchDataWorkout(endDate: Date, period: String) {
@@ -303,14 +334,8 @@ class HealthManager: ObservableObject, @unchecked Sendable {
                         calories = totalEnergy.doubleValue(for: .kilocalorie())
                     }
                     
-                    // ⚡️ Buscar os jumps do SwiftData
                     Task { @MainActor in
-                        let jumps = await self.wcSessionDelegate?.fetchJumps(for: workout.uuid) ?? []
-                        let higherJump = jumps.map { $0.height }.max() ?? 0.0
-                        
-                        let pointForMap = await self.wcSessionDelegate?.fetchWorkoutPath(for: workout.uuid) ?? []
-                        let pathPoints: [[Double]] = pointForMap.map { [$0.x, $0.y] }
-                        
+                        // Monta Workout básico primeiro (sem dados extras)
                         let summary = Workout(
                             id: workout.uuid,
                             idWorkoutType: Int(workout.workoutActivityType.rawValue),
@@ -319,8 +344,8 @@ class HealthManager: ObservableObject, @unchecked Sendable {
                             distance: Int(workout.totalDistance?.doubleValue(for: .meter()) ?? 0),
                             frequencyHeart: bpm,
                             dateWorkout: workout.endDate,
-                            higherJump: higherJump,
-                            pointsPath: pathPoints
+                            higherJump: 0.0,  // Será preenchido no merge posterior
+                            pointsPath: []    // Será preenchido no merge posterior
                         )
                         
                         self.newWorkouts.append(summary)
@@ -331,7 +356,10 @@ class HealthManager: ObservableObject, @unchecked Sendable {
             
             group.notify(queue: .main) {
                 Task { @MainActor in
-                    self.workouts = self.newWorkouts.sorted { $0.dateWorkout < $1.dateWorkout }
+                    // 🔹 Fazer merge com dados extras do SwiftData
+                    let enrichedWorkouts = await self.enrichWorkoutsWithExtras(self.newWorkouts)
+                    
+                    self.workouts = enrichedWorkouts.sorted { $0.dateWorkout < $1.dateWorkout }
                     self.totalWorkoutsCount = self.workouts.count
                     self.updateWorkoutsByDay(filtered: self.workouts)
                 }

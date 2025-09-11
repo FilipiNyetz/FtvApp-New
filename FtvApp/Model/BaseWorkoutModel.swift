@@ -12,7 +12,23 @@ struct PathPoint: Codable {
     let y: Double
 }
 
-// MARK: - Pulos
+// MARK: - WorkoutExtras - Dados extras do workout (pulos e trajeto)
+@Model
+final class WorkoutExtras: @unchecked Sendable {
+    @Attribute(.unique) var workoutID: String   // UUID string do HKWorkout
+    var higherJump: Double?                     // maior pulo do treino
+    var pointPath: [[Double]]?                  // trajeto como array de pares [x,y]
+    var updatedAt: Date
+    
+    init(workoutID: String, higherJump: Double? = nil, pointPath: [[Double]]? = nil) {
+        self.workoutID = workoutID
+        self.higherJump = higherJump
+        self.pointPath = pointPath
+        self.updatedAt = Date()
+    }
+}
+
+// MARK: - Pulos (mantido para compatibilidade e referência histórica)
 @Model
 final class JumpEntity {
     @Attribute(.unique) var id: UUID
@@ -28,7 +44,7 @@ final class JumpEntity {
     }
 }
 
-// MARK: - Trajetória do workout (pontos)
+// MARK: - Trajetória do workout (mantido para compatibilidade)
 @Model
 final class WorkoutPathEntity {
     @Attribute(.unique) var id: UUID
