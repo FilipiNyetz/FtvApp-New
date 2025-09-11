@@ -30,7 +30,7 @@ struct HeatmapResultView: View {
 
             // Overlay do heatmap (ocupa o mesmo frame do fundo)
             HeatmapView(
-                points: latestPoints,
+                points: Workout.pointsPath.map { CGPoint(x: $0[0], y: $0[1]) },
 //                worldBounds: debugSquare,
                 rotationDegrees: 220
             )
