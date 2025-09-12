@@ -1,11 +1,11 @@
 {
   "images" : [
     {
-      "filename" : "mapacalor.svg",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
+      "filename" : "homeQuadra.png",
       "idiom" : "universal",
       "scale" : "2x"
     },

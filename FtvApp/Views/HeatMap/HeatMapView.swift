@@ -108,8 +108,8 @@ struct HeatmapView: View {
                         let originRect = CGRect(
                             x: mappedOrigin.x - 5,
                             y: mappedOrigin.y - 5,
-                            width: 50,
-                            height: 50
+                            width: 10,
+                            height: 10
                         )  // Um pequeno quadrado ou círculo
 
                         layer.fill(
@@ -150,7 +150,7 @@ struct HeatmapView: View {
         let normalizedY = (point.y - worldBounds.minY) / worldBounds.height
 
         // Mapeia para o tamanho do canvas
-        var canvasX = normalizedX * canvasSize.width
+        let canvasX = normalizedX * canvasSize.width
         var canvasY = normalizedY * canvasSize.height
 
         // Inverte o Y se o seu sistema de coordenadas do mundo for de baixo para cima
