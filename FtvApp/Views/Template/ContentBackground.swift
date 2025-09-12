@@ -100,7 +100,7 @@ struct ContentBackground: View {
                     GeneratedHeatmapImageView(
                         workout: workout
                     )
-                    .frame(width: 340, height: 50)
+                    .frame(width: 340, height: 200)
                     .blur(radius: 4)
                     .padding(.trailing, -20)
                 } else {
@@ -112,13 +112,13 @@ struct ContentBackground: View {
                         Image(uiImage: heatmapImage)
                             .resizable()
                             .aspectRatio(contentMode: .fill)
-                            .frame(width: 340, height: 50)
+                            .frame(width: 340, height: 200)
                             .blur(radius: 4)
                             .padding(.trailing, -20)
                     } else {
                         Rectangle()
                             .fill(Color.clear)
-                            .frame(width: 340, height: 50)
+                            .frame(width: 340, height: 200)
                             .padding(.trailing, -20)
                     }
                 }

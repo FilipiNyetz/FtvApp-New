@@ -126,29 +126,41 @@ struct TemplateBodyView: View {
                     .frame(width: 170, height: 200)
                     .aspectRatio(contentMode: .fill)
 
-                // 2. O heatmap vem por cima, ocupando o mesmo espaço
-                if isPreview {
-                    // Para preview, usa a view assíncrona normal
-                    GeneratedHeatmapImageView(
-                        workout: workout
-                    )
-                    .frame(width: 100, height: 160)
-                } else {
-                    // Para exportação/cópia, renderiza diretamente a imagem
-                    if let heatmapImage = HeatmapImageGenerator.shared.ensureImageExists(
-                        for: workout, 
-                        size: CGSize(width: 160, height: 160)
-                    ) {
-                        Image(uiImage: heatmapImage)
-                            .resizable()
-                            .aspectRatio(contentMode: .fill)
-                            .frame(width: 100, height: 160)
+                // 2. Container com padding simétrico para o heatmap
+                VStack {
+                    Spacer() // Espaçamento superior
+                    
+                    // O heatmap centralizado com espaçamento proporcional
+                    if isPreview {
+                        // Para preview, usa a view assíncrona normal
+                        GeneratedHeatmapImageView(
+                            workout: workout
+                        )
+                        .frame(width: 130, height: 140)
+                        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
                     } else {
-                        Rectangle()
-                            .fill(Color.clear)
-                            .frame(width: 100, height: 160)
+                        // Para exportação/cópia, renderiza diretamente a imagem
+                        if let heatmapImage = HeatmapImageGenerator.shared.ensureImageExists(
+                            for: workout, 
+                            size: CGSize(width: 160, height: 160)
+                        ) {
+                            Image(uiImage: heatmapImage)
+                                .resizable()
+                                .aspectRatio(contentMode: .fill)
+                                .frame(width: 130, height: 140)
+                                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
+                        } else {
+                            Rectangle()
+                                .fill(Color.clear)
+                                .frame(width: 130, height: 140)
+                                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
+                        }
                     }
+                    
+                    Spacer() // Espaçamento inferior (simétrico ao superior)
                 }
+                .frame(width: 170, height: 200) // Mesmo tamanho do container de fundo
+                .padding(.vertical, 20) // Padding simétrico de 20pt no topo e base
             }
             .cornerRadius(12)
             .clipped()

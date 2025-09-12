@@ -89,7 +89,7 @@ struct HeatmapView: View {
 
                             layer.fill(
                                 Path(rect),
-                                with: .color(color.opacity(0.7))
+                                with: .color(color.opacity(1.0))
                             )
                         }
                     }
@@ -134,11 +134,11 @@ struct HeatmapView: View {
         // Esta função já tem um print(t), o que é ótimo para depuração.
         print("Calculando cor para intensidade: \(t)")
         switch t {
-        case ..<0.25: return .blue
-        case ..<0.4: return .green
-        case ..<0.6: return .yellow
-        case ..<0.75: return .orange
-        default: return .red
+        case ..<0.25: return Color(red: 0.0, green: 0.4, blue: 1.0, opacity: 1.0) // Azul sólido
+        case ..<0.4: return Color(red: 0.0, green: 0.8, blue: 0.2, opacity: 1.0) // Verde sólido
+        case ..<0.6: return Color(red: 1.0, green: 0.9, blue: 0.0, opacity: 1.0) // Amarelo sólido
+        case ..<0.75: return Color(red: 1.0, green: 0.5, blue: 0.0, opacity: 1.0) // Laranja sólido
+        default: return Color(red: 1.0, green: 0.1, blue: 0.1, opacity: 1.0) // Vermelho sólido
         }
     }
     
