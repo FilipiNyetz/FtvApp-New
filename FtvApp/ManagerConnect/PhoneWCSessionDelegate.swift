@@ -114,6 +114,8 @@ class PhoneWCSessionDelegate: NSObject, WCSessionDelegate,ObservableObject {
                     print("❌ Erro ao salvar pointPath: \(error)")
                 }
             }
+            print("🔄 Solicitando atualização dos workouts no HealthManager...")
+                self.healthManager?.fetchAllWorkouts()
         }
     }
 

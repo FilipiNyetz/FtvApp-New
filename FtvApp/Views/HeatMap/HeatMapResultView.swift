@@ -11,7 +11,7 @@ import Combine
 // Contêiner que assina os pontos vindos do Watch e renderiza o Heatmap por cima de um fundo.
 struct HeatmapResultView: View {
     
-    @State var Workout: Workout
+    let Workout: Workout
     
     @State private var latestPoints: [CGPoint] = []          // pontos recebidos
     @State private var subscription: AnyCancellable? = nil   // assinatura Combine
