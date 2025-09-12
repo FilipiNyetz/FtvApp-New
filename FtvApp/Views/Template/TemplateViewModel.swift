@@ -15,6 +15,7 @@ class TemplateViewModel: ObservableObject {
     @Published var showShare = false
     @Published var renderedImage: UIImage?
     @Published var isPreview = true
+    @Published var isGeneratingImage = false
 
     func exportTemplate(
         workout: Workout,
@@ -23,24 +24,36 @@ class TemplateViewModel: ObservableObject {
         totalWorkouts: Int,
         currentStreak: Int
     ) {
+        Task {
+            isGeneratingImage = true
+            
+            // 1. Primeiro, garante que a imagem do heatmap está no cache
+            await preGenerateHeatmapImage(for: workout)
+            
+            // 2. Agora renderiza o template diretamente
+            let templateView = TemplateBodyView(
+                workout: workout,
+                withBackground: withBackground,
+                badgeImage: badgeImage,
+                totalWorkouts: totalWorkouts,
+                currentStreak: currentStreak,
+                isPreview: false
+            )
+            .frame(width: 360, height: 700)
 
-        let templateView = TemplateBodyView(
-            workout: workout,
-            withBackground: withBackground,
-            badgeImage: badgeImage,
-            totalWorkouts: totalWorkouts,
-            currentStreak: currentStreak,
-            isPreview: false
-        )
-        .frame(width: 360, height: 700)  // define o tamanho da imagem desejado
+            let renderer = ImageRenderer(content: templateView)
+            renderer.scale = 3.0
+            renderer.isOpaque = withBackground
 
-        let renderer = ImageRenderer(content: templateView)
-        renderer.scale = 3.0  // você pode ajustar para 2 ou 3 para maior resolução
-        renderer.isOpaque = withBackground
-
-        if let uiImage = renderer.uiImage {
-            self.renderedImage = uiImage
-            self.showShare = true
+            if let uiImage = renderer.uiImage {
+                self.renderedImage = uiImage
+                self.showShare = true
+                print("✅ Template exportado com heatmap incluído")
+            } else {
+                print("❌ Falha ao gerar template para compartilhamento")
+            }
+            
+            isGeneratingImage = false
         }
     }
 
@@ -51,6 +64,12 @@ class TemplateViewModel: ObservableObject {
         currentStreak: Int
     ) {
         Task {
+            isGeneratingImage = true
+            
+            // 1. Primeiro, garante que a imagem do heatmap está no cache
+            await preGenerateHeatmapImage(for: workout)
+            
+            // 2. Agora renderiza o template diretamente
             let templateView = TemplateBodyView(
                 workout: workout,
                 withBackground: false,
@@ -61,13 +80,29 @@ class TemplateViewModel: ObservableObject {
             )
 
             let renderer = ImageRenderer(content: templateView)
-            renderer.scale = UIScreen.main.scale
+            renderer.scale = 3.0  // Maior resolução para cópia
             renderer.isOpaque = false
 
             if let uiImage = renderer.uiImage {
                 UIPasteboard.general.image = uiImage
                 UIImpactFeedbackGenerator(style: .medium).impactOccurred()
+                print("✅ Template copiado para clipboard com heatmap incluído")
+            } else {
+                print("❌ Falha ao gerar template para clipboard")
             }
+            
+            isGeneratingImage = false
         }
+    }
+    
+    // MARK: - Helper Methods
+    
+    private func preGenerateHeatmapImage(for workout: Workout) async {
+        // Força a geração da imagem do heatmap no cache
+        let renderSize = CGSize(width: 160, height: 160)
+        
+        // Garante que a imagem está no cache antes de continuar
+        let _ = HeatmapImageGenerator.shared.ensureImageExists(for: workout, size: renderSize)
+        print("✅ Imagem do heatmap garantida no cache para o template")
     }
 }

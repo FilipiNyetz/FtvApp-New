@@ -50,6 +50,7 @@ struct TemplateBodyView: View {
                     badgeImage: badgeImage,
                     totalWorkouts: totalWorkouts,
                     currentStreak: currentStreak,
+                    isPreview: isPreview,
                     workout: workout
                 )
             } else {
@@ -126,13 +127,28 @@ struct TemplateBodyView: View {
                     .aspectRatio(contentMode: .fill)
 
                 // 2. O heatmap vem por cima, ocupando o mesmo espaço
-                GeneratedHeatmapImageView(
-                    workout: workout
-                )
-                  //  .drawingGroup() // Garante a qualidade da renderização
-                    .frame(width: 100 ,height: 160)
-                    //.opacity(0.7)
-                    //.blur(radius: 4)
+                if isPreview {
+                    // Para preview, usa a view assíncrona normal
+                    GeneratedHeatmapImageView(
+                        workout: workout
+                    )
+                    .frame(width: 100, height: 160)
+                } else {
+                    // Para exportação/cópia, renderiza diretamente a imagem
+                    if let heatmapImage = HeatmapImageGenerator.shared.ensureImageExists(
+                        for: workout, 
+                        size: CGSize(width: 160, height: 160)
+                    ) {
+                        Image(uiImage: heatmapImage)
+                            .resizable()
+                            .aspectRatio(contentMode: .fill)
+                            .frame(width: 100, height: 160)
+                    } else {
+                        Rectangle()
+                            .fill(Color.clear)
+                            .frame(width: 100, height: 160)
+                    }
+                }
             }
             .cornerRadius(12)
             .clipped()

@@ -39,8 +39,13 @@ struct GeneratedHeatmapImageView: View {
     }
     
     private func generateImage() {
-        Task {
+        Task { @MainActor in
             self.heatmapImage = HeatmapImageGenerator.shared.image(for: workout, size: renderSize)
         }
+    }
+    
+    // Método público para força a geração da imagem (usado pelos templates)
+    func forceImageGeneration() {
+        self.heatmapImage = HeatmapImageGenerator.shared.image(for: workout, size: renderSize)
     }
 }

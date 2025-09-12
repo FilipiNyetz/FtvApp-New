@@ -49,4 +49,17 @@ final class HeatmapImageGenerator {
         print("✅ Imagem do heatmap renderizada e armazenada no cache.")
         return uiImage
     }
+    
+    // Método que força a geração e aguarda o resultado
+    func ensureImageExists(for workout: Workout, size: CGSize) -> UIImage? {
+        // Primeira tentativa - verificar cache
+        let cacheKey = workout.id.uuidString as NSString
+        if let cachedImage = cache.object(forKey: cacheKey) {
+            return cachedImage
+        }
+        
+        // Se não existe, gera de forma síncrona
+        print("🔄 Forçando geração síncrona da imagem do heatmap...")
+        return image(for: workout, size: size)
+    }
 }

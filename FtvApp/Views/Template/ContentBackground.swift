@@ -14,6 +14,7 @@ struct ContentBackground: View {
     let badgeImage: String
     let totalWorkouts: Int
     let currentStreak: Int
+    var isPreview: Bool = true
 
     var timeFormatter: DateComponentsFormatter {
         let formatter = DateComponentsFormatter()
@@ -94,14 +95,33 @@ struct ContentBackground: View {
                     .aspectRatio(contentMode: .fill)
 
                 // 2. O heatmap vem por cima, ocupando o mesmo espaço
-                GeneratedHeatmapImageView(
-                    workout: workout
-                )
-                  //  .drawingGroup() // Garante a qualidade da renderização
-                    .frame(width: 340 ,height: 50)
-//                    .opacity(0.7)
+                if isPreview {
+                    // Para preview, usa a view assíncrona normal
+                    GeneratedHeatmapImageView(
+                        workout: workout
+                    )
+                    .frame(width: 340, height: 50)
                     .blur(radius: 4)
                     .padding(.trailing, -20)
+                } else {
+                    // Para exportação/compartilhamento, renderiza diretamente a imagem
+                    if let heatmapImage = HeatmapImageGenerator.shared.ensureImageExists(
+                        for: workout, 
+                        size: CGSize(width: 160, height: 160)
+                    ) {
+                        Image(uiImage: heatmapImage)
+                            .resizable()
+                            .aspectRatio(contentMode: .fill)
+                            .frame(width: 340, height: 50)
+                            .blur(radius: 4)
+                            .padding(.trailing, -20)
+                    } else {
+                        Rectangle()
+                            .fill(Color.clear)
+                            .frame(width: 340, height: 50)
+                            .padding(.trailing, -20)
+                    }
+                }
             }
            // .frame(height: 250) // A altura do container do mapa de calor
             .cornerRadius(12)

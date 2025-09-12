@@ -54,19 +54,29 @@ struct HeaderTemplate: View {
                         .fill(Color.colorPrimal)
                         .frame(width: 54, height: 54)
                         .overlay(
-                            Image(systemName: selectedBackground == .comFundo ? "square.and.arrow.up" : "doc.on.doc")
-                                .font(.title2.weight(.semibold))
-                                .foregroundStyle(.black)
-                                .padding()
-                            
+                            Group {
+                                if viewModel.isGeneratingImage {
+                                    ProgressView()
+                                        .progressViewStyle(CircularProgressViewStyle(tint: .black))
+                                        .scaleEffect(0.8)
+                                } else {
+                                    Image(systemName: selectedBackground == .comFundo ? "square.and.arrow.up" : "doc.on.doc")
+                                        .font(.title2.weight(.semibold))
+                                        .foregroundStyle(.black)
+                                }
+                            }
+                            .padding()
                         )
                         .padding()
-                    
                 }
-                
                 .contentShape(Circle())
             }
-            .accessibilityLabel(selectedBackground == .comFundo ? "Compartilhar" : "Copiar")
+            .disabled(viewModel.isGeneratingImage)
+            .accessibilityLabel(
+                viewModel.isGeneratingImage 
+                    ? "Gerando imagem..." 
+                    : (selectedBackground == .comFundo ? "Compartilhar" : "Copiar")
+            )
             
         }
         .padding(.top, -12)
