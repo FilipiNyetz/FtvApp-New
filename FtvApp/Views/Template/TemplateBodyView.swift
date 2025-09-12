@@ -117,29 +117,25 @@ struct TemplateBodyView: View {
                 .monospacedDigit()
                 .foregroundStyle(.white)
             }
+            // MARK: - Heatmap Display
+            ZStack {
+                // 1. A imagem da meia quadra como fundo
+                Image("mapaTemplateSemfundo") // <-- Sua nova imagem de meia quadra
+                    .resizable()
+                    .frame(width: 170, height: 200)
+                    .aspectRatio(contentMode: .fill)
 
-            //                 //    Heatmap Pequeno
-            //                    VStack(spacing: 20) {
-            //                        RoundedRectangle(cornerRadius: 12)
-            //                            .stroke(Color.white.opacity(0.3), lineWidth: 2)
-            //                            .frame(width: 120, height: 160)
-            //                            .overlay(
-            //                                // Placeholder para heatmap futuro
-            //                                VStack(spacing: 8) {
-            //                                    Image(systemName: "chart.xyaxis.line")
-            //                                        .font(.title2)
-            //                                        .foregroundStyle(
-            //                                            Color.white.opacity(0.4)
-            //                                        )
-            //
-            //                                    Text("Heatmap")
-            //                                        .font(.caption2)
-            //                                        .foregroundStyle(
-            //                                            Color.white.opacity(0.4)
-            //                                        )
-            //                                }
-            //                            )
-            //                    }
+                // 2. O heatmap vem por cima, ocupando o mesmo espaço
+                GeneratedHeatmapImageView(
+                    workout: workout
+                )
+                  //  .drawingGroup() // Garante a qualidade da renderização
+                    .frame(width: 100 ,height: 160)
+                    //.opacity(0.7)
+                    //.blur(radius: 4)
+            }
+            .cornerRadius(12)
+            .clipped()
 
             // Nome do App
             VStack(spacing: 8) {

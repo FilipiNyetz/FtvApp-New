@@ -84,14 +84,29 @@ struct ContentBackground: View {
                 )
                 .frame(maxWidth: .infinity)
             }
+            
+            // MARK: - Heatmap Display
+            ZStack {
+                // 1. A imagem da meia quadra como fundo
+                Image("mapaTemplateFundo") // <-- Sua nova imagem de meia quadra
+                    .resizable()
+                    .frame(width: 380, height: 300)
+                    .aspectRatio(contentMode: .fill)
 
-            // Logo centralizada no heatmap (AUMENTADA)
-            Image("logo7S")
-                .resizable()
-                .scaledToFit()
-                .frame(width: 180, height: 180)
-                .opacity(0.8)
-                .padding(50)
+                // 2. O heatmap vem por cima, ocupando o mesmo espaço
+                GeneratedHeatmapImageView(
+                    workout: workout
+                )
+                  //  .drawingGroup() // Garante a qualidade da renderização
+                    .frame(width: 340 ,height: 50)
+//                    .opacity(0.7)
+                    .blur(radius: 4)
+                    .padding(.trailing, -20)
+            }
+           // .frame(height: 250) // A altura do container do mapa de calor
+            .cornerRadius(12)
+            .clipped()
+            .padding(.trailing, 20)// Adiciona um respiro nas laterais do container
 
             // Bottom Metrics
             HStack {

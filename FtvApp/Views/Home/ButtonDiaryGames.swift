@@ -21,37 +21,41 @@ struct ButtonDiaryGames: View {
 
                     // Garante que o índice selecionado é válido
                     if selectedIndex < workoutsDoDia.count {
+                                            ZStack {
+                                                Image("mapacalor") // Fundo da quadra
+                                                    .resizable()
+                                                    .aspectRatio(contentMode: .fill)
 
-                        ZStack {
-                            Image("mapacalor")
-                                .resizable()
-                                .aspectRatio(contentMode: .fill)
+                                                GeometryReader { proxy in
+                                                    HStack(spacing: 0) {
+                                                        Spacer() // Empurra para a direita
 
-                            GeometryReader { proxy in
-                                HStack(spacing: 0) {
+                                                        GeneratedHeatmapImageView(workout: workoutsDoDia[selectedIndex])
+                                                            .offset(y: 10) // Mantenha offsets e frames para posicionamento
+                                                            .frame(width: proxy.size.width * 0.5) // Largura da meia quadra
+                                                            // A altura será determinada pelo aspectRatio(contentMode: .fill)
+                                                            // da imagem dentro de GeneratedHeatmapImageView,
+                                                            // mas você pode forçar uma altura se a imagem gerada tiver a proporção certa.
+                                                            .frame(height: 180) // Mantenha a altura que você deseja para a região do heatmap
+                                                            .opacity(0.7)
+                                                            .blur(radius: 4)
+                                                            // REMOVA ESTES MODIFICADORES, ELES JÁ FORAM APLICADOS NA GERAÇÃO DA IMAGEM
+                                                            // .rotationEffect(.degrees(270))
+                                                            // .scaleEffect(x: -1, y: 1)
+                                                    }
+                                                }
+                                            }
+                                            .frame(height: 200)
+                                            .cornerRadius(12)
+                                            .clipped()
 
-                                    Spacer()
-
-                                    HeatmapResultView(
-                                        Workout: workoutsDoDia[selectedIndex]
-                                    )
-                                    .offset(y: 10)
-                                    .frame(width: proxy.size.width / 2)
-                                    .frame(height: 180)
-                                }
-                            }
-                        }
-                        .frame(height: 200)
-                        .cornerRadius(12)
-                        .clipped()  // 5. ESSENCIAL: Corta qualquer coisa (como o blur) que vaze para fora do frame
-
-                        WorkoutCardView(
-                            workouts: workoutsDoDia,
-                            selectedIndex: selectedIndex,
-                            userManager: userManager,
-                            healthManager: manager,
-                            totalWorkouts: totalWorkouts
-                        )
+                                            WorkoutCardView(
+                                                workouts: workoutsDoDia,
+                                                selectedIndex: selectedIndex,
+                                                userManager: userManager,
+                                                healthManager: manager,
+                                                totalWorkouts: totalWorkouts
+                                            )
                     }
                 }
             } else {
