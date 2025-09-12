@@ -5,49 +5,41 @@
 //  Created by Joao pedro Leonel on 29/08/25.
 //
 
-import SwiftUI
 import Combine
+import SwiftUI
 
 // Contêiner que assina os pontos vindos do Watch e renderiza o Heatmap por cima de um fundo.
 struct HeatmapResultView: View {
     
     let Workout: Workout
     
-    @State private var latestPoints: [CGPoint] = []          // pontos recebidos
-    @State private var subscription: AnyCancellable? = nil   // assinatura Combine
-
+    @State private var latestPoints: [CGPoint] = []  // pontos recebidos
+    @State private var subscription: AnyCancellable? = nil  // assinatura Combine
+    
     // === BOUNDS DE DEBUG (12x12m centrado no zero) ===
     // Troque depois por meia-quadra se preferir:
     // let halfCourt = CGRect(x: -4, y: 0, width: 8, height: 8)
     private let debugSquare = CGRect(x: -6, y: -6, width: 12, height: 12)
-
+    
     var body: some View {
-        ZStack {
-            // Fundo opcional (troque "mapacalor" pelo nome do seu asset ou remova)
-//            Image("mapacalor")
-//                .resizable()
-//                .scaledToFit()
-
-            // Overlay do heatmap (ocupa o mesmo frame do fundo)
-            HeatmapView(
-                points: Workout.pointsPath.map { CGPoint(x: $0[0], y: $0[1]) },
-//                worldBounds: debugSquare,
-                rotationDegrees: 220
-            )
-            .allowsHitTesting(false)
-        }
-        // Ajuste o frame conforme seu layout / imagem
-        .frame(width: 280, height: 280)
+        // Overlay do heatmap (ocupa o mesmo frame do fundo)
+        HeatmapView(
+            points: Workout.pointsPath.map { CGPoint(x: $0[0], y: $0[1]) },
+            rotationDegrees: 220, originPoint: Workout.pointsPath.first.map { CGPoint(x: $0[0], y: $0[1]) }
+        )
+        .allowsHitTesting(false)
         .onAppear {
             // Assina o publisher do WatchConnectivityManager
-//            subscription = WatchConnectivityManager.shared.workoutDataPublisher
-//                .receive(on: RunLoop.main)
-//                .sink { pts in
-//                    print("iPhone recebeu \(pts.count) pontos. Amostra:", pts.prefix(5))
-//                    latestPoints = pts
-//                }
-            latestPoints = Workout.pointsPath.map { CGPoint(x: $0[0], y: $0[1]) }
-
+            //            subscription = WatchConnectivityManager.shared.workoutDataPublisher
+            //                .receive(on: RunLoop.main)
+            //                .sink { pts in
+            //                    print("iPhone recebeu \(pts.count) pontos. Amostra:", pts.prefix(5))
+            //                    latestPoints = pts
+            //                }
+            latestPoints = Workout.pointsPath.map {
+                CGPoint(x: $0[0], y: $0[1])
+            }
+            
         }
         .onDisappear {
             subscription?.cancel()
@@ -55,7 +47,3 @@ struct HeatmapResultView: View {
         }
     }
 }
-
-//#Preview {
-//    HeatmapResultView()
-//}

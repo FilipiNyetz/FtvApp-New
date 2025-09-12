@@ -6,32 +6,51 @@ struct ButtonDiaryGames: View {
     @Binding var selectedDate: Date
     //@State private var opcaoDeTreinoParaMostrarCard: Int = 0
     let totalWorkouts: Int
-    @Binding var selectedIndex: Int 
-    
+    @Binding var selectedIndex: Int
+
     var body: some View {
         Group {
-            if let workoutsDoDia = manager.workoutsByDay[Calendar.current.startOfDay(for: selectedDate)] {
+            if let workoutsDoDia = manager.workoutsByDay[
+                Calendar.current.startOfDay(for: selectedDate)
+            ], !workoutsDoDia.isEmpty {  // Adicionado !workoutsDoDia.isEmpty para segurança
                 VStack {
-                    WorkoutMenu(workouts: workoutsDoDia, selectedIndex: $selectedIndex)
-                    //WorkoutMenu(workouts: workoutsDoDia, selectedIndex: $opcaoDeTreinoParaMostrarCard)]
-                    Text("\(workoutsDoDia[selectedIndex].pointsPath.count)")
-                    Image("mapacalor")
-                    HeatmapResultView(Workout: workoutsDoDia[selectedIndex])
-                   
-                    WorkoutCardView(
-                                           workouts: workoutsDoDia,
-                                           selectedIndex: selectedIndex,
-                                           userManager: userManager,
-                                           healthManager: manager,
-                                           totalWorkouts: totalWorkouts
-                                       )
-//                    WorkoutCardView(
-//                        workouts: workoutsDoDia,
-//                        selectedIndex: opcaoDeTreinoParaMostrarCard,
-//                        userManager: userManager,
-//                        healthManager: manager,
-//                        totalWorkouts: totalWorkouts
-//                    )
+                    WorkoutMenu(
+                        workouts: workoutsDoDia,
+                        selectedIndex: $selectedIndex
+                    )
+
+                    // Garante que o índice selecionado é válido
+                    if selectedIndex < workoutsDoDia.count {
+
+                        ZStack {
+                            Image("mapacalor")
+                                .resizable()
+                                .aspectRatio(contentMode: .fill)
+
+                            GeometryReader { proxy in
+                                HStack(spacing: 0) {
+
+                                    Spacer()
+
+                                    HeatmapResultView(
+                                        Workout: workoutsDoDia[selectedIndex]
+                                    )
+                                    .frame(width: proxy.size.width / 2)
+                                }
+                            }
+                        }
+                        .frame(height: 200)
+                        .cornerRadius(12)
+                        .clipped()  // 5. ESSENCIAL: Corta qualquer coisa (como o blur) que vaze para fora do frame
+
+                        WorkoutCardView(
+                            workouts: workoutsDoDia,
+                            selectedIndex: selectedIndex,
+                            userManager: userManager,
+                            healthManager: manager,
+                            totalWorkouts: totalWorkouts
+                        )
+                    }
                 }
             } else {
                 Text("Nenhum treino nesse dia")
@@ -40,11 +59,11 @@ struct ButtonDiaryGames: View {
             }
         }
         .onChange(of: selectedDate) {
-                    selectedIndex = 0
-                }
-//        .onChange(of: selectedDate) { _ in
-//            opcaoDeTreinoParaMostrarCard = 0
-//        }
+            selectedIndex = 0
+        }
+        //        .onChange(of: selectedDate) { _ in
+        //            opcaoDeTreinoParaMostrarCard = 0
+        //        }
     }
 }
 
@@ -52,10 +71,12 @@ struct ButtonDiaryGames: View {
 struct WorkoutMenu: View {
     let workouts: [Workout]
     @Binding var selectedIndex: Int
-    
+
     var body: some View {
         Menu {
-            ForEach(Array(workouts.enumerated()), id: \.element.id) { index, _ in
+            ForEach(Array(workouts.enumerated()), id: \.element.id) {
+                index,
+                _ in
                 Button("Treino \(index + 1)") {
                     selectedIndex = index
                 }
@@ -84,10 +105,15 @@ struct WorkoutCardView: View {
     @ObservedObject var userManager: UserManager
     @ObservedObject var healthManager: HealthManager
     let totalWorkouts: Int
-    
+
     var body: some View {
         if selectedIndex < workouts.count {
-            WorkoutStatsCard(userManager: userManager, healthManager: healthManager, workout: workouts[selectedIndex], totalWorkouts: totalWorkouts)
+            WorkoutStatsCard(
+                userManager: userManager,
+                healthManager: healthManager,
+                workout: workouts[selectedIndex],
+                totalWorkouts: totalWorkouts
+            )
         }
     }
 }
