@@ -27,7 +27,7 @@ func queryFrequenciaCardiaca(
         quantitySamplePredicate: predicate,
         options: .discreteAverage
     ) { _, result, error in
-        if let error = error {
+        if error != nil {
 //            print("Erro ao buscar frequência cardíaca: \(error.localizedDescription)")
             completionHandler(0)
             return

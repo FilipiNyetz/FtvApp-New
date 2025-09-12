@@ -12,8 +12,8 @@ struct TemplateBodyView: View {
     let workout: Workout
     let withBackground: Bool
     var isPreview: Bool = true
-    let card = Color.white.opacity(0.06)
-    let stroke = Color.white.opacity(0.16)
+//    let card = Color.white.opacity(1.0)
+//    let stroke = Color.white.opacity(1.0)
 
     var badgeImage: String
     let totalWorkouts: Int
@@ -65,22 +65,25 @@ struct TemplateBodyView: View {
         // MARK: Layout estilo Sem Fundo
         VStack(spacing: 30) {
             // Altura Máxima
-            //                    VStack(spacing: 8) {
-            //                        Text("Altura máx")
-            //                            .font(.callout)
-            //                            .fontWeight(.bold)
-            //                            .foregroundStyle(.white)
-            //                        HStack(alignment: .firstTextBaseline, spacing: 4) {
-            //                            Text("40")
-            //                                .font(.largeTitle)
-            //                                .fontWeight(.heavy)
-            //                                .foregroundStyle(.white)
-            //                            Text("cm")
-            //                                .font(.title2)
-            //                                .fontWeight(.medium)
-            //                                .foregroundStyle(.white.opacity(0.6))
-            //                        }
-            //                    }
+            if let jump = workout.higherJump, jump != 0 {
+                VStack(spacing: 8) {
+                    Text("Salto Max")
+                        .font(.callout)
+                        .fontWeight(.bold)
+                        .foregroundStyle(.white)
+                    HStack(alignment: .firstTextBaseline, spacing: 4) {
+                        Text("\(jump)")
+                            .font(.largeTitle)
+                            .fontWeight(.heavy)
+                            .foregroundStyle(.white)
+                        Text("cm")
+                            .font(.title2)
+                            .fontWeight(.medium)
+                            .foregroundStyle(.white)
+                            .padding(.leading, 3)
+                    }
+                }
+            }
 
             // Calorias
             VStack(spacing: 8) {

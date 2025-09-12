@@ -37,7 +37,7 @@ struct ButtonDiaryGames: View {
                                                             // da imagem dentro de GeneratedHeatmapImageView,
                                                             // mas você pode forçar uma altura se a imagem gerada tiver a proporção certa.
                                                             .frame(height: 180) // Mantenha a altura que você deseja para a região do heatmap
-                                                            .opacity(0.7)
+                                                            .opacity(1.0)
                                                             .blur(radius: 4)
                                                             // REMOVA ESTES MODIFICADORES, ELES JÁ FORAM APLICADOS NA GERAÇÃO DA IMAGEM
                                                             // .rotationEffect(.degrees(270))
