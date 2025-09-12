@@ -237,6 +237,7 @@
       }
     },
     "ALTURA" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -2121,6 +2122,9 @@
           }
         }
       }
+    },
+    "SALTO" : {
+
     },
     "Salto Max" : {
       "localizations" : {
