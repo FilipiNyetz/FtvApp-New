@@ -48,10 +48,10 @@ struct WorkoutStatsCard: View {
                 )
                 Divider().frame(height: 40).background(Color.white.opacity(0.4))
                 statItem(
-                    title: Text("ALTURA"),
+                    title: Text("SALTO"),
                     value: "\(Double(workout.higherJump!))",
                     unit: "cm",
-                    icon: "flame.fill"
+                    icon: "arrow.up.and.down"
                 )
             }
             

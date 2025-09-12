@@ -89,7 +89,7 @@ struct HeatmapView: View {
 
                             layer.fill(
                                 Path(rect),
-                                with: .color(color.opacity(0.7))
+                                with: .color(color.opacity(1.0))
                             )
                         }
                     }

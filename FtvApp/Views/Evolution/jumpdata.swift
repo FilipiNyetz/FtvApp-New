@@ -63,7 +63,7 @@ struct jumpdata: View {
         case "calories":  return "kcal"
         case "distance":  return "m"      // ajuste p/ "km" se preferir
         case "heartRate": return "bpm"
-        case "height":    return "m"
+        case "height":    return "cm"
         default:          return ""
         }
     }
@@ -73,7 +73,7 @@ struct jumpdata: View {
         case "heartRate": return (String(format: "%.0f", max), String(format: "%.0f", min))
         case "calories":  return (String(format: "%.0f", max), String(format: "%.0f", min))
         case "distance":  return (String(format: "%.0f", max), String(format: "%.0f", min))
-        case "height":    return (String(format: "%.2f", max), String(format: "%.2f", min))
+        case "height":    return (String(format: "%.0f", max), String(format: "%.0f", min))
         default:          return (String(format: "%.0f", max), String(format: "%.0f", min))
         }
     }

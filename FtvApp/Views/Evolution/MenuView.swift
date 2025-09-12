@@ -21,7 +21,7 @@ struct MenuView: View {
         Metric(id: "heartRate", name: NSLocalizedString("Batimento", comment: ""), icon: "heart.fill"),
         Metric(id: "calories", name: NSLocalizedString("Caloria", comment: ""), icon: "flame.fill"),
         Metric(id: "distance", name: NSLocalizedString("Distância", comment: ""), icon: "location.fill"),
-        Metric(id: "height", name: NSLocalizedString("Altura", comment: ""), icon: "location.fill")
+        Metric(id: "height", name: NSLocalizedString("Salto", comment: ""), icon: "arrow.up.and.down")
     ]
     
     private var currentMetric: Metric? {

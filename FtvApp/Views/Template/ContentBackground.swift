@@ -8,8 +8,8 @@
 import SwiftUI
 
 struct ContentBackground: View {
-    let card = Color.white.opacity(0.06)
-    let stroke = Color.white.opacity(0.16)
+    //    let card = Color.white.opacity(1.0)
+    //    let stroke = Color.white.opacity(1.0)
 
     let badgeImage: String
     let totalWorkouts: Int
@@ -85,11 +85,11 @@ struct ContentBackground: View {
                 )
                 .frame(maxWidth: .infinity)
             }
-            
+
             // MARK: - Heatmap Display
             ZStack {
                 // 1. A imagem da meia quadra como fundo
-                Image("mapaTemplateFundo") // <-- Sua nova imagem de meia quadra
+                Image("mapaTemplateFundo")  // <-- Sua nova imagem de meia quadra
                     .resizable()
                     .frame(width: 380, height: 300)
                     .aspectRatio(contentMode: .fill)
@@ -105,10 +105,12 @@ struct ContentBackground: View {
                     .padding(.trailing, -20)
                 } else {
                     // Para exportação/compartilhamento, renderiza diretamente a imagem
-                    if let heatmapImage = HeatmapImageGenerator.shared.ensureImageExists(
-                        for: workout, 
-                        size: CGSize(width: 160, height: 160)
-                    ) {
+                    if let heatmapImage = HeatmapImageGenerator.shared
+                        .ensureImageExists(
+                            for: workout,
+                            size: CGSize(width: 160, height: 160)
+                        )
+                    {
                         Image(uiImage: heatmapImage)
                             .resizable()
                             .aspectRatio(contentMode: .fill)
@@ -123,10 +125,10 @@ struct ContentBackground: View {
                     }
                 }
             }
-           // .frame(height: 250) // A altura do container do mapa de calor
+            // .frame(height: 250) // A altura do container do mapa de calor
             .cornerRadius(12)
             .clipped()
-            .padding(.trailing, 20)// Adiciona um respiro nas laterais do container
+            .padding(.trailing, 20)  // Adiciona um respiro nas laterais do container
 
             // Bottom Metrics
             HStack {
@@ -140,7 +142,19 @@ struct ContentBackground: View {
 
                 )
                 .frame(maxWidth: .infinity)
-                
+
+                if let jump = workout.higherJump, jump != 0 {
+                    metric(
+                        icon: "arrow.up.and.down",
+                        // Agora você usa 'jump', que é um Double garantido (não opcional)
+                        value: "\(jump)",
+                        unit: "cm",
+                        label: "SALTO MAX",
+                        systemImage: true,
+                        isStreak: false
+                    )
+                    .frame(maxWidth: .infinity)
+                }
 
                 metric(
                     icon: "flame.fill",
