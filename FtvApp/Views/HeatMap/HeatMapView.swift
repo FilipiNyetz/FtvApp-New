@@ -2,7 +2,6 @@ import SwiftUI
 
 struct HeatmapView: View {
     let points: [CGPoint]
-    var rotationDegrees: CGFloat = 0
     var originPoint: CGPoint? = nil
     var flipX: Bool = false
     var flipY: Bool = false

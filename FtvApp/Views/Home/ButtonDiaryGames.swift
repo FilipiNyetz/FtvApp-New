@@ -35,7 +35,9 @@ struct ButtonDiaryGames: View {
                                     HeatmapResultView(
                                         Workout: workoutsDoDia[selectedIndex]
                                     )
+                                    .offset(y: 10)
                                     .frame(width: proxy.size.width / 2)
+                                    .frame(height: 180)
                                 }
                             }
                         }

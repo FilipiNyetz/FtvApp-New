@@ -25,8 +25,10 @@ struct HeatmapResultView: View {
         // Overlay do heatmap (ocupa o mesmo frame do fundo)
         HeatmapView(
             points: Workout.pointsPath.map { CGPoint(x: $0[0], y: $0[1]) },
-            rotationDegrees: 220, originPoint: Workout.pointsPath.first.map { CGPoint(x: $0[0], y: $0[1]) }
+            originPoint: Workout.pointsPath.first.map { CGPoint(x: $0[0], y: $0[1]) }
         )
+        .rotationEffect(.degrees(270))
+        .scaleEffect(x: -1, y: 1)
         .allowsHitTesting(false)
         .onAppear {
             // Assina o publisher do WatchConnectivityManager
