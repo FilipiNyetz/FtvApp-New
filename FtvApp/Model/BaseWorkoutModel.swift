@@ -81,4 +81,5 @@ struct Workout {
     let dateWorkout: Date
     let higherJump: Double?
     let pointsPath: [[Double]]   // Convertido de WorkoutPathEntity
+    let stepCount: Int
 }

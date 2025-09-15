@@ -35,7 +35,7 @@ struct WorkoutStatsCard: View {
             HStack {
                 statItem(
                     title: Text("PASSOS"),
-                    value: "\(Int(workout.higherJump!))",
+                    value: "\(Int(workout.stepCount))",
                     unit: "",
                     icon: "shoeprints.fill"
                 )
