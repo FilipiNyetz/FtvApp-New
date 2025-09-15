@@ -1862,6 +1862,9 @@
         }
       }
     },
+    "PASSOS" : {
+
+    },
     "Período" : {
       "localizations" : {
         "en" : {
@@ -2061,6 +2064,7 @@
       }
     },
     "SALTO" : {
+      "extractionState" : "stale",
       "localizations" : {
         "es" : {
           "stringUnit" : {

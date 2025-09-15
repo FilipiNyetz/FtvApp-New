@@ -27,15 +27,15 @@ struct CalendarScreen: View {
                         showCalendar.toggle()
                     }
                 } label: {
-                    Text(selectedDate.formattedPill())
-                        .font(.headline.weight(.regular))
-                        .padding(.vertical, 6)
-                        .padding(.horizontal, 10)
-                        .background(
-                            RoundedRectangle(cornerRadius: 8)
-                                .fill(Color.darkGrayBackground)
-                        )
-                        .foregroundStyle(.primary)
+//                    Text(selectedDate.formattedPill())
+//                        .font(.headline.weight(.regular))
+//                        .padding(.vertical, 6)
+//                        .padding(.horizontal, 10)
+//                        .background(
+//                            RoundedRectangle(cornerRadius: 8)
+//                                .fill(Color.darkGrayBackground)
+//                        )
+//                        .foregroundStyle(.primary)
                 }
                 Spacer()
             }

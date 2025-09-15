@@ -34,24 +34,17 @@ struct WorkoutStatsCard: View {
             // Linha de cima
             HStack {
                 statItem(
+                    title: Text("PASSOS"),
+                    value: "\(Int(workout.higherJump!))",
+                    unit: "",
+                    icon: "shoeprints.fill"
+                )
+                
+                statItem(
                     title: Text("BATIMENTO"),
                     value: "\(Int(workout.frequencyHeart))",
                     unit: "bpm",
                     icon: "heart.fill"
-                )
-                Divider().frame(height: 40).background(Color.white.opacity(0.4))
-                statItem(
-                    title: Text("CALORIA"),
-                    value: "\(workout.calories)",
-                    unit: "cal",
-                    icon: "flame.fill"
-                )
-                Divider().frame(height: 40).background(Color.white.opacity(0.4))
-                statItem(
-                    title: Text("SALTO"),
-                    value: "\(Double(workout.higherJump!))",
-                    unit: "cm",
-                    icon: "arrow.up.and.down"
                 )
             }
             
@@ -63,13 +56,19 @@ struct WorkoutStatsCard: View {
                     .fontDesign(.rounded)
                     .foregroundColor(.gray)
                 
-                Text(timeFormatter.string(from: TimeInterval(workout.duration)) ?? "00:00:00")
+                Text(timeFormatter.string(from: TimeInterval(workout.duration)) ?? "00:00.00")
                     .font(.system(size: 28, weight: .medium, design: .rounded))
                     .foregroundColor(.white)
             }
             
             // Linha de baixo
             HStack {
+                statItem(
+                    title: Text("CALORIA"),
+                    value: "\(workout.calories)",
+                    unit: "cal",
+                    icon: "flame.fill"
+                )
                 statItem(
                     title: Text("DISTÂNCIA"),
                     value: formattedDistance,
