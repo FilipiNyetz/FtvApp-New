@@ -12,8 +12,8 @@ struct TemplateBodyView: View {
     let workout: Workout
     let withBackground: Bool
     var isPreview: Bool = true
-//    let card = Color.white.opacity(1.0)
-//    let stroke = Color.white.opacity(1.0)
+    //    let card = Color.white.opacity(1.0)
+    //    let stroke = Color.white.opacity(1.0)
 
     var badgeImage: String
     let totalWorkouts: Int
@@ -124,50 +124,59 @@ struct TemplateBodyView: View {
             // MARK: - Heatmap Display
             ZStack {
                 // 1. A imagem da meia quadra como fundo
-                Image("mapaTemplateSemfundo") // <-- Sua nova imagem de meia quadra
+                Image("mapaTemplateSemfundo")  // <-- Sua nova imagem de meia quadra
                     .resizable()
+                    .scaledToFit()
                     .frame(width: 170, height: 200)
-                    .aspectRatio(contentMode: .fill)
 
-                // 2. Container com padding simétrico para o heatmap
-                VStack {
-                    Spacer() // Espaçamento superior
-                    
-                    // O heatmap centralizado com espaçamento proporcional
-                    if isPreview {
-                        // Para preview, usa a view assíncrona normal
-                        GeneratedHeatmapImageView(
-                            workout: workout
-                        )
-                        .frame(width: 130, height: 140)
-                        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
+                Rectangle()
+                                    .fill(Color.black.opacity(0.15))
+                                    .cornerRadius(8)
+                                    .padding(.horizontal, 8)
+                                    .padding(.top, 2)
+                                    .padding(.bottom, 12)
+
+                
+                // O heatmap centralizado com espaçamento proporcional
+                if isPreview {
+                    GeneratedHeatmapImageView(
+                        workout: workout,
+                        // Geramos a imagem numa proporção mais vertical
+                        renderSize: CGSize(width: 170, height: 200)
+                    )
+                    .frame(width: 147, height: 186)
+                    // 3. Modificadores aplicados na imagem para o visual final
+                    .mask(
+                        RoundedRectangle(cornerRadius: 8, style: .continuous)
+                    )
+                    .padding(.horizontal, 12)
+                                       .padding(.top, 2)
+                                       .padding(.bottom, 12)
+
+
+                } else {
+                    // Para exportação/cópia, renderiza diretamente a imagem
+                    if let heatmapImage = HeatmapImageGenerator.shared.ensureImageExists(
+                        for: workout,
+                        size: CGSize(width: 170, height: 200)
+                    ) {
+                        Image(uiImage: heatmapImage)
+                            .resizable()
+                            .aspectRatio(contentMode: .fill)
+                            .frame(width: 147, height: 186)
+                            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
+                        
                     } else {
-                        // Para exportação/cópia, renderiza diretamente a imagem
-                        if let heatmapImage = HeatmapImageGenerator.shared.ensureImageExists(
-                            for: workout, 
-                            size: CGSize(width: 160, height: 160)
-                        ) {
-                            Image(uiImage: heatmapImage)
-                                .resizable()
-                                .aspectRatio(contentMode: .fill)
-                                .frame(width: 130, height: 140)
-                                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
-                        } else {
-                            Rectangle()
-                                .fill(Color.clear)
-                                .frame(width: 130, height: 140)
-                                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
-                        }
+                        Rectangle()
+                            .fill(Color.clear)
+                            .frame(width: 170, height: 200)
+                            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
                     }
-                    
-                    Spacer() // Espaçamento inferior (simétrico ao superior)
                 }
-                .frame(width: 170, height: 200) // Mesmo tamanho do container de fundo
-                .padding(.vertical, 20) // Padding simétrico de 20pt no topo e base
             }
             .cornerRadius(12)
             .clipped()
-
+            
             // Nome do App
             VStack(spacing: 8) {
                 Image("LogoNome7")

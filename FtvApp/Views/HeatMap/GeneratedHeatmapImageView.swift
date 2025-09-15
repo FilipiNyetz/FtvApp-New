@@ -14,9 +14,14 @@ struct GeneratedHeatmapImageView: View {
     // Ajuste esses valores para o tamanho ideal da imagem original que será gerada.
     // Por exemplo, se a sua "meia quadra" tem uma proporção específica (ex: 1:2),
     // o renderSize deve refletir isso (ex: width: 400, height: 800)
-    private let renderSize = CGSize(width: 160, height: 160) // Ajuste conforme a proporção real da quadra se necessário
+    let renderSize: CGSize
     
     @State private var heatmapImage: UIImage? = nil
+    
+    init(workout: Workout, renderSize: CGSize = CGSize(width: 160, height: 160)) {
+        self.workout = workout
+        self.renderSize = renderSize
+    }
     
     var body: some View {
         Group {

@@ -65,7 +65,7 @@ struct HeatmapView: View {
 
             if result.maxValue > 0 {
                 context.drawLayer { layer in
-                    layer.addFilter(.blur(radius: 10))
+                    layer.addFilter(.blur(radius: 6))
 
                     print("✅ Desenhando \(rows) linhas e \(cols) colunas...")
                     var cellsDrawn = 0
@@ -83,8 +83,8 @@ struct HeatmapView: View {
                             let rect = CGRect(
                                 x: CGFloat(col) * cellWidth,
                                 y: CGFloat(row) * cellHeight,
-                                width: cellWidth * 1.5,
-                                height: cellHeight * 1.5
+                                width: cellWidth * 2.0,
+                                height: cellHeight * 2.0
                             )
 
                             layer.fill(
@@ -134,11 +134,11 @@ struct HeatmapView: View {
         // Esta função já tem um print(t), o que é ótimo para depuração.
         print("Calculando cor para intensidade: \(t)")
         switch t {
-        case ..<0.25: return Color(red: 0.0, green: 0.4, blue: 1.0, opacity: 1.0) // Azul sólido
-        case ..<0.4: return Color(red: 0.0, green: 0.8, blue: 0.2, opacity: 1.0) // Verde sólido
-        case ..<0.6: return Color(red: 1.0, green: 0.9, blue: 0.0, opacity: 1.0) // Amarelo sólido
-        case ..<0.75: return Color(red: 1.0, green: 0.5, blue: 0.0, opacity: 1.0) // Laranja sólido
-        default: return Color(red: 1.0, green: 0.1, blue: 0.1, opacity: 1.0) // Vermelho sólido
+        case ..<0.25: return Color(red: 0.0, green: 0.6, blue: 1.0, opacity: 0.9) // Azul mais vibrante
+        case ..<0.4: return Color(red: 0.0, green: 1.0, blue: 0.3, opacity: 0.9) // Verde mais vibrante
+        case ..<0.6: return Color(red: 1.0, green: 1.0, blue: 0.0, opacity: 0.9) // Amarelo brilhante
+        case ..<0.75: return Color(red: 1.0, green: 0.6, blue: 0.0, opacity: 0.95) // Laranja vibrante
+        default: return Color(red: 1.0, green: 0.2, blue: 0.2, opacity: 1.0) // Vermelho vibrante
         }
     }
     

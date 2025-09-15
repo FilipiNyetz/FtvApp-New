@@ -86,7 +86,7 @@ class TemplateViewModel: ObservableObject {
             if let uiImage = renderer.uiImage {
                 UIPasteboard.general.image = uiImage
                 UIImpactFeedbackGenerator(style: .medium).impactOccurred()
-                print("✅ Template copiado para clipboard com heatmap incluído")
+                print("✅ Template copiado para clipboard comx heatmap incluído")
             } else {
                 print("❌ Falha ao gerar template para clipboard")
             }
