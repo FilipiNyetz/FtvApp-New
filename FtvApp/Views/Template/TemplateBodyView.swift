@@ -174,8 +174,6 @@ struct TemplateBodyView: View {
             }
         }
         .padding(.horizontal, 20)
-        .frame(maxWidth: 350)
-        .frame(height: 500)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color.clear)
     }
