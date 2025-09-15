@@ -72,7 +72,7 @@ struct TemplateBodyView: View {
                         .fontWeight(.bold)
                         .foregroundStyle(.white)
                     HStack(alignment: .firstTextBaseline, spacing: 4) {
-                        Text("\(jump)")
+                        Text(String(format: "%.1f", jump))
                             .font(.largeTitle)
                             .fontWeight(.heavy)
                             .foregroundStyle(.white)
