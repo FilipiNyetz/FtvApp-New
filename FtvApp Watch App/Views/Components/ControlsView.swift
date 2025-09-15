@@ -8,18 +8,20 @@
 import SwiftUI
 
 struct ControlsView: View {
-    
+
     @ObservedObject var manager: WorkoutManager
     var onNextMatch: (() -> Void)?
     var onResume: (() -> Void)?
-    
+
     var body: some View {
-        VStack(spacing: 15){
-            HStack{
-                VStack{
-                    Button{
-                        manager.endWorkout()
-                    }label: {
+        VStack(spacing: 15) {
+            HStack {
+                VStack {
+                    Button {
+                        Task {
+                            await manager.endWorkout()
+                        }
+                    } label: {
                         Image(systemName: "xmark")
                     }
                     .tint(.red)
@@ -32,7 +34,6 @@ struct ControlsView: View {
                             manager.pause()
                         } else if manager.session?.state == .paused {
                             manager.resume()
-                            // ✨ NOVA FUNCIONALIDADE: Navega para MetricsView ao retomar
                             onResume?()
                         }
                     } label: {
@@ -47,12 +48,13 @@ struct ControlsView: View {
                     )
                 }
             }
-            
+
             VStack {
                 Button {
-                    manager.endWorkout(shouldShowSummary: false) {
+                    Task {
+                        await manager.endWorkout(shouldShowSummary: false)
+
                         self.manager.startWorkout(workoutType: .soccer)
-                        // Chama o callback para navegar para MetricsView
                         self.onNextMatch?()
                     }
                 } label: {

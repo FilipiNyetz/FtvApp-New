@@ -26,7 +26,7 @@ struct StartView: View {
     @State private var navigationPath: [JumpNavigationPath] = []
     @State private var latestJumpMeasurement: Int? = nil
     @State private var isCalibratingOrigin = false
-    @StateObject var positionManager = managerPosition()
+    @ObservedObject var positionManager = managerPosition.shared
 
     var workoutTypes: [HKWorkoutActivityType] = [.soccer]
 

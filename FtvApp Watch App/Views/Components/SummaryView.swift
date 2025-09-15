@@ -85,24 +85,46 @@ struct SummaryView: View {
         .navigationTitle("Summary")
         .navigationBarTitleDisplayMode(.inline)
         .onAppear {
-            Task {
-                let bestJumpValue: Int? = manager.preWorkoutJumpHeight
-                
-                let workoutPath = manager.serializablePath
-                
-                print(workoutPath)
-                
-                
-                print("Vai enviar o melhor pulo (\(bestJumpValue ?? -1)) para o iPhone")
-                print("Vai enviar o pacote de pontos (\(workoutPath)) para o iPhone")
-                print(workoutPath)
-                wcSessionDelegate.sendMessage(message: [
-                    "pulo": bestJumpValue as Any,
-                    "workoutId": workout.uuid.uuidString,
-                    "workoutPath": workoutPath
-                ])
-            }
-        }
+                    Task {
+                        let bestJumpValue: Int? = manager.preWorkoutJumpHeight
+
+                        let workoutPath = manager.serializablePath
+
+                        print(workoutPath)
+
+                        var message: [String: Any] = [
+                            "workoutId": workout.uuid.uuidString
+                        ]
+
+                        // 2. Adiciona a chave "pulo" SOMENTE se bestJumpValue não for nulo
+                        if let jump = bestJumpValue {
+                            print("✅ Adicionando pulo (\(jump) cm) à mensagem.")
+                            message["pulo"] = Double(jump)  // Envia como Double para consistência
+                        } else {
+                            print(
+                                "ℹ️ Nenhum pulo medido, a chave 'pulo' não será enviada."
+                            )
+                        }
+
+                        // 3. Adiciona a chave "workoutPath" SOMENTE se o path não estiver vazio
+                        if !workoutPath.isEmpty {
+                            print(
+                                "✅ Adicionando mapa de calor com (\(workoutPath.count) pontos) à mensagem."
+                            )
+                            message["workoutPath"] = workoutPath
+                        } else {
+                            print(
+                                "ℹ️ Nenhum mapa de calor gerado, a chave 'workoutPath' não será enviada."
+                            )
+                        }
+
+                        // 4. Envia a mensagem que foi construída dinamicamente
+                        print(
+                            "➡️ Enviando mensagem final para o iPhone: \(message.keys)"
+                        )
+                        wcSessionDelegate.sendMessage(message: message)
+                    }
+                }
 
     }
 }

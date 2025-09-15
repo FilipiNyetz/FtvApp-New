@@ -139,51 +139,84 @@ class WorkoutManager: NSObject, ObservableObject {
     
     var onWorkoutEnded: ((HKWorkout) -> Void)?
     
-    func endWorkout(shouldShowSummary: Bool = true, completion: (() -> Void)? = nil) {
-        guard !isEndingWorkout else {
-            print("⚠️ Tentativa de encerrar um treino que já está em processo de finalização.")
-            return
-        }
-        isEndingWorkout = true
-        guard let builder = builder else {
-            print("⚠️ Nenhum workout builder ativo para encerrar")
-            isEndingWorkout = false
-            completion?()
-            return
-        }
-        session?.end()
-        builder.endCollection(withEnd: Date()) { _, error in
-            if let error = error {
-                print("❌ Erro ao encerrar coleta: \(error.localizedDescription)")
-                DispatchQueue.main.async {
-                    self.isEndingWorkout = false
-                    completion?()
-                }
+    @MainActor
+        func endWorkout(shouldShowSummary: Bool = true) async {
+            guard !isEndingWorkout else {
+                print(
+                    "⚠️ Tentativa de encerrar um treino que já está em processo de finalização."
+                )
                 return
             }
-            builder.finishWorkout { workout, _ in
-                print("🏁 Treino finalizado e salvo:", workout ?? "Sem dados")
-                DispatchQueue.main.async {
-                    self.workout = workout
-                    if let finalWorkout = workout, shouldShowSummary {
-                        self.onWorkoutEnded?(finalWorkout)
-                    }
-                    completion?()
-                    self.isEndingWorkout = false
-                }
+            isEndingWorkout = true
+
+            defer {
+                isEndingWorkout = false
+                resetTimer()
             }
-        }
-        Task {
-            let collectedPath = await positionManager.stopMotionUpdates()
-            DispatchQueue.main.async {
+
+            if positionManager.localizacaoRodando {
+                let collectedPath = await positionManager.stopMotionUpdates()
                 self.serializablePath = collectedPath
-                print(self.serializablePath)
-                print("📌 Path salvo no WorkoutManager: \(self.serializablePath.count) pontos")
+                print(
+                    "📌 Path salvo no WorkoutManager: \(self.serializablePath.count) pontos"
+                )
+            }
+
+            guard let session = session, let builder = builder else {
+                print("⚠️ Nenhum workout builder ativo para encerrar.")
+                return
+            }
+
+            session.end()
+
+            do {
+                try await withCheckedThrowingContinuation {
+                    (continuation: CheckedContinuation<Void, Error>) in
+                    builder.endCollection(withEnd: Date()) { success, error in
+                        if let error = error {
+                            continuation.resume(throwing: error)
+                        } else {
+                            continuation.resume()
+                        }
+                    }
+                }
+
+                let finalWorkout: HKWorkout =
+                    try await withCheckedThrowingContinuation {
+                        (continuation: CheckedContinuation<HKWorkout, Error>) in
+                        builder.finishWorkout { workout, error in
+                            if let error = error {
+                                continuation.resume(throwing: error)
+                            } else if let workout = workout {
+                                continuation.resume(returning: workout)
+                            } else {
+                                continuation.resume(
+                                    throwing: NSError(
+                                        domain: "WorkoutManager",
+                                        code: 1,
+                                        userInfo: [
+                                            NSLocalizedDescriptionKey:
+                                                "Failed to finish workout."
+                                        ]
+                                    )
+                                )
+                            }
+                        }
+                    }
+
+                print("🏁 Treino finalizado e salvo:", finalWorkout)
+                self.workout = finalWorkout
+
+                if shouldShowSummary, let workoutToShow = self.workout {
+                    self.onWorkoutEnded?(workoutToShow)
+                }
+
+            } catch {
+                print(
+                    "❌ Erro ao finalizar o treino no HealthKit: \(error.localizedDescription)"
+                )
             }
         }
-        
-        resetTimer()
-    }
     
     // MARK: - Timer Control
     private func startTimer() {
