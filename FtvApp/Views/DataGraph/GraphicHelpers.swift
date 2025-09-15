@@ -94,6 +94,7 @@ func aggregateByDay(workouts: [Workout], selectedMetricId: String) -> [Workout] 
         var distance = 0
         var frequencyHeart = 0.0
         var higherJump: Double? = nil
+        var stepCount = 0
 
         switch selectedMetricId {
         case "calories":
@@ -105,6 +106,9 @@ func aggregateByDay(workouts: [Workout], selectedMetricId: String) -> [Workout] 
         case "height":
             let jumps = dayWorkouts.compactMap { $0.higherJump }
             higherJump = jumps.isEmpty ? nil : jumps.max()
+        case "stepCount": // ✨ Case adicionado para passos
+            let steps = dayWorkouts.map { $0.stepCount }
+            stepCount = Int(Double(steps.reduce(0, +)) / Double(steps.count))
         default:
             break
         }
@@ -118,7 +122,8 @@ func aggregateByDay(workouts: [Workout], selectedMetricId: String) -> [Workout] 
             frequencyHeart: frequencyHeart,
             dateWorkout: date,
             higherJump: higherJump,
-            pointsPath: []
+            pointsPath: [],
+            stepCount: stepCount
         )
 
         result.append(workout)
@@ -144,6 +149,7 @@ func aggregateByMonth(workouts: [Workout], selectedMetricId : String) -> [Workou
         var distance = 0
         var frequencyHeart = 0.0
         var higherJump: Double? = nil
+        var stepCount = 0
 
         switch selectedMetricId {
         case "calories":
@@ -155,6 +161,9 @@ func aggregateByMonth(workouts: [Workout], selectedMetricId : String) -> [Workou
         case "height":
             let jumps = monthWorkouts.compactMap { $0.higherJump }
             higherJump = jumps.isEmpty ? nil : jumps.max()
+        case "stepCount":
+            let steps = monthWorkouts.map { $0.stepCount }
+            stepCount = Int(Double(steps.reduce(0, +)) / Double(steps.count))
         default:
             break
         }
@@ -168,7 +177,8 @@ func aggregateByMonth(workouts: [Workout], selectedMetricId : String) -> [Workou
             frequencyHeart: frequencyHeart,
             dateWorkout: date,
             higherJump: higherJump,
-            pointsPath: []
+            pointsPath: [],
+            stepCount: stepCount
         )
 
         result.append(workout)
@@ -184,6 +194,7 @@ func valueForMetric(_ workout: Workout, _ selectedMetricId  : String) -> Double 
     case "distance": return Double(workout.distance)
     case "heartRate": return Double(workout.frequencyHeart)
     case "height": return workout.higherJump ?? 0
+    case "stepCount": return Double(workout.stepCount) 
     default: return 0
     }
 }

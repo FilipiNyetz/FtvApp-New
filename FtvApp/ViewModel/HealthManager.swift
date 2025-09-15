@@ -64,6 +64,50 @@ class HealthManager: ObservableObject, @unchecked Sendable {
             }
         }
     }
+    
+    // MARK: - Fetch de dados único (NOVA FUNÇÃO)
+        private func fetchWorkoutData(for workout: HKWorkout) async -> Workout? {
+            return await withCheckedContinuation { continuation in
+                // Assume que 'queryFrequenciaCardiaca' está disponível globalmente ou em outro arquivo
+                queryFrequenciaCardiaca(
+                    workout: workout,
+                    healthStore: self.healthStore
+                ) { bpm in
+                    let energyType = HKQuantityType.quantityType(forIdentifier: .activeEnergyBurned)!
+                    let calories: Int
+                    if let totalEnergy = workout.statistics(for: energyType)?.sumQuantity() {
+                        calories = Int(totalEnergy.doubleValue(for: .kilocalorie()))
+                    } else {
+                        calories = 0
+                    }
+                    
+                    let stepsType = HKQuantityType.quantityType(forIdentifier: .stepCount)!
+                    let predicateSteps = HKQuery.predicateForObjects(from: workout)
+                    let stepsQuery = HKStatisticsQuery(quantityType: stepsType, quantitySamplePredicate: predicateSteps, options: .cumulativeSum) { _, result, _ in
+                        var steps = 0.0
+                        if let sum = result?.sumQuantity() {
+                            steps = sum.doubleValue(for: .count())
+                        }
+                        
+                        let summary = Workout(
+                            id: workout.uuid,
+                            idWorkoutType: Int(workout.workoutActivityType.rawValue),
+                            duration: workout.duration,
+                            calories: calories,
+                            distance: Int(workout.totalDistance?.doubleValue(for: .meter()) ?? 0),
+                            frequencyHeart: bpm,
+                            dateWorkout: workout.endDate,
+                            higherJump: 0.0,
+                            pointsPath: [],
+                            stepCount: Int(steps)
+                        )
+                        
+                        continuation.resume(returning: summary)
+                    }
+                    self.healthStore.execute(stepsQuery)
+                }
+            }
+        }
 
     // MARK: - Timer para reset semanal
     func startWeekChangeTimer() {
@@ -203,96 +247,47 @@ class HealthManager: ObservableObject, @unchecked Sendable {
             sortDescriptors: [sortDescriptor]
         ) { _, samples, error in
             guard let workouts = samples as? [HKWorkout], error == nil else {
-                print(
-                    "Erro ao buscar workouts: \(error?.localizedDescription ?? "desconhecido")"
-                )
+                print("Erro ao buscar workouts: \(error?.localizedDescription ?? "desconhecido")")
                 return
             }
-            
+
             if workouts.isEmpty {
                 print("Nenhum treino encontrado")
                 return
             }
-            
-            let group = DispatchGroup()
-            var tempWorkouts: [Workout] = []
-            
-            for workout in workouts {
-                group.enter()
+
+            Task { @MainActor in
+                var tempWorkouts: [Workout] = []
                 
-                queryFrequenciaCardiaca(
-                    workout: workout,
-                    healthStore: self.healthStore
-                ) { bpm in
-                    let energyType = HKQuantityType.quantityType(
-                        forIdentifier: .activeEnergyBurned
-                    )!
-                    let calories: Int
-                    if let totalEnergy = workout.statistics(for: energyType)?.sumQuantity() {
-                        calories = Int(totalEnergy.doubleValue(for: .kilocalorie()))
-                    } else {
-                        calories = 0
+                // ✅ Usa TaskGroup para buscar dados em paralelo de forma segura
+                await withTaskGroup(of: Workout?.self) { group in
+                    for workout in workouts {
+                        group.addTask {
+                            await self.fetchWorkoutData(for: workout)
+                        }
                     }
                     
-                    let stepsType = HKQuantityType.quantityType(forIdentifier: .stepCount)!
-                    let predicateSteps = HKQuery.predicateForObjects(from: workout)
-                    let stepsQuery = HKStatisticsQuery(quantityType: stepsType, quantitySamplePredicate: predicateSteps, options: .cumulativeSum) { _, result, _ in
-                        var steps = 0.0
-                        if let sum = result?.sumQuantity() {
-                            steps = sum.doubleValue(for: .count())
-                        }
-                        
-                        Task { @MainActor in
-                            // Monta Workout básico primeiro (sem dados extras)
-                            let summary = Workout(
-                                id: workout.uuid,
-                                idWorkoutType: Int(
-                                    workout.workoutActivityType.rawValue
-                                ),
-                                duration: workout.duration,
-                                calories: Int(calories),
-                                distance: Int(
-                                    workout.totalDistance?.doubleValue(
-                                        for: .meter()
-                                    ) ?? 0
-                                ),
-                                frequencyHeart: bpm,
-                                dateWorkout: workout.endDate,
-                                higherJump: 0.0,  // Será preenchido no merge posterior
-                                pointsPath: [], // Será preenchido no merge posterior
-                                stepCount: Int(steps)
-                                
-                            )
-                            
-                            tempWorkouts.append(summary)
-                            group.leave()
+                    // Coleta os resultados de cada tarefa quando elas finalizarem
+                    for await workout in group {
+                        if let workout = workout {
+                            tempWorkouts.append(workout)
                         }
                     }
                 }
+
+                // Garante que não haja duplicatas
+                let uniqueWorkouts = Array(
+                    Dictionary(grouping: tempWorkouts, by: { $0.id }).values.map { $0.first! }
+                )
                 
-                group.notify(queue: .main) {
-                    Task { @MainActor in
-                        let uniqueWorkouts = Array(
-                            Dictionary(grouping: tempWorkouts, by: { $0.id }).values
-                                .map { $0.first! }
-                        )
-                        
-                        // 🔹 Fazer merge com dados extras do SwiftData
-                        let enrichedWorkouts = await self.enrichWorkoutsWithExtras(
-                            uniqueWorkouts
-                        )
-                        
-                        self.newWorkouts = enrichedWorkouts.sorted {
-                            $0.dateWorkout < $1.dateWorkout
-                        }
-                        self.workouts = self.newWorkouts
-                        self.totalWorkoutsCount = self.workouts.count
-                        self.updateWorkoutsByDay(filtered: self.workouts)
-                    }
-                }
+                // ✅ Faz o merge com os dados extras e atualiza as propriedades publicadas
+                let enrichedWorkouts = await self.enrichWorkoutsWithExtras(uniqueWorkouts)
+                self.newWorkouts = enrichedWorkouts.sorted { $0.dateWorkout < $1.dateWorkout }
+                self.workouts = self.newWorkouts
+                self.totalWorkoutsCount = self.workouts.count
+                self.updateWorkoutsByDay(filtered: self.workouts)
             }
         }
-
         healthStore.execute(query)
     }
 
@@ -366,6 +361,8 @@ class HealthManager: ObservableObject, @unchecked Sendable {
             return workouts
         }
     }
+    
+    
 
     // MARK: - Fetch por período (mantida!)
     func fetchDataWorkout(endDate: Date, period: String) {
@@ -465,7 +462,7 @@ class HealthManager: ObservableObject, @unchecked Sendable {
                     
                     let stepsType = HKQuantityType.quantityType(forIdentifier: .stepCount)!
                     let predicateSteps = HKQuery.predicateForObjects(from: workout)
-                    let stepsQuery = HKStatisticsQuery(quantityType: stepsType, quantitySamplePredicate: predicateSteps, options: .cumulativeSum) { _, result, _ in
+                    _ = HKStatisticsQuery(quantityType: stepsType, quantitySamplePredicate: predicateSteps, options: .cumulativeSum) { _, result, _ in
                         var steps = 0.0
                         if let sum = result?.sumQuantity() {
                             steps = sum.doubleValue(for: .count())
