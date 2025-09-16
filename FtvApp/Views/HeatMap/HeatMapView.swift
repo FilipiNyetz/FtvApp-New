@@ -6,7 +6,7 @@ struct HeatmapView: View {
     var flipX: Bool = false
     var flipY: Bool = false
 
-    private let idealCellSize: CGFloat = 20
+    private let idealCellSize: CGFloat = 14
 
     var body: some View {
         Canvas { context, size in
@@ -65,7 +65,7 @@ struct HeatmapView: View {
 
             if result.maxValue > 0 {
                 context.drawLayer { layer in
-                    layer.addFilter(.blur(radius: 6))
+                    layer.addFilter(.blur(radius: 9))
 
                     print("✅ Desenhando \(rows) linhas e \(cols) colunas...")
                     var cellsDrawn = 0
@@ -76,19 +76,25 @@ struct HeatmapView: View {
                             guard value > 0 else { continue }
 
                             cellsDrawn += 1
-                            let intensity =
-                                CGFloat(value) / CGFloat(result.maxValue)
+                            let tLinear = CGFloat(value) / CGFloat(result.maxValue)
+                            let intensity = pow(tLinear, 0.85)
                             let color = color(forIntensity: intensity)
 
-                            let rect = CGRect(
-                                x: CGFloat(col) * cellWidth,
-                                y: CGFloat(row) * cellHeight,
-                                width: cellWidth * 2.0,
-                                height: cellHeight * 2.0
+                            // Center of the cell
+                            let centerX = (CGFloat(col) + 0.5) * cellWidth
+                            let centerY = (CGFloat(row) + 0.5) * cellHeight
+
+                            // Circle diameter slightly larger than a cell to improve blending
+                            let diameter = max(cellWidth, cellHeight) * 1.8
+                            let circleRect = CGRect(
+                                x: centerX - diameter / 2,
+                                y: centerY - diameter / 2,
+                                width: diameter,
+                                height: diameter
                             )
 
                             layer.fill(
-                                Path(rect),
+                                Path(ellipseIn: circleRect),
                                 with: .color(color.opacity(1.0))
                             )
                         }
@@ -131,14 +137,23 @@ struct HeatmapView: View {
     }
 
     private func color(forIntensity t: CGFloat) -> Color {
-        // Esta função já tem um print(t), o que é ótimo para depuração.
-        print("Calculando cor para intensidade: \(t)")
+        // Paleta com thresholds estáveis + tons mais vivos (opacidade total)
         switch t {
-        case ..<0.25: return Color(red: 0.0, green: 0.6, blue: 1.0, opacity: 0.9) // Azul mais vibrante
-        case ..<0.4: return Color(red: 0.0, green: 1.0, blue: 0.3, opacity: 0.9) // Verde mais vibrante
-        case ..<0.6: return Color(red: 1.0, green: 1.0, blue: 0.0, opacity: 0.9) // Amarelo brilhante
-        case ..<0.75: return Color(red: 1.0, green: 0.6, blue: 0.0, opacity: 0.95) // Laranja vibrante
-        default: return Color(red: 1.0, green: 0.2, blue: 0.2, opacity: 1.0) // Vermelho vibrante
+        case ..<0.25:
+            // Azul vivo (base fria)
+            return Color(red: 0.00, green: 0.60, blue: 1.00, opacity: 1.0)
+        case ..<0.40:
+            // Verde vivo
+            return Color(red: 0.00, green: 1.00, blue: 0.35, opacity: 1.0)
+        case ..<0.60:
+            // Amarelo intenso
+            return Color(red: 1.00, green: 1.00, blue: 0.00, opacity: 1.0)
+        case ..<0.75:
+            // Laranja forte
+            return Color(red: 1.00, green: 0.60, blue: 0.00, opacity: 1.0)
+        default:
+            // Vermelho intenso
+            return Color(red: 1.00, green: 0.20, blue: 0.20, opacity: 1.0)
         }
     }
     

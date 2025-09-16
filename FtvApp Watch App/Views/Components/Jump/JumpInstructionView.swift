@@ -2,54 +2,39 @@
 //  JumpInstructionView.swift
 //  FtvApp Watch App
 //
-//  Created by Gustavo Souto Pereira on 08/09/25.
+//  Jump measurement flow has been removed.
 //
 
 import SwiftUI
 
 struct JumpInstructionView: View {
-    @Binding var navigationPath: [JumpNavigationPath]
-
     var body: some View {
-        Group{
-            VStack(spacing: 12) {
-                Text("Como medir seu salto")
-                    .font(.headline)
-                    .fontWeight(.bold)
-                    .foregroundStyle(.white)
-                    .multilineTextAlignment(.center)
-                    .fixedSize(horizontal: true, vertical: false)
-                
-                Text("Mãos na cintura e prepare-se para pular quantas vezes quiser")
-                    .font(.headline)
-                    .foregroundStyle(.white)
-                    .multilineTextAlignment(.center)
-                    .fixedSize(horizontal: false, vertical: true)
-                    .frame(maxWidth: .infinity)
-
-                Button(action: {
-                    navigationPath.append(.measure)
-                }) {
-                    Text("Iniciar medição")
-                        .font(.headline)
-                        .fontWeight(.bold)
-                        .foregroundStyle(.black)
-                        .frame(width: 160, height: 50)
-                        .background(Color.colorPrimal)
-                        .clipShape(RoundedRectangle(cornerRadius: 24))
-                }
-                .buttonStyle(.plain)
-            }
-            .padding()
-        }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(
+        // Placeholder view kept for compatibility after removing jump feature
+        ZStack {
             LinearGradient(
                 gradient: Gradient(colors: [.gradiente1, .gradiente2, .gradiente2]),
                 startPoint: .bottomLeading,
                 endPoint: .topTrailing
             )
             .ignoresSafeArea()
-        )
+
+            VStack(spacing: 12) {
+                Image(systemName: "figure.run")
+                    .font(.system(size: 36))
+                    .foregroundStyle(.white.opacity(0.9))
+
+                Text("Medição de salto removida")
+                    .font(.headline)
+                    .fontWeight(.bold)
+                    .foregroundStyle(.white)
+                    .multilineTextAlignment(.center)
+
+                Text("Esta tela não é mais utilizada.")
+                    .font(.footnote)
+                    .foregroundStyle(.white.opacity(0.8))
+                    .multilineTextAlignment(.center)
+            }
+            .padding()
+        }
     }
 }

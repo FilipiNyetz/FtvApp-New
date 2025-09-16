@@ -347,7 +347,7 @@ class HealthManager: ObservableObject, @unchecked Sendable {
                         dateWorkout: workout.dateWorkout,
                         higherJump: extras.higherJump ?? 0.0,
                         pointsPath: extras.pointPath ?? [],
-                        stepCount: workout.stepCount
+                        stepCount: extras.stepCount ?? workout.stepCount
                     )
                 } else {
                     print(

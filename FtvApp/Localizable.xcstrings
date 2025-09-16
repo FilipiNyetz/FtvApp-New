@@ -481,6 +481,7 @@
       }
     },
     "cm" : {
+      "extractionState" : "stale",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -2096,6 +2097,7 @@
       }
     },
     "Salto Max" : {
+      "extractionState" : "stale",
       "localizations" : {
         "es" : {
           "stringUnit" : {

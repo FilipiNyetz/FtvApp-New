@@ -66,14 +66,6 @@ struct SummaryView: View {
                     ) + " bpm",
                     color: .red
                 )
-                
-                if let bestJump = manager.preWorkoutJumpHeight {
-                    SummaryMetricView(
-                        title: "Best Jump",
-                        value: "\(bestJump) cm",
-                        color: .orange // Uma cor para destacar
-                    )
-                }
 
                 Button("Done") {
                     dismiss()
@@ -86,7 +78,6 @@ struct SummaryView: View {
         .navigationBarTitleDisplayMode(.inline)
         .onAppear {
                     Task {
-                        let bestJumpValue: Int? = manager.preWorkoutJumpHeight
 
                         let workoutPath = manager.serializablePath
 
@@ -96,15 +87,9 @@ struct SummaryView: View {
                             "workoutId": workout.uuid.uuidString
                         ]
 
-                        // 2. Adiciona a chave "pulo" SOMENTE se bestJumpValue não for nulo
-                        if let jump = bestJumpValue {
-                            print("✅ Adicionando pulo (\(jump) cm) à mensagem.")
-                            message["pulo"] = Double(jump)  // Envia como Double para consistência
-                        } else {
-                            print(
-                                "ℹ️ Nenhum pulo medido, a chave 'pulo' não será enviada."
-                            )
-                        }
+                        // Inclui contagem de passos customizada do PDR
+                        message["customStepCount"] = manager.stepCount
+                        print("👣 Enviando stepCount custom: \(manager.stepCount)")
 
                         // 3. Adiciona a chave "workoutPath" SOMENTE se o path não estiver vazio
                         if !workoutPath.isEmpty {
@@ -144,3 +129,4 @@ struct SummaryMetricView: View {
         }
     }
 }
+

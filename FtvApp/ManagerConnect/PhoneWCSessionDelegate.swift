@@ -114,6 +114,18 @@ class PhoneWCSessionDelegate: NSObject, WCSessionDelegate,ObservableObject {
                     print("❌ Erro ao salvar pointPath: \(error)")
                 }
             }
+            
+            if let stepCount = message["customStepCount"] as? Int {
+                        print("👣 Recebido stepCount \(stepCount) para workoutId \(workoutIdString)")
+                        
+                        do {
+                            // Você precisará criar o método 'upsertStepCount' no Passo 2
+                            try await self.extrasRepository.upsertStepCount(stepCount, for: workoutIdString)
+                        } catch {
+                            print("❌ Erro ao salvar stepCount: \(error)")
+                        }
+                    }
+            
             print("🔄 Solicitando atualização dos workouts no HealthManager...")
                 self.healthManager?.fetchAllWorkouts()
         }

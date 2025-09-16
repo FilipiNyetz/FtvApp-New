@@ -12,6 +12,8 @@ struct PathPoint: Codable {
     let y: Double
 }
 
+var stepCount: Int?
+
 // MARK: - WorkoutExtras - Dados extras do workout (pulos e trajeto)
 @Model
 final class WorkoutExtras: @unchecked Sendable {
@@ -20,11 +22,14 @@ final class WorkoutExtras: @unchecked Sendable {
     var pointPath: [[Double]]?                  // trajeto como array de pares [x,y]
     var updatedAt: Date
     
+    var stepCount: Int?
+    
     init(workoutID: String, higherJump: Double? = nil, pointPath: [[Double]]? = nil) {
         self.workoutID = workoutID
         self.higherJump = higherJump
         self.pointPath = pointPath
         self.updatedAt = Date()
+        self.stepCount = stepCount
     }
 }
 

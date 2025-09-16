@@ -64,27 +64,6 @@ struct TemplateBodyView: View {
 
         // MARK: Layout estilo Sem Fundo
         VStack(spacing: 30) {
-            // Altura Máxima
-            if let jump = workout.higherJump, jump != 0 {
-                VStack(spacing: 8) {
-                    Text("Salto Max")
-                        .font(.callout)
-                        .fontWeight(.bold)
-                        .foregroundStyle(.white)
-                    HStack(alignment: .firstTextBaseline, spacing: 4) {
-                        Text(String(format: "%.1f", jump))
-                            .font(.largeTitle)
-                            .fontWeight(.heavy)
-                            .foregroundStyle(.white)
-                        Text("cm")
-                            .font(.title2)
-                            .fontWeight(.medium)
-                            .foregroundStyle(.white)
-                            .padding(.leading, 3)
-                    }
-                }
-            }
-
             // Calorias
             VStack(spacing: 8) {
                 Text("Caloria")
@@ -248,3 +227,4 @@ func metric(
         }
     }
 }
+

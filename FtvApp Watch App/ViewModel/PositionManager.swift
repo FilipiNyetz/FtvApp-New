@@ -26,6 +26,8 @@ class managerPosition: NSObject, ObservableObject {
     
     @Published var serializablePath: [[String:Double]] = []
     
+    @Published var stepCount: Int = 0
+    
     // Referência unificada: YAW inicial
     
     
@@ -78,6 +80,7 @@ class managerPosition: NSObject, ObservableObject {
         referenciaGuia = nil
         currentPosition = .zero
         path = [.zero]
+        stepCount = 0
         
         guard motionManager.isDeviceMotionAvailable else {
             print("Device Motion não está disponível")
@@ -145,6 +148,9 @@ class managerPosition: NSObject, ObservableObject {
             let deltaY = stepLength * -sin(rel)
             
             DispatchQueue.main.async {
+                
+                self.stepCount += 1
+                
                 self.currentPosition.x += deltaX
                 self.currentPosition.y += deltaY
                 
@@ -163,19 +169,22 @@ class managerPosition: NSObject, ObservableObject {
     }
     
     @MainActor
-    func stopMotionUpdates() async -> [[String: Double]] {
-        motionManager.stopDeviceMotionUpdates()
-        
-        try? await Task.sleep(nanoseconds: 50_000_000)
-        
-        print("Treino finalizado. Pontos coletados: \(path.count)")
-        
-        guard !path.isEmpty else { return [] }
-        
-        serializablePath = path.map { ["x": Double($0.x), "y": Double($0.y)] }
-        
-        print("Serializable dentro da funcao stopMotion: \(serializablePath.count)")
-        return serializablePath
+        // ALTERAÇÃO 1: Mudar o tipo de retorno da função
+        func stopMotionUpdates() async -> (path: [[String: Double]], steps: Int) {
+            motionManager.stopDeviceMotionUpdates()
+            
+            try? await Task.sleep(nanoseconds: 50_000_000)
+            
+            print("Treino finalizado. Pontos coletados: \(path.count). Passos contados: \(stepCount)")
+            
+            // ALTERAÇÃO 2: Tratar o caso de caminho vazio
+            guard !path.isEmpty else { return (path: [], steps: 0) }
+            
+            serializablePath = path.map { ["x": Double($0.x), "y": Double($0.y)] }
+            
+            print("Serializable dentro da funcao stopMotion: \(serializablePath.count)")
+            
+            // ALTERAÇÃO 3: Retornar a tupla com o caminho e os passos
+            return (path: serializablePath, steps: self.stepCount)
+        }
     }
-    
-}
