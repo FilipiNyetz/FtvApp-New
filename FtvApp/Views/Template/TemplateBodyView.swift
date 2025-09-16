@@ -129,13 +129,6 @@ struct TemplateBodyView: View {
                     .scaledToFit()
                     .frame(width: 170, height: 200)
 
-                Rectangle()
-                                    .fill(Color.black.opacity(0.15))
-                                    .cornerRadius(8)
-                                    .padding(.horizontal, 8)
-                                    .padding(.top, 2)
-                                    .padding(.bottom, 12)
-
                 
                 // O heatmap centralizado com espaçamento proporcional
                 if isPreview {
@@ -158,19 +151,22 @@ struct TemplateBodyView: View {
                     // Para exportação/cópia, renderiza diretamente a imagem
                     if let heatmapImage = HeatmapImageGenerator.shared.ensureImageExists(
                         for: workout,
-                        size: CGSize(width: 170, height: 200)
+                        size: CGSize(width: 140, height: 180)
                     ) {
                         Image(uiImage: heatmapImage)
                             .resizable()
                             .aspectRatio(contentMode: .fill)
                             .frame(width: 147, height: 186)
-                            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
-                        
+                            .mask(
+                                RoundedRectangle(cornerRadius: 8, style: .continuous)
+                            )
+                            .padding(.horizontal, 12)
+                            .padding(.top, 2)
+                            .padding(.bottom, 12)
                     } else {
                         Rectangle()
                             .fill(Color.clear)
                             .frame(width: 170, height: 200)
-                            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
                     }
                 }
             }

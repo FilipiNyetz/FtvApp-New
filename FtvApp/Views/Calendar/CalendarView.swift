@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import SwiftUICore
 import SwiftUI
 
 // MARK: - Calendário principal
