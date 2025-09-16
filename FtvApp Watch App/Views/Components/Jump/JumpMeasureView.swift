@@ -1,9 +1,3 @@
-//
-//  JumpMeasureView.swift
-//  FtvApp Watch App
-//
-//  Jump measurement feature removed.
-//
 
 import SwiftUI
 

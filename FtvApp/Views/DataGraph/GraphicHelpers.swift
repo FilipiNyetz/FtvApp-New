@@ -1,14 +1,6 @@
-//
-// GraphicHelpers.swift
-// FtvApp
-//
-// Created by Joao pedro Leonel on 21/08/25.
-// Atualizado por Filipi Romao
-//
 
 import Foundation
 
-// MARK: - Janela do período atual (ancorada em "hoje")
 func currentRange(for period: String, now: Date = Date()) -> ClosedRange<Date> {
     let cal = Calendar.current
     switch period {
@@ -43,22 +35,19 @@ func currentRange(for period: String, now: Date = Date()) -> ClosedRange<Date> {
     }
 }
 
-// MARK: - Filtra treinos que caem dentro da janela
 func filter(_ workouts: [Workout], in range: ClosedRange<Date>) -> [Workout] {
     workouts.filter { range.contains($0.dateWorkout) }
 }
 
-// MARK: - Dados para gráfico
 func dataForChart(manager: HealthManager, period: String, selectedMetricId: String) -> [Workout] {
     let range = currentRange(for: period)
     let scoped = filter(manager.workouts, in: range)
 
     switch period {
     case "day":
-        return scoped // sem criar novos workouts
+        return scoped 
 
     case "week", "month":
-        // Se não quiser calcular média de altura, apenas use os workouts existentes
         if selectedMetricId == "height" {
             return scoped
         }
@@ -75,9 +64,6 @@ func dataForChart(manager: HealthManager, period: String, selectedMetricId: Stri
         return scoped
     }
 }
-
-
-// MARK: - Agregação diária
 func aggregateByDay(workouts: [Workout], selectedMetricId: String) -> [Workout] {
     let calendar = Calendar.current
     let grouped = Dictionary(grouping: workouts) { calendar.startOfDay(for: $0.dateWorkout) }
@@ -85,11 +71,9 @@ func aggregateByDay(workouts: [Workout], selectedMetricId: String) -> [Workout] 
     var result: [Workout] = []
 
     for (date, dayWorkouts) in grouped {
-        // Calcula a métrica
         let values = dayWorkouts.map { valueForMetric($0, selectedMetricId) }
         let avg = values.reduce(0, +) / Double(values.count)
 
-        // Campos agregados
         var calories = 0
         var distance = 0
         var frequencyHeart = 0.0
@@ -106,7 +90,7 @@ func aggregateByDay(workouts: [Workout], selectedMetricId: String) -> [Workout] 
         case "height":
             let jumps = dayWorkouts.compactMap { $0.higherJump }
             higherJump = jumps.isEmpty ? nil : jumps.max()
-        case "stepCount": // ✨ Case adicionado para passos
+        case "stepCount": 
             let steps = dayWorkouts.map { $0.stepCount }
             stepCount = Int(Double(steps.reduce(0, +)) / Double(steps.count))
         default:
@@ -132,7 +116,6 @@ func aggregateByDay(workouts: [Workout], selectedMetricId: String) -> [Workout] 
     return result.sorted { $0.dateWorkout < $1.dateWorkout }
 }
 
-// MARK: - Agregação mensal
 func aggregateByMonth(workouts: [Workout], selectedMetricId : String) -> [Workout] {
     let calendar = Calendar.current
     let grouped = Dictionary(grouping: workouts) {
@@ -187,7 +170,6 @@ func aggregateByMonth(workouts: [Workout], selectedMetricId : String) -> [Workou
     return result.sorted { $0.dateWorkout < $1.dateWorkout }
 }
 
-// MARK: - Valor de métrica
 func valueForMetric(_ workout: Workout, _ selectedMetricId  : String) -> Double {
     switch selectedMetricId {
     case "calories": return Double(workout.calories)
@@ -199,7 +181,6 @@ func valueForMetric(_ workout: Workout, _ selectedMetricId  : String) -> Double 
     }
 }
 
-// MARK: - Labels eixo X em pt-BR
 func localizedXAxisLabel(for date: Date, period: String) -> String {
     let loc = Locale(identifier: "pt_BR")
     let df = DateFormatter()
@@ -231,13 +212,11 @@ func xLabelPtBR(for date: Date, period: String) -> String {
     localizedXAxisLabel(for: date, period: period)
 }
 
-// MARK: - Seleção do treino mais próximo
 func updateSelection(for date: Date, in data: [Workout], selectedWorkout: inout Workout?) {
     let closest = data.min { abs($0.dateWorkout.timeIntervalSince(date)) < abs($1.dateWorkout.timeIntervalSince(date)) }
     selectedWorkout = closest
 }
 
-// MARK: - Domínio do eixo X
 func xDomain(data: [Workout], period: String) -> ClosedRange<Date> {
     let cal = Calendar.current
     var range = currentRange(for: period)

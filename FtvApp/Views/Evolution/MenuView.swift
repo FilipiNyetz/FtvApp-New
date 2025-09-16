@@ -1,19 +1,13 @@
-//
-//  MenuView.swift
-//  FtvApp
-//
-//  Created by Joao pedro Leonel on 19/08/25.
-//
 
 import SwiftUI
 
 struct MenuView: View {
     
-    @Binding var selectedMetricId: String   // binding único
+    @Binding var selectedMetricId: String   
     
     struct Metric {
-        let id: String        // chave fixa
-        let name: String      // texto localizável
+        let id: String        
+        let name: String      
         let icon: String
     }
     
@@ -21,7 +15,6 @@ struct MenuView: View {
         Metric(id: "heartRate", name: NSLocalizedString("Batimento", comment: ""), icon: "heart.fill"),
         Metric(id: "calories", name: NSLocalizedString("Caloria", comment: ""), icon: "flame.fill"),
         Metric(id: "distance", name: NSLocalizedString("Distância", comment: ""), icon: "location.fill"),
-//        Metric(id: "height", name: NSLocalizedString("Salto", comment: ""), icon: "arrow.up.and.down"),
         Metric(id: "stepCount", name: NSLocalizedString("Passos", comment: ""), icon: "shoeprints.fill")
     ]
     
@@ -73,4 +66,3 @@ struct MenuView: View {
         .menuIndicator(.hidden)
     }
 }
-

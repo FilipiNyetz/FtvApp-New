@@ -1,9 +1,3 @@
-//
-//  HeaderEvolution.swift
-//  FtvApp
-//
-//  Created by Gustavo Souto Pereira on 28/08/25.
-//
 
 import SwiftUI
 

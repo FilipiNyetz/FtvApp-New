@@ -1,34 +1,21 @@
-//
-//  Date+Extensions.swift
-//  FtvApp
-//
-//  Created by Joao pedro Leonel on 18/08/25.
-//
 
 import Foundation
-
-// MARK: - Extensões para facilitar o trabalho com datas
-
 extension Date {
-    // Verifica se duas datas são do mesmo dia
     func isSameDay(as other: Date) -> Bool {
         let calendar = Calendar.current
         return calendar.isDate(self, inSameDayAs: other)
     }
     
-    // Retorna o primeiro dia do mês
     var startOfMonth: Date {
         let calendar = Calendar.current
         let components = calendar.dateComponents([.year, .month], from: self)
         return calendar.date(from: components) ?? self
     }
     
-    // Adiciona dias à data
     func adding(days: Int) -> Date {
         return Calendar.current.date(byAdding: .day, value: days, to: self) ?? self
     }
     
-    // Formata a data para exibir na pílula (ex: "12 de ago. de 2025")
     func formattedPill() -> String {
         let formatter = DateFormatter()
         formatter.locale = Locale(identifier: "pt_BR")
@@ -36,7 +23,6 @@ extension Date {
         return formatter.string(from: self)
     }
     
-    // Retorna apenas o número do dia
     func dayNumber() -> String {
         let day = Calendar.current.component(.day, from: self)
         return String(day)

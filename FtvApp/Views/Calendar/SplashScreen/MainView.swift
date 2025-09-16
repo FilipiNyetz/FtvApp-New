@@ -2,19 +2,15 @@
 import SwiftUI
 import SwiftData
 
-
-
 struct MainView: View {
     @State private var isLoading = true
     @State private var splashOpacity: Double = 1.0
     @State private var startViewOpacity: Double = 0.0
     
-    // Instâncias dos managers
     @StateObject var healthManager = HealthManager()
     @EnvironmentObject var userManager: UserManager
     @StateObject var wcSessionDelegate = PhoneWCSessionDelegate()
     
-    // Criar ModelContainer como State
     @State private var container: ModelContainer?
 
     var body: some View {
@@ -33,7 +29,6 @@ struct MainView: View {
             }
         }
         .task {
-            // Inicializa o ModelContainer de forma segura
             do {
                 container = try ModelContainer(for: JumpEntity.self, WorkoutPathEntity.self, WorkoutExtras.self)
                 wcSessionDelegate.container = container
@@ -41,16 +36,13 @@ struct MainView: View {
                 print("Erro ao criar ModelContainer: \(error)")
             }
 
-            // Wait for the splash screen duration
             try? await Task.sleep(for: .seconds(0.8))
 
-            // Animate splash screen fade out and start view fade in
             withAnimation(.easeInOut(duration: 0.6)) {
                 splashOpacity = 0.0
                 startViewOpacity = 1.0
             }
 
-            // Wait for the animation to complete before changing the state
             try? await Task.sleep(for: .seconds(0.6))
             isLoading = false
         }

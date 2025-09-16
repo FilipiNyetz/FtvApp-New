@@ -2040,6 +2040,7 @@
       }
     },
     "Salto" : {
+      "extractionState" : "stale",
       "localizations" : {
         "es" : {
           "stringUnit" : {

@@ -1,9 +1,3 @@
-//
-//  JumpResultView.swift
-//  FtvApp Watch App
-//
-//  Created by Gustavo Souto Pereira on 06/09/25.
-//
 
 import HealthKit
 import SwiftUI
@@ -13,7 +7,6 @@ struct JumpResultView: View {
     @ObservedObject var jumpDetector: JumpDetector
     let bestJump: Int
     
-    // Ações são passadas como closures, em vez de usar Bindings para o estado da outra view
     var onStart: () -> Void
     var onRedo: () -> Void
 
@@ -66,9 +59,6 @@ struct JumpResultView: View {
             .buttonStyle(.plain)
             
         }
-//        .onAppear{
-//            jumpDetector.stop()
-//        }
         .navigationBarBackButtonHidden(true)
         .ignoresSafeArea(edges: .bottom)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -80,7 +70,6 @@ struct JumpResultView: View {
                 startPoint: .bottomLeading,
                 endPoint: .topTrailing
             )
-            // .opacity(0.85) // A opacidade pode ser ajustada aqui se necessário
             .ignoresSafeArea()
         )
     }

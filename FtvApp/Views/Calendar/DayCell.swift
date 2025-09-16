@@ -1,15 +1,6 @@
-//
-//  DayCell.swift
-//  FtvApp
-//
-//  Created by Joao pedro Leonel on 18/08/25.
-//
 
 import Foundation
 import SwiftUI
-
-// MARK: - Célula de cada dia do calendário
-
 struct DayCell: View {
     let date: Date
     let isToday: Bool
@@ -44,7 +35,6 @@ struct DayCell: View {
                 }
                 
                 
-                // Bolinha indicando treino concluído
                 if(isToday && isSelected){
                     Circle()
                         .fill(Color.black)

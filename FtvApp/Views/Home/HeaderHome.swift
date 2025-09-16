@@ -1,9 +1,3 @@
-//
-//  HeaderHome.swift
-//  FtvApp
-//
-//  Created by Filipi Romão on 23/08/25.
-//
 
 import SwiftUI
 
@@ -36,7 +30,6 @@ struct HeaderHome: View {
                     .font(.title.bold())
                     .foregroundColor(.white)
 
-                // Foguinho evolutivo por streak
                 HStack(spacing: 8) {
                     Image(imageFogoNum)
                         .resizable()

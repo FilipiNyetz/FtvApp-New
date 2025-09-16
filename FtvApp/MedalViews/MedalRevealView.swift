@@ -1,9 +1,3 @@
-//
-//  MedalReviewView.swift
-//  FtvApp
-//
-//  Created by Gustavo Souto Pereira on 02/09/25.
-//
 
 import UIKit
 
@@ -34,7 +28,6 @@ final class MedalRevealView: UIView {
             imageView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
             imageView.trailingAnchor.constraint(equalTo: self.trailingAnchor),
         ])
-        // Sombra para dar profundidade
         imageView.layer.shadowColor = UIColor.yellow.cgColor
         imageView.layer.shadowOpacity = 0.8
         imageView.layer.shadowRadius = 10
@@ -101,7 +94,6 @@ final class MedalRevealView: UIView {
         let emitterCell = CAEmitterCell()
         emitterCell.contents = createSparkleImage()
         
-        // Sem filtro de cor, a imagem será exibida com sua cor original amarela
         
         emitterCell.birthRate = 5
         emitterCell.lifetime = 1.0
@@ -129,8 +121,8 @@ final class MedalRevealView: UIView {
     
     private func startPulsingAnimation() {
         let pulse = CABasicAnimation(keyPath: "position.y")
-        pulse.fromValue = imageView.layer.position.y - 10 // sobe 5 pontos
-        pulse.toValue = imageView.layer.position.y + 10    // desce 5 pontos
+        pulse.fromValue = imageView.layer.position.y - 10 
+        pulse.toValue = imageView.layer.position.y + 10    
         pulse.duration = 0.8
         pulse.autoreverses = true
         pulse.repeatCount = .infinity

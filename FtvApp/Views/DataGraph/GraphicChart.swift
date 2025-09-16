@@ -1,9 +1,3 @@
-//
-// GraphicChart.swift
-// FtvApp
-//
-// Created by Joao pedro Leonel on 21/08/25.
-//
 
 import SwiftUI
 import Charts
@@ -17,7 +11,6 @@ struct GraphicChart: View {
     
     var body: some View {
         Chart {
-            // Barras
             ForEach(data, id: \.id) { workout in
                 BarMark(
                     x: .value("Data", workout.dateWorkout),
@@ -28,7 +21,6 @@ struct GraphicChart: View {
                 .opacity(selectedWorkout?.id == workout.id ? 1 : 0.7)
             }
             
-            // Seleção
             if let workout = selectedWorkout {
                 PointMark(
                     x: .value("Data", workout.dateWorkout),
@@ -56,7 +48,6 @@ struct GraphicChart: View {
         }
         .chartXScale(domain: xDomain(data: data, period: period), range: .plotDimension(padding: 8))
         
-        // Eixo X com rótulos pt-BR (3 letras)
         .chartXAxis {
             switch period {
             case "day":
@@ -68,8 +59,8 @@ struct GraphicChart: View {
                             Text(localizedXAxisLabel(for: date, period: period))
                                 .font(.caption2)
                                 .rotationEffect(.degrees(-45))
-                                .fixedSize(horizontal: true, vertical: false)  // <-- evita truncar/ellipsis
-                                .frame(minWidth: 24)                           // <-- dá largura mínima pro "ter"
+                                .fixedSize(horizontal: true, vertical: false)  
+                                .frame(minWidth: 24)                           
                                 .offset(x: -6, y: 6)
                                 .multilineTextAlignment(.trailing)
                         }
@@ -85,8 +76,8 @@ struct GraphicChart: View {
                             Text(localizedXAxisLabel(for: date, period: period))
                                 .font(.caption2)
                                 .rotationEffect(.degrees(-45))
-                                .fixedSize(horizontal: true, vertical: false)  // <-- evita truncar/ellipsis
-                                .frame(minWidth: 24)                           // <-- dá largura mínima pro "ter"
+                                .fixedSize(horizontal: true, vertical: false)  
+                                .frame(minWidth: 24)                           
                                 .offset(x: -6, y: 6)
                                 .multilineTextAlignment(.trailing)
                         }
@@ -102,7 +93,7 @@ struct GraphicChart: View {
                             Text(localizedXAxisLabel(for: date, period: period))
                                 .font(.caption2)
                                 .rotationEffect(.degrees(-45))
-                                .fixedSize(horizontal: true, vertical: false)  // <-- evita truncar/ellipsis
+                                .fixedSize(horizontal: true, vertical: false)  
                                 .offset(y: 8)
                                 .multilineTextAlignment(.center)
                         }

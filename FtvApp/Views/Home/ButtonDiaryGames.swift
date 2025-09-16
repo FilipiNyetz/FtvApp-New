@@ -4,7 +4,6 @@ struct ButtonDiaryGames: View {
     @ObservedObject var manager: HealthManager
     @ObservedObject var userManager: UserManager
     @Binding var selectedDate: Date
-    //@State private var opcaoDeTreinoParaMostrarCard: Int = 0
     let totalWorkouts: Int
     @Binding var selectedIndex: Int
     
@@ -12,36 +11,29 @@ struct ButtonDiaryGames: View {
         Group {
             if let workoutsDoDia = manager.workoutsByDay[
                 Calendar.current.startOfDay(for: selectedDate)
-            ], !workoutsDoDia.isEmpty {  // Adicionado !workoutsDoDia.isEmpty para segurança
+            ], !workoutsDoDia.isEmpty {  
                 VStack {
                     WorkoutMenu(
                         workouts: workoutsDoDia,
                         selectedIndex: $selectedIndex
                     )
                     
-                    // Garante que o índice selecionado é válido
                     if selectedIndex < workoutsDoDia.count {
                         ZStack {
-                            Image("mapacalor") // Fundo da quadra
+                            Image("mapacalor") 
                                 .resizable()
                                 .aspectRatio(contentMode: .fill)
                             
                             GeometryReader { proxy in
                                 HStack(spacing: 0) {
-                                    Spacer() // Empurra para a direita
+                                    Spacer() 
                                     
                                     GeneratedHeatmapImageView(workout: workoutsDoDia[selectedIndex])
-                                        .offset(y: 10) // Mantenha offsets e frames para posicionamento
-                                        .frame(width: proxy.size.width * 0.5) // Largura da meia quadra
-                                    // A altura será determinada pelo aspectRatio(contentMode: .fill)
-                                    // da imagem dentro de GeneratedHeatmapImageView,
-                                    // mas você pode forçar uma altura se a imagem gerada tiver a proporção certa.
-                                        .frame(height: 180) // Mantenha a altura que você deseja para a região do heatmap
+                                        .offset(y: 10) 
+                                        .frame(width: proxy.size.width * 0.5) 
+                                        .frame(height: 180) 
                                         .opacity(1.0)
                                         .blur(radius: 4)
-                                    // REMOVA ESTES MODIFICADORES, ELES JÁ FORAM APLICADOS NA GERAÇÃO DA IMAGEM
-                                    // .rotationEffect(.degrees(270))
-                                    // .scaleEffect(x: -1, y: 1)
                                 }
                             }
                         }
@@ -67,13 +59,9 @@ struct ButtonDiaryGames: View {
         .onChange(of: selectedDate) {
             selectedIndex = 0
         }
-        //        .onChange(of: selectedDate) { _ in
-        //            opcaoDeTreinoParaMostrarCard = 0
-        //        }
     }
 }
 
-// MARK: - Menu de Treinos
 struct WorkoutMenu: View {
     let workouts: [Workout]
     @Binding var selectedIndex: Int
@@ -104,7 +92,6 @@ struct WorkoutMenu: View {
     }
 }
 
-// MARK: - Card do treino selecionado
 struct WorkoutCardView: View {
     let workouts: [Workout]
     let selectedIndex: Int

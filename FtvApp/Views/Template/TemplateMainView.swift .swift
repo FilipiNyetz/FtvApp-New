@@ -1,13 +1,6 @@
-//
-//  TemplateMainView.swift
-//  FtvApp
-//
-//  Created by Cauê Carneiro on 20/08/25.
-//
 
 import SwiftUI
 
-// Opções do segmented
 enum ShareBg: String, CaseIterable {
     case comFundo = "Com fundo"
     case semFundo = "Sem fundo"
@@ -27,53 +20,6 @@ struct TemplateMainView: View {
         ZStack {
             NavigationStack {
                 VStack(spacing: 0) {
-
-                    // Header com título e botão
-                    //                    HStack {
-                    //                        VStack(alignment: .leading, spacing: 2) {
-                    //                            Text("Compartilhar")
-                    //                                .font(.title.bold())
-                    //                                .foregroundColor(.white)
-                    //                            Text("Compartilhe com seus amigos")
-                    //                                .font(.headline)
-                    //                                .foregroundStyle(.gray)
-                    //                        }
-                    //
-                    //                        Spacer()
-                    //
-                    //                        Button {
-                    //                            if selectedBackground == .comFundo {
-                    //                                viewModel.exportTemplate(workout: workout, withBackground: true, badgeImage: badgeImage, totalWorkouts: totalWorkouts, currentStreak: currentStreak)
-                    //                            } else {
-                    //                                viewModel.copyTemplateToClipboard(workout: workout, badgeImage: badgeImage, totalWorkouts: totalWorkouts, currentStreak: currentStreak)
-                    //                                withAnimation {
-                    //                                    showCopiedAlert = true
-                    //                                }
-                    //                            }
-                    //                        } label: {
-                    //                            ZStack {
-                    //                                Circle()
-                    //                                    .fill(Color.colorPrimal)
-                    //                                    .frame(width: 54, height: 54)
-                    //                                    .overlay(
-                    //                                        Image(systemName: selectedBackground == .comFundo ? "square.and.arrow.up" : "doc.on.doc")
-                    //                                            .font(.title2.weight(.semibold))
-                    //                                            .foregroundStyle(.black)
-                    //                                            .padding()
-                    //
-                    //                                    )
-                    //
-                    //
-                    //                            }
-                    //
-                    //                            .contentShape(Circle())
-                    //                        }
-                    //                        .accessibilityLabel(selectedBackground == .comFundo ? "Compartilhar" : "Copiar")
-                    //
-                    //                    }
-                    //                    .padding(.horizontal)
-                    //                    .padding(.top)
-
                     HeaderTemplate(
                         selectedBackground: $selectedBackground,
                         showCopiedAlert: $showCopiedAlert,
@@ -94,7 +40,6 @@ struct TemplateMainView: View {
                             }
 
                             VStack {
-                                // Picker agora fica sobre o mesmo fundo
                                 Picker("", selection: $selectedBackground) {
                                     Text(ShareBg.comFundo.rawValue)
                                         .font(.body)
@@ -111,7 +56,6 @@ struct TemplateMainView: View {
 
                                 Spacer()
                                 
-                                // Preview
                                 TemplateBodyView(
                                     workout: workout,
                                     withBackground: selectedBackground
@@ -166,7 +110,6 @@ struct TemplateMainView: View {
                     }
                 }
                 .toolbarBackground(Color.black, for: .navigationBar)
-               // .toolbarBackground(.visible, for: .navigationBar)
                 .background(Color.gray.opacity(0.1).ignoresSafeArea())
                 .foregroundColor(.white)
 

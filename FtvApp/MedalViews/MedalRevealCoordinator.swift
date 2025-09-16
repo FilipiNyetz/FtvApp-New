@@ -1,9 +1,3 @@
-//
-//  MedalRevealCoordinator.swift
-//  FtvApp
-//
-//  Created by Gustavo Souto Pereira on 02/09/25.
-//
 
 import UIKit
 
@@ -24,10 +18,8 @@ class MedalRevealCoordinator {
         
         medalView.reveal()
         
-        // Remover medalha após a animação (opcional)
         DispatchQueue.main.asyncAfter(deadline: .now() + 4.0) {
             medalView.removeFromSuperview()
         }
     }
 }
-

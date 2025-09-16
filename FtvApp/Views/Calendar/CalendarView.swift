@@ -1,22 +1,12 @@
-//
-//  CalendarView.swift
-//  FtvApp
-//
-//  Created by Joao pedro Leonel on 18/08/25.
-//
 
 import Foundation
 import SwiftUI
-
-// MARK: - Calendário principal
-
 struct CalendarView: View {
     @Binding var selectedDate: Date
-    @ObservedObject var manager: HealthManager   // <-- referência direta
+    @ObservedObject var manager: HealthManager   
     @State private var currentMonth: Date
     @State private var transitionDirection: TransitionDirection = .forward
     
-    // Enum para a direção do slide
     private enum TransitionDirection {
         case forward, backward
     }
@@ -33,38 +23,23 @@ struct CalendarView: View {
             removal: .move(edge: transitionDirection == .forward ? .leading : .trailing)
         )
         VStack(spacing: 0) {
-            // Cabeçalho com mês/ano e setas de navegação
             header
                 .padding(.horizontal, 16)
                 .padding(.top, 16)
                 .transition(transition)
                 .id(currentMonth)
             
-            // Cabeçalho dos dias da semana
             weekHeader
                 .padding(.horizontal, 16)
                 .padding(.top, 8)
                 .transition(transition)
                 .id(currentMonth)
             
-            // Grid com os dias do mês
             monthGrid
                 .padding(.horizontal, 16)
                 .transition(transition)
                 .id(currentMonth)
             
-//            // Linha separadora (se houver jogos)
-//            if selectedDayHasGames {
-//                Divider()
-//                    .background(Color.gray.opacity(0.3))
-//                    .padding(.horizontal, 16)
-//                    .padding(.top, 8)
-//            }
-//
-//            // Componente de jogos
-//            gameSection
-//                .padding(.horizontal, 16)
-//                .padding(.bottom, 16)
         }
         .clipShape(RoundedRectangle(cornerRadius: 16))
         .background(
@@ -73,7 +48,6 @@ struct CalendarView: View {
         )
     }
     
-    // MARK: - Subviews
     
     private var header: some View {
         HStack {
@@ -152,15 +126,12 @@ struct CalendarView: View {
                         selectedDate = day
                     }
                 }
-                .allowsHitTesting(hasWorkout || isToday) // HOJE sempre clicável
+                .allowsHitTesting(hasWorkout || isToday) 
             }
         }
     }
-
-
     
 
-    // MARK: - Funções auxiliares
     
     private var monthTitle: String {
         let formatter = DateFormatter()
@@ -169,13 +140,6 @@ struct CalendarView: View {
         return formatter.string(from: currentMonth)
     }
     
-//    private var selectedDayInfo: DayInfo? {
-//        return calendarData[normalizeDate(selectedDate)]
-//    }
-//
-//    private var selectedDayHasGames: Bool {
-//        return selectedDayInfo?.hasGames == true
-//    }
     
     private func normalizeDate(_ date: Date) -> Date {
         return Calendar.current.startOfDay(for: date)
@@ -196,6 +160,6 @@ struct CalendarView: View {
     private func getLeadingBlanks() -> Int {
         let calendar = Calendar.current
         let weekday = calendar.component(.weekday, from: currentMonth.startOfMonth)
-        return (weekday + 6) % 7  // Converte domingo=1 para domingo=0
+        return (weekday + 6) % 7  
     }
 }

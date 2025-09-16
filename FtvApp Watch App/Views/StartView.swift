@@ -1,9 +1,3 @@
-//
-//  StartView.swift
-//  FtvApp Watch App
-//
-//  Created by Gustavo Souto Pereira on 14/08/25.
-//
 
 import HealthKit
 import SwiftUI
@@ -48,7 +42,6 @@ struct StartView: View {
                 }
             } else if isCalibratingOrigin {
                 CalibrateOriginView(positionManager: positionManager) {
-                    // Callback quando calibrar origem
                     self.isCalibratingOrigin = false
                     self.isCountingDown = true
                 }
@@ -87,7 +80,7 @@ struct StartView: View {
 
             VStack(spacing: 8) {
                 Text("Seu desempenho será registrado")
-                    .font(.headline)  // headline em vez de title3 → mais compacto
+                    .font(.headline)  
                     .fontWeight(.medium)
                     .fontDesign(.rounded)
                     .multilineTextAlignment(.center)
@@ -96,7 +89,7 @@ struct StartView: View {
 
                 Button(action: {
                     self.selectedWorkoutType = .soccer
-                    self.isCalibratingOrigin = true   // <- novo estado
+                    self.isCalibratingOrigin = true   
                 }) {
                     Text("Iniciar Treino")
                         .font(.headline.bold())

@@ -1,15 +1,9 @@
-//
-//  suggestions.swift
-//  FtvApp
-//
-//  Created by Joao pedro Leonel on 19/08/25.
-//
 
 import SwiftUI
 
 struct SuggestionsDynamic: View {
-    let selectedMetricId: String     // "heartRate" | "calories" | "distance" | "height"
-    let maxValue: Double             // valor Máx da métrica no período atual
+    let selectedMetricId: String     
+    let maxValue: Double             
     
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
@@ -31,7 +25,6 @@ struct SuggestionsDynamic: View {
         }
     }
     
-    // Subtítulo contextual
     var subtitle: String {
         switch selectedMetricId {
         case "heartRate": return "Ajuste a intensidade pelos seus batimentos"
@@ -42,11 +35,9 @@ struct SuggestionsDynamic: View {
         }
     }
     
-    // Regras simples por métrica — 3 cartões SEMPRE
     var cards: [Card] {
         switch selectedMetricId {
         case "heartRate":
-            // Faixas exemplo: <=120 baixa, 121–149 moderada, >=150 alta
             if maxValue <= 120 {
                 return [
                     .init("figure",
@@ -214,7 +205,6 @@ struct SuggestionsDynamic: View {
             }
             
             
-            //salto Liberar quando saber se vai usar ou nao
         case "height":
             if maxValue < 0.25 {
                 return [

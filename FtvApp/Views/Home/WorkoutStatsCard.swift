@@ -19,7 +19,7 @@ struct WorkoutStatsCard: View {
     var formattedDistance: String {
         if workout.distance > 999 {
             let km = Double(workout.distance) / 1000.0
-            return String(format: "%.1f", km) // 1 casa decimal
+            return String(format: "%.1f", km) 
         } else {
             return "\(workout.distance)"
         }
@@ -31,7 +31,6 @@ struct WorkoutStatsCard: View {
     
     var body: some View {
         VStack(spacing: 16) {
-            // Linha de cima
             HStack {
                 statItem(
                     title: Text("PASSOS"),
@@ -61,7 +60,6 @@ struct WorkoutStatsCard: View {
                     .foregroundColor(.white)
             }
             
-            // Linha de baixo
             HStack {
                 statItem(
                     title: Text("CALORIA"),

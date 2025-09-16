@@ -1,12 +1,7 @@
-//
-//  BaseWorkoutModel.swift
-//  FtvApp
-//
 
 import Foundation
 import SwiftData
 
-// MARK: - Estrutura de um ponto do trajeto
 struct PathPoint: Codable {
     let x: Double
     let y: Double
@@ -14,12 +9,11 @@ struct PathPoint: Codable {
 
 var stepCount: Int?
 
-// MARK: - WorkoutExtras - Dados extras do workout (pulos e trajeto)
 @Model
 final class WorkoutExtras: @unchecked Sendable {
-    @Attribute(.unique) var workoutID: String   // UUID string do HKWorkout
-    var higherJump: Double?                     // maior pulo do treino
-    var pointPath: [[Double]]?                  // trajeto como array de pares [x,y]
+    @Attribute(.unique) var workoutID: String   
+    var higherJump: Double?                     
+    var pointPath: [[Double]]?                  
     var updatedAt: Date
     
     var stepCount: Int?
@@ -33,11 +27,10 @@ final class WorkoutExtras: @unchecked Sendable {
     }
 }
 
-// MARK: - Pulos (mantido para compatibilidade e referência histórica)
 @Model
 final class JumpEntity {
     @Attribute(.unique) var id: UUID
-    var workoutId: UUID        // UUID do workout no HealthKit
+    var workoutId: UUID        
     var height: Double
     var date: Date
     
@@ -49,12 +42,11 @@ final class JumpEntity {
     }
 }
 
-// MARK: - Trajetória do workout (mantido para compatibilidade)
 @Model
 final class WorkoutPathEntity {
     @Attribute(.unique) var id: UUID
     var workoutId: UUID
-    var pathData: Data          // Array de PathPoint serializado
+    var pathData: Data          
     var createdAt: Date
     
     init(workoutId: UUID, path: [PathPoint]) {
@@ -62,22 +54,18 @@ final class WorkoutPathEntity {
         self.workoutId = workoutId
         self.createdAt = Date()
         
-        // Codifica o array de pontos em JSON
         let encoder = JSONEncoder()
         self.pathData = (try? encoder.encode(path)) ?? Data()
     }
     
-    // Helper para decodificar o array de pontos
     func decodedPath() -> [PathPoint] {
         let decoder = JSONDecoder()
         return (try? decoder.decode([PathPoint].self, from: pathData)) ?? []
     }
 }
 
-// MARK: - Modelo temporário para exibição
-// Não será salvo no SwiftData, apenas usado para agrupar os dados
 struct Workout {
-    let id: UUID                 // UUID do HealthKit workout
+    let id: UUID                 
     let idWorkoutType: Int
     let duration: Double
     let calories: Int
@@ -85,6 +73,6 @@ struct Workout {
     let frequencyHeart: Double
     let dateWorkout: Date
     let higherJump: Double?
-    let pointsPath: [[Double]]   // Convertido de WorkoutPathEntity
+    let pointsPath: [[Double]]   
     let stepCount: Int
 }

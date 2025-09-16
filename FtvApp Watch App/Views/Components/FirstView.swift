@@ -1,9 +1,3 @@
-//
-//  FirstView.swift
-//  FtvApp Watch App
-//
-//  Created by Gustavo Souto Pereira on 05/09/25.
-//
 
 import HealthKit
 import SwiftUI
@@ -12,7 +6,6 @@ struct FirstView: View {
     @Binding var hasCompletedOnboarding: Bool
     var body: some View {
         NavigationStack {
-            //criar a logica de onboarding
             ZStack {
                 Image("LogoS")
                     .resizable()
@@ -33,7 +26,6 @@ struct FirstView: View {
 
                 VStack(spacing: 12) {
 
-                    //Text("Seu desempenho será registrado em tempo real")
                     Text(
                         "Bem vindo ao SETE, vamos registrar sua performance e evoluir seu jogo"
                     )

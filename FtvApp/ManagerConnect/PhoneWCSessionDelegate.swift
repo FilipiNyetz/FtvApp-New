@@ -2,27 +2,22 @@ import Foundation
 import SwiftData
 import WatchConnectivity
 
-/// The WCSession delegate on the watch side
 class PhoneWCSessionDelegate: NSObject, WCSessionDelegate,ObservableObject {
     
     var container: ModelContainer!
-//    @Published var higherJumps: [Double?] = [0.0]
     @Published var number: Int = 0
     @Published var higherJump: Double = 0.0
     @Published var pulos: [Double] = []
     var healthManager: HealthManager?
     
-    // Repository para gerenciar dados extras dos workouts
     private lazy var extrasRepository: WorkoutExtrasRepository = {
         WorkoutExtrasRepository(container: container)
     }()
     
-    /// Acesso público ao repositório para o HealthManager
     func getExtrasRepository() -> WorkoutExtrasRepository {
         return extrasRepository
     }
     
-    /// Assigns this delegate to WCSession and starts the session
     func startSession() {
         guard WCSession.isSupported() else { return }
         print("*** Starting WCSession for phone ***")
@@ -32,7 +27,6 @@ class PhoneWCSessionDelegate: NSObject, WCSessionDelegate,ObservableObject {
         session.activate()
     }
     
-    /// A delegate function called everytime WCSession is activated
     func session(_ session: WCSession, activationDidCompleteWith activationState: WCSessionActivationState, error: Error?) {
         if let error = error {
             print("*** Phone WCSession activation error: \(error) ***")
@@ -51,18 +45,15 @@ class PhoneWCSessionDelegate: NSObject, WCSessionDelegate,ObservableObject {
         }
     }
     
-    /// A delegate function called everytime WCSession recieves an application context update
     func session(_ session: WCSession, didReceiveApplicationContext applicationContext: [String : Any]) {
         print("*** WCSession recieved application context on phone ***")
         
     }
     
-    /// A delegate function called everytime WCSession becomes inactive
     func sessionDidBecomeInactive(_ session: WCSession) {
         print("*** WCSession became inactive on phone ***")
     }
     
-    /// A delegate function called everytime WCSession deactivates
     func sessionDidDeactivate(_ session: WCSession) {
         print("*** WCSession deactivated on phone ***")
     }
@@ -85,7 +76,6 @@ class PhoneWCSessionDelegate: NSObject, WCSessionDelegate,ObservableObject {
                 return
             }
             
-            // 🔹 Processar higherJump se presente
             if let valor = message["pulo"] as? Double {
                 print("📩 Recebido jump \(valor) para workoutId \(workoutIdString)")
                 self.higherJump = valor
@@ -98,7 +88,6 @@ class PhoneWCSessionDelegate: NSObject, WCSessionDelegate,ObservableObject {
                 }
             }
             
-            // 🔹 Processar workoutPath se presente
             if let rawPath = message["workoutPath"] as? [[String: Double]] {
                 let pathPoints: [[Double]] = rawPath.compactMap { dict in
                     if let x = dict["x"], let y = dict["y"] {
@@ -119,7 +108,6 @@ class PhoneWCSessionDelegate: NSObject, WCSessionDelegate,ObservableObject {
                         print("👣 Recebido stepCount \(stepCount) para workoutId \(workoutIdString)")
                         
                         do {
-                            // Você precisará criar o método 'upsertStepCount' no Passo 2
                             try await self.extrasRepository.upsertStepCount(stepCount, for: workoutIdString)
                         } catch {
                             print("❌ Erro ao salvar stepCount: \(error)")
@@ -131,7 +119,6 @@ class PhoneWCSessionDelegate: NSObject, WCSessionDelegate,ObservableObject {
         }
     }
 
-    // MARK: - Métodos mantidos para compatibilidade com dados legados
     
     @MainActor
     func fetchJumps(for workoutId: UUID) async -> [JumpEntity] {
@@ -175,7 +162,5 @@ class PhoneWCSessionDelegate: NSObject, WCSessionDelegate,ObservableObject {
         
         return []
     }
-
-
 
 }

@@ -1,14 +1,5 @@
-//
-//  CalendarScreen.swift
-//  FtvApp
-//
-//  Created by Gustavo Souto Pereira on 18/08/25.
-//
 
 import SwiftUI
-
-// MARK: - Tela principal do calendário
-
 import SwiftUI
 
 struct CalendarScreen: View {
@@ -16,31 +7,19 @@ struct CalendarScreen: View {
     @Binding var selectedDate: Date
     @ObservedObject var manager: HealthManager
     
-    //private let calendarData = SampleData.createCalendarData()
     
     var body: some View {
         VStack(spacing: 12) {
-            // Pílula da data ( fixa a esquerda)
             HStack{
                 Button {
                     withAnimation (){
                         showCalendar.toggle()
                     }
                 } label: {
-//                    Text(selectedDate.formattedPill())
-//                        .font(.headline.weight(.regular))
-//                        .padding(.vertical, 6)
-//                        .padding(.horizontal, 10)
-//                        .background(
-//                            RoundedRectangle(cornerRadius: 8)
-//                                .fill(Color.darkGrayBackground)
-//                        )
-//                        .foregroundStyle(.primary)
                 }
                 Spacer()
             }
             
-            // Calendário (aparece/desaparece)
             if showCalendar {
                 CalendarView(
                     selectedDate: $selectedDate,

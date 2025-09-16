@@ -1,9 +1,3 @@
-//
-//  ComFundo.swift
-//  FtvApp
-//
-//  Created by Cauê Carneiro on 20/08/25.
-//
 
 import SwiftUI
 import UniformTypeIdentifiers
@@ -12,8 +6,6 @@ struct TemplateBodyView: View {
     let workout: Workout
     let withBackground: Bool
     var isPreview: Bool = true
-    //    let card = Color.white.opacity(1.0)
-    //    let stroke = Color.white.opacity(1.0)
 
     var badgeImage: String
     let totalWorkouts: Int
@@ -59,12 +51,9 @@ struct TemplateBodyView: View {
         }
     }
 
-    // MARK: - Sem Fundo (Transparente)
     var contentNoBackground: some View {
 
-        // MARK: Layout estilo Sem Fundo
         VStack(spacing: 30) {
-            // Calorias
             VStack(spacing: 8) {
                 Text("Caloria")
                     .font(.callout)
@@ -83,7 +72,6 @@ struct TemplateBodyView: View {
                 }
             }
 
-            // Tempo
             VStack(spacing: 8) {
                 Text("Tempo")
                     .font(.callout)
@@ -100,34 +88,26 @@ struct TemplateBodyView: View {
                 .monospacedDigit()
                 .foregroundStyle(.white)
             }
-            // MARK: - Heatmap Display
             ZStack {
-                // 1. A imagem da meia quadra como fundo
-                Image("mapaTemplateSemfundo")  // <-- Sua nova imagem de meia quadra
+                Image("mapaTemplateSemfundo")  
                     .resizable()
                     .scaledToFit()
                     .frame(width: 170, height: 200)
 
                 
-                // O heatmap centralizado com espaçamento proporcional
                 if isPreview {
                     GeneratedHeatmapImageView(
                         workout: workout,
-                        // Geramos a imagem numa proporção mais vertical
                         renderSize: CGSize(width: 170, height: 200)
                     )
                     .frame(width: 147, height: 186)
-                    // 3. Modificadores aplicados na imagem para o visual final
                     .mask(
                         RoundedRectangle(cornerRadius: 8, style: .continuous)
                     )
                     .padding(.horizontal, 12)
                                        .padding(.top, 2)
                                        .padding(.bottom, 12)
-
-
                 } else {
-                    // Para exportação/cópia, renderiza diretamente a imagem
                     if let heatmapImage = HeatmapImageGenerator.shared.ensureImageExists(
                         for: workout,
                         size: CGSize(width: 140, height: 180)
@@ -152,7 +132,6 @@ struct TemplateBodyView: View {
             .cornerRadius(12)
             .clipped()
             
-            // Nome do App
             VStack(spacing: 8) {
                 Image("LogoNome7")
             }
@@ -227,4 +206,3 @@ func metric(
         }
     }
 }
-

@@ -1,9 +1,3 @@
-//
-//  ElapsedTimeView.swift
-//  FtvApp Watch App
-//
-//  Created by Gustavo Souto Pereira on 14/08/25.
-//
 
 import SwiftUI
 

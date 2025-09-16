@@ -1,15 +1,8 @@
-//
-//  JumpInstructionView.swift
-//  FtvApp Watch App
-//
-//  Jump measurement flow has been removed.
-//
 
 import SwiftUI
 
 struct JumpInstructionView: View {
     var body: some View {
-        // Placeholder view kept for compatibility after removing jump feature
         ZStack {
             LinearGradient(
                 gradient: Gradient(colors: [.gradiente1, .gradiente2, .gradiente2]),

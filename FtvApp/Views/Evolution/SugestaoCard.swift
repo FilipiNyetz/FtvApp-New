@@ -1,9 +1,3 @@
-//
-//  SugestaoCard.swift
-//  FtvApp
-//
-//  Created by Joao pedro Leonel on 19/08/25.
-//
 
 import SwiftUI
 
@@ -14,7 +8,6 @@ struct SugestaoCard: View {
     
     var body: some View {
         VStack(alignment: .leading, spacing: 6) {
-            // Linha do título + ícone
             HStack {
                 Image(systemName: icone)
                     .foregroundColor(.colorSecond)
@@ -25,7 +18,6 @@ struct SugestaoCard: View {
                     .fontWeight(.medium)
             }
             
-            // Texto da descrição
             descricao
                 .font(.subheadline)
                 .foregroundColor(.white)
@@ -49,8 +41,6 @@ struct SugestaoCard: View {
                         .stroke(Color.backgroundProgressBar,lineWidth: 0.3)
                 )
         )
-//        .background(.gray.opacity(0.2))
         .cornerRadius(10)
     }
 }
-

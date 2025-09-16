@@ -8,7 +8,6 @@ struct jumpdata: View {
         let stats = computeStats(data: data, metric: selectedMetric)
         
         HStack(spacing: 12) {
-            // Card Máx
             StatCard(
                 title: Text("MÁX"),
                 value: stats.maxValueText,
@@ -16,7 +15,6 @@ struct jumpdata: View {
                 dateText: stats.maxDateText
             )
             
-            // Card Mín
             StatCard(
                 title: Text("MÍN"),
                 value: stats.minValueText,
@@ -28,15 +26,12 @@ struct jumpdata: View {
     
     
     
-    // MARK: - Lógica
     
     func computeStats(data: [Workout], metric: String) -> (maxValueText: String, minValueText: String, maxDateText: String, minDateText: String, unit: String) {
         guard !data.isEmpty else {
-            // Sem dados
             return ("—", "—", "—", "—", unitFor(metric))
         }
         
-        // Valores conforme a métrica
         let pairs: [(workout: Workout, value: Double)] = data.map { ($0, valueForMetric($0, metric)) }
         
         guard let maxPair = pairs.max(by: { $0.value < $1.value }),
@@ -49,7 +44,6 @@ struct jumpdata: View {
         fmt.calendar = Calendar(identifier: .gregorian)
         fmt.dateFormat = "dd/MM/yy"
         
-        // Formata números por métrica
         let (maxText, minText) = formattedValues(maxPair.value, minPair.value, for: metric)
         
         let maxDate = fmt.string(from: maxPair.workout.dateWorkout)
@@ -61,7 +55,7 @@ struct jumpdata: View {
     private func unitFor(_ metric: String) -> String {
         switch metric {
         case "calories":  return "kcal"
-        case "distance":  return "m"      // ajuste p/ "km" se preferir
+        case "distance":  return "m"      
         case "heartRate": return "bpm"
         case "height":    return "cm"
         default:          return ""
@@ -79,15 +73,3 @@ struct jumpdata: View {
     }
     
 }
-
-//#Preview {
-//    // Preview com dados fake
-//    let now = Date()
-//    let fake: [Workout] = [
-//        Workout(id: UUID(), idWorkoutType: 0, duration: 0, calories: 230, distance: 800, frequencyHeart: 120, dateWorkout: now.addingTimeInterval(-2*86400)),
-//        Workout(id: UUID(), idWorkoutType: 0, duration: 0, calories: 450, distance: 1200, frequencyHeart: 150, dateWorkout: now.addingTimeInterval(-1*86400)),
-//        Workout(id: UUID(), idWorkoutType: 0, duration: 0, calories: 300, distance: 600, frequencyHeart: 110, dateWorkout: now)
-//    ]
-////    return jumpdata(data: fake, selectedMetric: "Batimento")
-////        .preferredColorScheme(.dark)
-//}

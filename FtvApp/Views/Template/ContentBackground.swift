@@ -1,15 +1,7 @@
-//
-//  ContentBackground.swift
-//  FtvApp
-//
-//  Created by Filipi Romão on 26/08/25.
-//
 
 import SwiftUI
 
 struct ContentBackground: View {
-    //    let card = Color.white.opacity(1.0)
-    //    let stroke = Color.white.opacity(1.0)
 
     let badgeImage: String
     let totalWorkouts: Int
@@ -26,7 +18,6 @@ struct ContentBackground: View {
 
     let workout: Workout
 
-    // Lógica dos níveis de fogo (igual ao HeaderHome)
     var nivelFogo: Int {
         switch currentStreak {
         case 0...1: return 1
@@ -43,7 +34,6 @@ struct ContentBackground: View {
 
     var body: some View {
         VStack(spacing: 24) {
-            // Top Metrics (streak, tempo, insignia)
             HStack {
                 metric(
                     icon: imageFogoNum,
@@ -55,7 +45,6 @@ struct ContentBackground: View {
                 )
                 .frame(maxWidth: .infinity)
 
-                // Coluna Central
                 VStack(spacing: 4) {
                     Text("TEMPO")
                         .font(.caption2)
@@ -74,7 +63,6 @@ struct ContentBackground: View {
                 }
                 .frame(maxWidth: .infinity)
 
-                // Coluna Direita
                 metric(
                     icon: badgeImage,
                     value: "\(totalWorkouts)",
@@ -86,17 +74,13 @@ struct ContentBackground: View {
                 .frame(maxWidth: .infinity)
             }
 
-            // MARK: - Heatmap Display
             ZStack {
-                // 1. A imagem da meia quadra como fundo
-                Image("mapaTemplateFundo")  // <-- Sua nova imagem de meia quadra
+                Image("mapaTemplateFundo")  
                     .resizable()
                     .frame(width: 380, height: 300)
                     .aspectRatio(contentMode: .fill)
 
-                // 2. O heatmap vem por cima, ocupando o mesmo espaço
                 if isPreview {
-                    // Para preview, usa a view assíncrona normal
                     GeneratedHeatmapImageView(
                         workout: workout
                     )
@@ -104,7 +88,6 @@ struct ContentBackground: View {
                     .blur(radius: 4)
                     .padding(.trailing, -20)
                 } else {
-                    // Para exportação/compartilhamento, renderiza diretamente a imagem
                     if let heatmapImage = HeatmapImageGenerator.shared
                         .ensureImageExists(
                             for: workout,
@@ -125,12 +108,10 @@ struct ContentBackground: View {
                     }
                 }
             }
-            // .frame(height: 250) // A altura do container do mapa de calor
             .cornerRadius(12)
             .clipped()
-            .padding(.trailing, 20)  // Adiciona um respiro nas laterais do container
+            .padding(.trailing, 20)  
 
-            // Bottom Metrics
             HStack {
                 metric(
                     icon: "heart.fill",
@@ -146,7 +127,6 @@ struct ContentBackground: View {
                 if let jump = workout.higherJump, jump != 0 {
                     metric(
                         icon: "arrow.up.and.down",
-                        // Agora você usa 'jump', que é um Double garantido (não opcional)
                         value: "\(jump)",
                         unit: "cm",
                         label: "SALTO MAX",
@@ -168,7 +148,6 @@ struct ContentBackground: View {
                 .frame(maxWidth: .infinity)
             }
 
-            // Nome do App
             VStack(spacing: 4) {
                 Image("LogoNome7")
             }

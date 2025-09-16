@@ -1,9 +1,3 @@
-//
-//  CalibrationManager.swift
-//  FtvApp Watch App
-//
-//  Created by Gustavo Souto Pereira on 05/09/25.
-//
 
 import Foundation
 import Foundation
@@ -29,9 +23,7 @@ class CalibrationManager: ObservableObject {
         motionManager.startDeviceMotionUpdates(to: .main) { motion, error in
             guard let motion = motion else { return }
             
-            // Captura o valor médio da gravidade no eixo Z como baseline
             self.baselineGravity = motion.gravity.z
-            // Define sensibilidade inicial com base em aceleração média
             self.sensitivity = max(0.2, abs(motion.userAcceleration.z) + 0.05)
             
             self.isCalibrated = true

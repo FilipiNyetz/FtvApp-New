@@ -1,9 +1,3 @@
-//
-//  TotalGames.swift
-//  FtvApp
-//
-//  Created by Filipi Romão on 21/08/25.
-//
 
 import SwiftUI
 

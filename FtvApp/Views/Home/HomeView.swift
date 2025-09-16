@@ -10,12 +10,10 @@ struct HomeView: View {
     @State var opcaoDeTreinoParaMostrarCard: Int = 0
     @State private var showCalendar = false
     
-    // Conveniências
     private var dayStart: Date { Calendar.current.startOfDay(for: selectedDate) }
     private var workoutsToday: [Workout] { manager.workoutsByDay[dayStart] ?? [] }
     private var hasWorkoutsToday: Bool { !workoutsToday.isEmpty }
     
-    // Pegamos o workout escolhido pelo usuário (via índice)
     private var selectedWorkoutForShare: Workout? {
         guard hasWorkoutsToday else { return nil }
         let idx = min(max(opcaoDeTreinoParaMostrarCard, 0), workoutsToday.count - 1)
@@ -29,10 +27,8 @@ struct HomeView: View {
                 Color.gradiente2.ignoresSafeArea(edges: .all)
                 
                 VStack(spacing: 0) {
-                    // HEADER PRETO PERSONALIZADO
                     HeaderHome(manager: manager, wcSessionDelegate: wcSessionDelegate)
                 
-                    // CONTEÚDO
                     ScrollViewReader { proxy in
                         ScrollView {
                             ZStack {
@@ -45,7 +41,6 @@ struct HomeView: View {
                                 
                                 VStack(alignment: .leading, spacing: 20) {
                                     
-                                    // Linha da data com share alinhado ao topo-direito
                                     HStack {
                                         DatePickerField(
                                             selectedDate: $selectedDate,
@@ -57,14 +52,11 @@ struct HomeView: View {
                                     }
                                     .foregroundStyle(.white)
                                     
-                                    // Cards conforme estado
                                     Group {
                                         if manager.workouts.isEmpty {
-                                            // Nenhum treino no histórico
                                             CardWithoutWorkout()
                                                 .id("card-top")
                                         } else if hasWorkoutsToday {
-                                            // Há treinos na data selecionada
                                             
                                            
                                             
@@ -77,7 +69,6 @@ struct HomeView: View {
                                             )
                                             .id("card-top")
                                         } else {
-                                            // Há histórico, mas não nessa data
                                             CardWithoutDayWorkout()
                                                 .id("card-top")
                                         }
@@ -86,7 +77,6 @@ struct HomeView: View {
                                 .padding()
                             }
                             .onChange(of: selectedDate) {
-                                // Quando muda a data, rolar para o card
                                 withAnimation(.easeInOut) {
                                     proxy.scrollTo("card-top", anchor: .top)
                                 }

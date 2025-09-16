@@ -1,9 +1,3 @@
-//
-//  ShareSheet.swift
-//  FtvApp
-//
-//  Created by Gustavo Souto Pereira on 21/08/25.
-//
 
 import SwiftUI
 

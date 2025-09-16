@@ -1,9 +1,3 @@
-//
-//  SummaryView.swift
-//  FtvApp Watch App
-//
-//  Created by Gustavo Souto Pereira on 14/08/25.
-//
 
 import HealthKit
 import SwiftUI
@@ -87,11 +81,9 @@ struct SummaryView: View {
                             "workoutId": workout.uuid.uuidString
                         ]
 
-                        // Inclui contagem de passos customizada do PDR
                         message["customStepCount"] = manager.stepCount
                         print("👣 Enviando stepCount custom: \(manager.stepCount)")
 
-                        // 3. Adiciona a chave "workoutPath" SOMENTE se o path não estiver vazio
                         if !workoutPath.isEmpty {
                             print(
                                 "✅ Adicionando mapa de calor com (\(workoutPath.count) pontos) à mensagem."
@@ -103,7 +95,6 @@ struct SummaryView: View {
                             )
                         }
 
-                        // 4. Envia a mensagem que foi construída dinamicamente
                         print(
                             "➡️ Enviando mensagem final para o iPhone: \(message.keys)"
                         )
@@ -129,4 +120,3 @@ struct SummaryMetricView: View {
         }
     }
 }
-

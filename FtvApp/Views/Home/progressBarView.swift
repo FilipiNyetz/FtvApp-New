@@ -6,7 +6,7 @@ struct ProgressBarView: View {
     @EnvironmentObject var userManager: UserManager
     @State private var animatedProgress: Double = 0
     @State private var previousWorkoutsCount: Int = 0
-    let goal: Int = 20  // meta inicial
+    let goal: Int = 20  
 
     var body: some View {
         HStack {
@@ -27,19 +27,17 @@ struct ProgressBarView: View {
                     .font(.footnote)
                     .foregroundStyle(Color.textGray)
                     .fontWeight(.medium)
-                    .animation(nil, value: manager.workouts.count)  // bloqueia animação
+                    .animation(nil, value: manager.workouts.count)  
             }
 
             VStack {
                 GeometryReader { geometry in
                     ZStack(alignment: .leading) {
-                        // Fundo da barra
                         Rectangle()
                             .frame(height: 8)
                             .foregroundColor(Color.backgroundProgressBar)
                             .cornerRadius(8)
 
-                        // Progresso
                         let progress = min(
                             Double(manager.workouts.count)
                                 / Double(userManager.goalBadge),
@@ -73,7 +71,7 @@ struct ProgressBarView: View {
                     .font(.footnote)
                     .foregroundStyle(Color.textGray)
                     .fontWeight(.medium)
-                    .animation(nil, value: manager.workouts.count)  // bloqueia animação
+                    .animation(nil, value: manager.workouts.count)  
             }
 
             VStack {
@@ -105,12 +103,12 @@ struct ProgressBarView: View {
             )
         )
         .overlay(
-            RoundedRectangle(cornerRadius: 8)  // mesmo radius do Figma
+            RoundedRectangle(cornerRadius: 8)  
                 .stroke(Color(.backgroundProgressBar), lineWidth: 0.3)
         )
         .shadow(
-            color: Color.black.opacity(0.3),  // ajusta a opacidade
-            radius: 3,  // blur
+            color: Color.black.opacity(0.3),  
+            radius: 3,  
             x: 0,
             y: 2
         )
@@ -128,12 +126,10 @@ struct ProgressBarView: View {
         .onChange(of: manager.totalWorkoutsCount) { _, newTotalWorkouts in
             print("--- onChange Disparado! Novo total de treinos: \(newTotalWorkouts) ---")
 
-            // 1. Verifica se há uma nova medalha para conceder
             if let medalNameToAward = userManager.checkForNewMedal(totalWorkouts: newTotalWorkouts) {
                 print("✅ SUCESSO: Nova medalha encontrada para premiar: \(medalNameToAward)")
                 userManager.awardMedal(medalNameToAward)
 
-                // 3. Tenta mostrar a animação
                 DispatchQueue.main.async {
                     print("▶️ Tentando exibir a animação na main thread.")
                     if let rootVC = UIApplication.topMostViewController() {
@@ -151,7 +147,6 @@ struct ProgressBarView: View {
                 print("❌ NENHUMA MEDALHA NOVA: A função checkForNewMedal retornou nulo.")
             }
 
-            // 4. Atualiza a UI da barra de progresso
             userManager.setBadgeTotalWorkout(totalWorkouts: newTotalWorkouts)
             let progress = min(
                 Double(newTotalWorkouts) / Double(userManager.goalBadge),
@@ -161,12 +156,11 @@ struct ProgressBarView: View {
         }
     }
 
-    /// Interpola entre duas cores (#A2A2A2 -> #D6FF45) conforme o progresso
     func interpolatedColor(progress: Double) -> Color {
-        let clamped = max(0, min(progress, 1))  // garante que esteja entre 0 e 1
+        let clamped = max(0, min(progress, 1))  
 
-        let start = UIColor(hex: "#A2A2A2")  // cinza
-        let end = UIColor(hex: "#D6FF45")  // verde limão
+        let start = UIColor(hex: "#A2A2A2")  
+        let end = UIColor(hex: "#D6FF45")  
 
         var sR: CGFloat = 0
         var sG: CGFloat = 0
@@ -189,7 +183,6 @@ struct ProgressBarView: View {
 
 }
 
-// Extensão para converter hex em UIColor
 extension UIColor {
     convenience init(hex: String) {
         var hexSanitized = hex.trimmingCharacters(in: .whitespacesAndNewlines)

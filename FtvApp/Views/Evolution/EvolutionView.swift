@@ -1,9 +1,3 @@
-//
-//  EvolutionView.swift
-//  FtvApp
-//
-//  Created by Gustavo Souto Pereira on 14/08/25.
-//
 import SwiftUI
 import Charts
 
@@ -22,7 +16,6 @@ struct EvolutionView: View {
             HeaderEvolution(selectedMetricId: $selectedMetricId)
             
             ScrollView {
-                // Dados do gráfico (filtrados/agregados p/ período + métrica)
                 let periodKey = Period(selection: selectedSelection)
                 let chartData = dataForChart(
                     manager: manager,
@@ -44,7 +37,6 @@ struct EvolutionView: View {
                         }
                         .padding()
                         
-                        // Gráfico
                         GraphicChart(
                             data: chartData,
                             selectedMetric: selectedMetricId,
@@ -68,9 +60,7 @@ struct EvolutionView: View {
                     )
                     .padding(.bottom, -7)
                     Divider()
-                    //.padding(.horizontal)
                     
-                    // Cards Máx / Mín conforme métrica selecionada
                     jumpdata(data: chartData, selectedMetric: selectedMetricId)
                         .padding()
                 }
@@ -113,13 +103,8 @@ struct EvolutionView: View {
                 }
             }
             .toolbarBackground(Color.black, for: .navigationBar)
-            //   .toolbarBackground(.visible, for: .navigationBar)
             .background(Color.gray.opacity(0.1).ignoresSafeArea())
             
-            // Carrega tudo ao entrar; o gráfico agrega por período em memória
-//            .onAppear {
-//                manager.fetchAllWorkouts()
-//            }
         }
     }
     
@@ -144,7 +129,6 @@ struct EvolutionView: View {
         default:   return "month"
         }
     }
-    /// Máximo da métrica selecionada (usado pelas Sugestões)
     private var maxValueForMetric: Double {
         switch selectedMetricId {
         case "heartRate":
@@ -154,11 +138,9 @@ struct EvolutionView: View {
         case "distance":
             return Double(manager.workouts.map(\.distance).max() ?? 0)
         case "height":
-            return 0 // se adicionar altura no modelo, troque por Double(workout.height ?? 0)
+            return 0 
         default:
             return 0
         }
     }
 }
-
-

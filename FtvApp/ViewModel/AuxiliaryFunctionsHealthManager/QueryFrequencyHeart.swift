@@ -1,15 +1,7 @@
-//
-//  QueryFrequenciaCardiaca.swift
-//  BeActiv
-//
-//  Created by Filipi Romão on 25/08/25.
-//
 
 import Foundation
 import HealthKit
 
-/// Consulta frequência cardíaca de um workout específico.
-/// Retorna a média em BPM.
 func queryFrequenciaCardiaca(
     workout: HKWorkout,
     healthStore: HKHealthStore,
@@ -28,13 +20,12 @@ func queryFrequenciaCardiaca(
         options: .discreteAverage
     ) { _, result, error in
         if error != nil {
-//            print("Erro ao buscar frequência cardíaca: \(error.localizedDescription)")
             completionHandler(0)
             return
         }
         
         let bpm = result?.averageQuantity()?.doubleValue(for: HKUnit.count().unitDivided(by: .minute())) ?? 0
-        completionHandler(bpm) // Chamado apenas uma vez por treino
+        completionHandler(bpm) 
     }
     
     healthStore.execute(query)

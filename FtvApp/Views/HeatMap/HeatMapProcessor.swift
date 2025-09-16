@@ -8,7 +8,6 @@ struct HeatmapProcessor {
         let maxValue: Int
     }
 
-    // Processa pontos em uma grade, recebendo worldBounds já definidos
     static func process(points: [CGPoint],
                         worldBounds: CGRect,
                         gridSize: (rows: Int, cols: Int)) -> GridResult {
@@ -28,9 +27,9 @@ struct HeatmapProcessor {
         let spanY = max(maxY - minY, 0.001)
 
         for p in points {
-            let nx = (p.x - minX) / spanX           // 0..1
-            let ny = (p.y - minY) / spanY           // 0..1
-            let invY = 1 - ny                       // inverte para alinhar grid
+            let nx = (p.x - minX) / spanX           
+            let ny = (p.y - minY) / spanY           
+            let invY = 1 - ny                       
 
             var col = Int(nx * CGFloat(cols))
             var row = Int(invY * CGFloat(rows))
@@ -44,6 +43,6 @@ struct HeatmapProcessor {
             if grid[row][col] > maxValue { maxValue = grid[row][col] }
         }
 
-        return GridResult(grid: grid, maxValue: max(maxValue, 1)) // garante > 0
+        return GridResult(grid: grid, maxValue: max(maxValue, 1)) 
     }
 }

@@ -1,9 +1,3 @@
-//
-//  HealthManager.swift
-//  BeActiv
-//
-//  Created by Filipi Romão on 25/08/25.
-//
 
 import Foundation
 import HealthKit
@@ -15,13 +9,9 @@ class HealthManager: ObservableObject, @unchecked Sendable {
 
     var wcSessionDelegate: PhoneWCSessionDelegate?
 
-    // Todos os treinos históricos
     @Published var workouts: [Workout] = []
-    // Treinos agrupados por dia (baseado nos workouts filtrados)
     @Published var workoutsByDay: [Date: [Workout]] = [:]
-    // Total de treinos (baseado nos workouts filtrados)
     @Published var totalWorkoutsCount: Int = 0
-    // Streak atual
     @Published var currentStreak: Int = 0
 
     @AppStorage("streakUser") private var storedStreak: Int = 0
@@ -31,7 +21,6 @@ class HealthManager: ObservableObject, @unchecked Sendable {
     var newWorkouts: [Workout] = []
     var workoutAnchor: HKQueryAnchor?
 
-    // MARK: - Init
     init() {
         self.currentStreak = storedStreak
         if let delegate = self.wcSessionDelegate {
@@ -41,7 +30,6 @@ class HealthManager: ObservableObject, @unchecked Sendable {
         startObservingWorkouts()
     }
 
-    // MARK: - Authorization
     private func requestAuthorization() {
         let steps = HKQuantityType(.stepCount)
         let calories = HKQuantityType(.activeEnergyBurned)
@@ -65,10 +53,8 @@ class HealthManager: ObservableObject, @unchecked Sendable {
         }
     }
     
-    // MARK: - Fetch de dados único (NOVA FUNÇÃO)
         private func fetchWorkoutData(for workout: HKWorkout) async -> Workout? {
             return await withCheckedContinuation { continuation in
-                // Assume que 'queryFrequenciaCardiaca' está disponível globalmente ou em outro arquivo
                 queryFrequenciaCardiaca(
                     workout: workout,
                     healthStore: self.healthStore
@@ -109,7 +95,6 @@ class HealthManager: ObservableObject, @unchecked Sendable {
             }
         }
 
-    // MARK: - Timer para reset semanal
     func startWeekChangeTimer() {
         weekChangeTimer?.invalidate()
 
@@ -137,7 +122,6 @@ class HealthManager: ObservableObject, @unchecked Sendable {
         }
     }
 
-    // MARK: - Atualiza workouts agrupados
     @MainActor
     func updateWorkoutsByDay(filtered: [Workout]) {
         let grouped = Dictionary(grouping: filtered) { workout in
@@ -150,7 +134,6 @@ class HealthManager: ObservableObject, @unchecked Sendable {
         calculateStreak(from: filtered)
     }
 
-    // MARK: - Streak semanal
     @MainActor
     private func calculateStreak(from workouts: [Workout]) {
         let today = Date()
@@ -164,7 +147,6 @@ class HealthManager: ObservableObject, @unchecked Sendable {
             return
         }
 
-        // converte para semanas
         var weeks: [(year: Int, week: Int)] = []
         for day in workoutDays {
             let year = calendar.component(.yearForWeekOfYear, from: day)
@@ -180,7 +162,6 @@ class HealthManager: ObservableObject, @unchecked Sendable {
             return $0.year < $1.year
         }
 
-        // streak
         var streak = 0
         var lastWeek: (year: Int, week: Int)? = nil
 
@@ -200,7 +181,6 @@ class HealthManager: ObservableObject, @unchecked Sendable {
             lastWeek = week
         }
 
-        // se passou uma semana sem treino → zera
         if let last = lastWeek {
             let currentYear = calendar.component(
                 .yearForWeekOfYear,
@@ -219,7 +199,6 @@ class HealthManager: ObservableObject, @unchecked Sendable {
         storedStreak = streak
     }
 
-    // MARK: - Fetch histórico completo
     @MainActor
     func fetchAllWorkouts(until endDate: Date = Date()) {
         self.workouts.removeAll()
@@ -259,7 +238,6 @@ class HealthManager: ObservableObject, @unchecked Sendable {
             Task { @MainActor in
                 var tempWorkouts: [Workout] = []
                 
-                // ✅ Usa TaskGroup para buscar dados em paralelo de forma segura
                 await withTaskGroup(of: Workout?.self) { group in
                     for workout in workouts {
                         group.addTask {
@@ -267,7 +245,6 @@ class HealthManager: ObservableObject, @unchecked Sendable {
                         }
                     }
                     
-                    // Coleta os resultados de cada tarefa quando elas finalizarem
                     for await workout in group {
                         if let workout = workout {
                             tempWorkouts.append(workout)
@@ -275,12 +252,10 @@ class HealthManager: ObservableObject, @unchecked Sendable {
                     }
                 }
 
-                // Garante que não haja duplicatas
                 let uniqueWorkouts = Array(
                     Dictionary(grouping: tempWorkouts, by: { $0.id }).values.map { $0.first! }
                 )
                 
-                // ✅ Faz o merge com os dados extras e atualiza as propriedades publicadas
                 let enrichedWorkouts = await self.enrichWorkoutsWithExtras(uniqueWorkouts)
                 self.newWorkouts = enrichedWorkouts.sorted { $0.dateWorkout < $1.dateWorkout }
                 self.workouts = self.newWorkouts
@@ -291,9 +266,6 @@ class HealthManager: ObservableObject, @unchecked Sendable {
         healthStore.execute(query)
     }
 
-    // MARK: - Enrichment com dados extras
-    /// Enriquece workouts básicos com dados extras (higherJump e pointPath) do SwiftData
-    /// Executa uma única query para buscar todos os extras necessários
     @MainActor
     private func enrichWorkoutsWithExtras(_ workouts: [Workout]) async
         -> [Workout]
@@ -311,23 +283,19 @@ class HealthManager: ObservableObject, @unchecked Sendable {
                 for: workoutIDs
             )
 
-            // --- INÍCIO DA DEPURAÇÃO DETALHADA ---
             print(
                 "🔎 Chaves encontradas no banco de dados (Extras Map): \(extrasMap.keys)"
             )
             print(
                 "📦 Fazendo merge de \(workouts.count) workouts com \(extrasMap.count) extras..."
             )
-            // --- FIM DA DEPURAÇÃO DETALHADA ---
 
             return workouts.map { workout in
                 let workoutIDString = workout.id.uuidString
 
-                // --- INÍCIO DA DEPURAÇÃO DETALHADA ---
                 print(
                     "   -> Processando workout do HealthKit com ID: \(workoutIDString)"
                 )
-                // --- FIM DA DEPURAÇÃO DETALHADA ---
                 if let key = extrasMap.keys.first(where: {
                     $0.caseInsensitiveCompare(workoutIDString) == .orderedSame
                 }),
@@ -353,7 +321,7 @@ class HealthManager: ObservableObject, @unchecked Sendable {
                     print(
                         "      ❌ FALHA: Nenhuma combinação encontrada para \(workoutIDString) no mapa de extras."
                     )
-                    return workout  // Retorna o workout original sem os pontos
+                    return workout  
                 }
             }
         } catch {
@@ -364,7 +332,6 @@ class HealthManager: ObservableObject, @unchecked Sendable {
     
     
 
-    // MARK: - Fetch por período (mantida!)
     func fetchDataWorkout(endDate: Date, period: String) {
         self.workouts.removeAll()
         self.newWorkouts.removeAll()
@@ -470,7 +437,6 @@ class HealthManager: ObservableObject, @unchecked Sendable {
                         
                         
                         Task { @MainActor in
-                            // Monta Workout básico primeiro (sem dados extras)
                             let summary = Workout(
                                 id: workout.uuid,
                                 idWorkoutType: Int(
@@ -485,8 +451,8 @@ class HealthManager: ObservableObject, @unchecked Sendable {
                                 ),
                                 frequencyHeart: bpm,
                                 dateWorkout: workout.endDate,
-                                higherJump: 0.0,  // Será preenchido no merge posterior
-                                pointsPath: [], // Será preenchido no merge posterior
+                                higherJump: 0.0,  
+                                pointsPath: [], 
                                 stepCount: Int (steps)
                             )
                             
@@ -498,7 +464,6 @@ class HealthManager: ObservableObject, @unchecked Sendable {
                 
                 group.notify(queue: .main) {
                     Task { @MainActor in
-                        // 🔹 Fazer merge com dados extras do SwiftData
                         let enrichedWorkouts = await self.enrichWorkoutsWithExtras(
                             self.newWorkouts
                         )
@@ -516,7 +481,6 @@ class HealthManager: ObservableObject, @unchecked Sendable {
         healthStore.execute(query)
     }
 
-    // MARK: - Filtro em memória
     func filterWorkouts(period: String, referenceDate: Date = Date()) {
         let startDate: Date
         let endDate: Date
@@ -552,11 +516,9 @@ class HealthManager: ObservableObject, @unchecked Sendable {
         }
     }
 
-    //observar novos treinos diretamente no health kit
     func startObservingWorkouts() {
         let workoutType = HKObjectType.workoutType()
 
-        // 1. ObserverQuery avisa quando há novos treinos
         let observerQuery = HKObserverQuery(
             sampleType: workoutType,
             predicate: nil
@@ -567,7 +529,6 @@ class HealthManager: ObservableObject, @unchecked Sendable {
                 return
             }
 
-            // Sempre que chegar dado novo, re-fetch
             self.fetchNewWorkouts()
         }
 
@@ -588,7 +549,6 @@ class HealthManager: ObservableObject, @unchecked Sendable {
 
     private func fetchNewWorkouts() {
         let workoutType = HKObjectType.workoutType()
-        //        let sortDescriptor = NSSortDescriptor(key: HKSampleSortIdentifierEndDate, ascending: true)
 
         let query = HKAnchoredObjectQuery(
             type: workoutType,
@@ -609,7 +569,6 @@ class HealthManager: ObservableObject, @unchecked Sendable {
                 else { return }
 
                 Task { @MainActor in
-                    // 🔁 Reaproveita sua lógica existente
                     self.fetchAllWorkouts()
                 }
             }

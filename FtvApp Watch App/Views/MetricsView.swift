@@ -1,9 +1,3 @@
-//
-//  MetricsView.swift
-//  MyWorkouts Watch App
-//
-//  Created by Gustavo Souto Pereira on 11/08/25.
-//
 
 import SwiftUI
 import HealthKit
@@ -11,7 +5,6 @@ import HealthKit
 struct MetricsView: View {
     @ObservedObject var workoutManager: WorkoutManager
     @ObservedObject var wcSessionDelegate: WatchWCSessionDelegate
-//    @ObservedObject var jumpDetector: JumpDetector
    
 
     var body: some View {
@@ -44,9 +37,9 @@ struct MetricsView: View {
                     )
                     
                     Text("Calorias")
-                        .font(.caption2) // bem pequeno
-                        .textCase(.uppercase) // deixa maiúsculo
-                        .foregroundColor(.colorSecond) // cor secundária
+                        .font(.caption2) 
+                        .textCase(.uppercase) 
+                        .foregroundColor(.colorSecond) 
                         .alignmentGuide(.firstTextBaseline) { d in d[.bottom] + 0.5 }
                 }
 
@@ -58,20 +51,14 @@ struct MetricsView: View {
                         )
                     
                     Text("Distância")
-                        .font(.caption2) // bem pequeno
-                        .textCase(.uppercase) // deixa maiúsculo
-                        .foregroundColor(.colorSecond) // cor secundária
+                        .font(.caption2) 
+                        .textCase(.uppercase) 
+                        .foregroundColor(.colorSecond) 
                         .alignmentGuide(.firstTextBaseline) { d in d[.bottom] + 0.5 }
                     
                 }
                 
                 
-                // Saltos
-//                Text("Ú: \(String(format: "%.0f", jumpDetector.lastJumpHeight * 100)) cm")
-//                
-//                
-//                
-//                Text("MKA: \(String(format: "%.0f", jumpDetector.bestJumpHeight * 100)) cm")
                 
             }
             .font(
@@ -83,15 +70,6 @@ struct MetricsView: View {
             .ignoresSafeArea(edges: .bottom)
             .scenePadding()
         }
-//        .onAppear {
-//            jumpDetector.start()
-//        }
-//        .onDisappear {
-//            jumpDetector.stop()
-//            let cmValue:Double = jumpDetector.bestJumpHeight*100
-//            print("Vai enviar a msg")
-//            wcSessionDelegate.sendMessage(message: ["pulo": cmValue])
-//        }
     }
 }
 

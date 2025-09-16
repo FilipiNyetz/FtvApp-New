@@ -1,9 +1,3 @@
-//
-//  JumpDetector.swift
-//  FtvApp Watch App
-//
-//  Jump detection functionality has been removed from the app.
-//
 
 import Foundation
 

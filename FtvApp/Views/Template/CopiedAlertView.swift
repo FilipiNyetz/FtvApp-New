@@ -1,9 +1,3 @@
-//
-//  CopiedAlertView.swift
-//  FtvApp
-//
-//  Created by Gustavo Souto Pereira on 22/08/25.
-//
 
 import SwiftUI
 

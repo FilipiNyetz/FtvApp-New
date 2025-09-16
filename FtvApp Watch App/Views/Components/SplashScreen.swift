@@ -1,9 +1,3 @@
-//
-//  SplashScreen.swift
-//  FtvApp Watch App
-//
-//  Created by Gustavo Souto Pereira on 25/08/25.
-//
 
 import SwiftUI
 
@@ -13,7 +7,7 @@ struct SplashScreen: View {
             HStack{
                 Spacer()
                 
-                Image("LogoS") // Substitua por sua imagem de logo
+                Image("LogoS") 
                     .resizable()
                     .scaledToFit()
                     .frame(width: 150, height: 150)

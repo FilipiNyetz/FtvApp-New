@@ -1,15 +1,8 @@
-//
-//  TemplateViewModel.swift
-//  FtvApp
-//
-//  Created by Gustavo Souto Pereira on 22/08/25.
-//
 
 import SwiftUI
 import UIKit
 import UniformTypeIdentifiers
 
-// MARK: - ViewModel
 @MainActor
 class TemplateViewModel: ObservableObject {
     @Published var showShare = false
@@ -27,10 +20,8 @@ class TemplateViewModel: ObservableObject {
         Task {
             isGeneratingImage = true
             
-            // 1. Primeiro, garante que a imagem do heatmap está no cache
             await preGenerateHeatmapImage(for: workout)
             
-            // 2. Agora renderiza o template diretamente
             let templateView = TemplateBodyView(
                 workout: workout,
                 withBackground: withBackground,
@@ -66,10 +57,8 @@ class TemplateViewModel: ObservableObject {
         Task {
             isGeneratingImage = true
             
-            // 1. Primeiro, garante que a imagem do heatmap está no cache
             await preGenerateHeatmapImage(for: workout)
             
-            // 2. Agora renderiza o template diretamente
             let templateView = TemplateBodyView(
                 workout: workout,
                 withBackground: false,
@@ -80,7 +69,7 @@ class TemplateViewModel: ObservableObject {
             )
 
             let renderer = ImageRenderer(content: templateView)
-            renderer.scale = 3.0  // Maior resolução para cópia
+            renderer.scale = 3.0  
             renderer.isOpaque = false
 
             if let uiImage = renderer.uiImage {
@@ -95,13 +84,10 @@ class TemplateViewModel: ObservableObject {
         }
     }
     
-    // MARK: - Helper Methods
     
     private func preGenerateHeatmapImage(for workout: Workout) async {
-        // Força a geração da imagem do heatmap no cache
         let renderSize = CGSize(width: 160, height: 160)
         
-        // Garante que a imagem está no cache antes de continuar
         let _ = HeatmapImageGenerator.shared.ensureImageExists(for: workout, size: renderSize)
         print("✅ Imagem do heatmap garantida no cache para o template")
     }
