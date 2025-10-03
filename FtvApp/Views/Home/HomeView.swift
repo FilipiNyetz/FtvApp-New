@@ -10,37 +10,53 @@ struct HomeView: View {
     @State var opcaoDeTreinoParaMostrarCard: Int = 0
     @State private var showCalendar = false
     
-    private var dayStart: Date { Calendar.current.startOfDay(for: selectedDate) }
-    private var workoutsToday: [Workout] { manager.workoutsByDay[dayStart] ?? [] }
+    @State var todosOsEsportes: [Sport] = [.beachTennis, .footvolley, .volleyball]
+
+    @State private var selectedSport: Sport = .footvolley
+
+    private var dayStart: Date {
+        Calendar.current.startOfDay(for: selectedDate)
+    }
+    private var workoutsToday: [Workout] {
+        manager.workoutsByDay[dayStart] ?? []
+    }
     private var hasWorkoutsToday: Bool { !workoutsToday.isEmpty }
-    
+
     private var selectedWorkoutForShare: Workout? {
         guard hasWorkoutsToday else { return nil }
-        let idx = min(max(opcaoDeTreinoParaMostrarCard, 0), workoutsToday.count - 1)
+        let idx = min(
+            max(opcaoDeTreinoParaMostrarCard, 0),
+            workoutsToday.count - 1
+        )
         return workoutsToday[idx]
     }
-    
-    
+
     var body: some View {
         NavigationStack {
             ZStack {
                 Color.gradiente2.ignoresSafeArea(edges: .all)
-                
+
                 VStack(spacing: 0) {
-                    HeaderHome(manager: manager, wcSessionDelegate: wcSessionDelegate)
-                
+                    HeaderHome(
+                        manager: manager,
+                        wcSessionDelegate: wcSessionDelegate
+                    )
+
                     ScrollViewReader { proxy in
                         ScrollView {
                             ZStack {
                                 LinearGradient(
-                                    gradient: Gradient(colors: [.gradiente1, .gradiente2, .gradiente2, .gradiente2]),
+                                    gradient: Gradient(colors: [
+                                        .gradiente1, .gradiente2, .gradiente2,
+                                        .gradiente2,
+                                    ]),
                                     startPoint: .bottomLeading,
                                     endPoint: .topTrailing
                                 )
                                 .ignoresSafeArea()
-                                
+
                                 VStack(alignment: .leading, spacing: 20) {
-                                    
+
                                     HStack {
                                         DatePickerField(
                                             selectedDate: $selectedDate,
@@ -48,24 +64,24 @@ struct HomeView: View {
                                             manager: manager
                                         )
                                         .background(Color.clear)
-                                        
+
                                     }
                                     .foregroundStyle(.white)
-                                    
+
                                     Group {
                                         if manager.workouts.isEmpty {
                                             CardWithoutWorkout()
                                                 .id("card-top")
                                         } else if hasWorkoutsToday {
-                                            
-                                           
-                                            
+
                                             ButtonDiaryGames(
                                                 manager: manager,
                                                 userManager: userManager,
                                                 selectedDate: $selectedDate,
-                                                totalWorkouts: manager.totalWorkoutsCount,
-                                                selectedIndex: $opcaoDeTreinoParaMostrarCard
+                                                totalWorkouts: manager
+                                                    .totalWorkoutsCount,
+                                                selectedIndex:
+                                                    $opcaoDeTreinoParaMostrarCard
                                             )
                                             .id("card-top")
                                         } else {
@@ -81,10 +97,10 @@ struct HomeView: View {
                                     proxy.scrollTo("card-top", anchor: .top)
                                 }
                             }
-                            
+
                             Divider()
                                 .padding(.top, -8)
-                            
+
                             VStack {
                                 TotalGames(
                                     manager: manager,
@@ -97,12 +113,55 @@ struct HomeView: View {
                     }
                 }
             }
+            .toolbar(content: {
+                ToolbarItem(placement: toolbarTrailingPlacement) {
+                    Menu(
+                        content: {
+                            ForEach(todosOsEsportes, id: \.id) { sport in
+                                Button(action: {
+                                    selectedSport = sport
+                                    manager.fetchAllWorkouts(until: Date(), sport: sport)
+                                    manager.filterWorkouts(period: "day", sport: sport, referenceDate: selectedDate)
+                                }, label: {
+                                    HStack(spacing: 8) {
+                                        Text(sport.displayName)
+                                    }
+                                })
+                            }
+                        },
+                        label: {
+                            HStack(spacing: 6) {
+                                 [
+                                Text(selectedSport.displayName)
+                            }
+                        }
+                    )
+                }
+            })
+            // se quiser título minimalista sem esconder a barra:
+            .navigationTitle("")  // título vazio
+            .navigationBarTitleDisplayMode(.inline)  // sem “Large Title”
         }
         .ignoresSafeArea(edges: .top)
         .onAppear {
-            manager.fetchAllWorkouts(until: Date())
+            //            manager.fetchAllWorkouts(until: Date())
+            //            manager.startWeekChangeTimer()
+
+            manager.fetchAllWorkouts(until: Date(), sport: selectedSport)
+            manager.filterWorkouts(
+                period: "day",
+                sport: selectedSport,
+                referenceDate: selectedDate
+            )
             manager.startWeekChangeTimer()
         }
-        .navigationBarHidden(true)
+        // .navigationBarHidden(true)
+    }
+}
+private var toolbarTrailingPlacement: ToolbarItemPlacement {
+    if #available(iOS 17.0, *) {
+        return .topBarTrailing
+    } else {
+        return .navigationBarTrailing
     }
 }

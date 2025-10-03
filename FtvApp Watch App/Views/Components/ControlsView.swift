@@ -47,9 +47,13 @@ struct ControlsView: View {
                 Button {
                     Task {
                         await manager.endWorkout(shouldShowSummary: false)
-
-                        self.manager.startWorkout(workoutType: .soccer)
-                        self.onNextMatch?()
+                        if let type = manager.selectedWorkoutType {
+                            manager.startWorkout(workoutType: type)
+                            onNextMatch?()
+                        } else {
+                            manager.startWorkout(workoutType: .soccer)
+                            onNextMatch?()
+                        }
                     }
                 } label: {
                     Image(systemName: "forward.fill")

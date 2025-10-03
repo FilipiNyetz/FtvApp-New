@@ -13,7 +13,7 @@ struct StartView: View {
     @State private var isCalibratingOrigin = false
     @ObservedObject var positionManager = managerPosition.shared
 
-    var workoutTypes: [HKWorkoutActivityType] = [.soccer]
+    var workoutTypes: [HKWorkoutActivityType] = [.soccer, .volleyball, .tennis]
 
     var body: some View {
         NavigationStack {
@@ -41,10 +41,19 @@ struct StartView: View {
                     .environmentObject(manager)
                 }
             } else if isCalibratingOrigin {
-                CalibrateOriginView(positionManager: positionManager) {
-                    self.isCalibratingOrigin = false
-                    self.isCountingDown = true
-                }
+                CalibrateOriginView(
+                    positionManager: positionManager,
+                    onCalibrated: {
+                        self.isCalibratingOrigin = false
+                        self.isCountingDown = true
+                    },
+                    onCancel: {
+                        // Volta para a StartView para permitir trocar o esporte
+                        self.isCalibratingOrigin = false
+                        // Opcional: zere a seleção para forçar nova escolha
+                        // self.selectedWorkoutType = nil
+                    }
+                )
 
             } else if isCountingDown, let workoutType = selectedWorkoutType {
                 CountdownScreen(onCountdownFinished: {
@@ -78,9 +87,9 @@ struct StartView: View {
             .opacity(0.85)
             .ignoresSafeArea()
 
-            VStack(spacing: 8) {
-                Text("Seu desempenho será registrado")
-                    .font(.headline)  
+            VStack(spacing: 12) {
+                Text("Escolha seu esporte para iniciar")
+                    .font(.headline)
                     .fontWeight(.medium)
                     .fontDesign(.rounded)
                     .multilineTextAlignment(.center)
@@ -88,17 +97,52 @@ struct StartView: View {
                     .padding(.horizontal)
 
                 Button(action: {
-                    self.selectedWorkoutType = .soccer
-                    self.isCalibratingOrigin = true   
+                    let type: HKWorkoutActivityType = .soccer
+                    self.selectedWorkoutType = type
+                    self.manager.selectedWorkoutType = type
+                    self.isCalibratingOrigin = true
                 }) {
-                    Text("Iniciar Treino")
+                    Text("Futevolei")
                         .font(.headline.bold())
-                        .frame(maxWidth: .infinity, maxHeight: 50)
+                        .frame(maxWidth: .infinity, maxHeight: 35)
                         .foregroundStyle(.black)
                         .background(Color.colorPrimal)
                         .clipShape(RoundedRectangle(cornerRadius: 24))
                 }
                 .buttonStyle(.plain)
+                .padding(.horizontal, 12)
+                
+                Button(action: {
+                    let type: HKWorkoutActivityType = .volleyball
+                    self.selectedWorkoutType = type
+                    self.manager.selectedWorkoutType = type
+                    self.isCalibratingOrigin = true
+                }) {
+                    Text("Vôlei")
+                        .font(.headline.bold())
+                        .frame(maxWidth: .infinity, maxHeight: 35)
+                        .foregroundStyle(.black)
+                        .background(Color.colorPrimal)
+                        .clipShape(RoundedRectangle(cornerRadius: 24))
+                }
+                .buttonStyle(.plain)
+                .padding(.horizontal,12)
+                
+                Button(action: {
+                    let type: HKWorkoutActivityType = .tennis
+                    self.selectedWorkoutType = type
+                    self.manager.selectedWorkoutType = type
+                    self.isCalibratingOrigin = true
+                }) {
+                    Text("Beach Tennis")
+                        .font(.headline.bold())
+                        .frame(maxWidth: .infinity, maxHeight: 35)
+                        .foregroundStyle(.black)
+                        .background(Color.colorPrimal)
+                        .clipShape(RoundedRectangle(cornerRadius: 24))
+                }
+                .buttonStyle(.plain)
+                .padding(.horizontal,12)
             }
             .padding(.horizontal, 12)
         }
@@ -119,6 +163,8 @@ extension HKWorkoutActivityType: @retroactive Identifiable {
     var name: String {
         switch self {
         case .soccer: return "Futevôlei"
+        case .volleyball: return "Vôlei de praia"
+        case .tennis: return "Beach Tennis"
         default: return "Treino"
         }
     }

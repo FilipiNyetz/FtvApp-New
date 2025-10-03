@@ -3,6 +3,39 @@ import Foundation
 import HealthKit
 import SwiftUI
 
+enum Sport: Int, CaseIterable, Identifiable {
+    case footvolley   // usa HKWorkoutActivityType.soccer
+    case volleyball   // .volleyball
+    case beachTennis  // .tennis
+
+    var id: Int { rawValue }
+
+    var hkType: HKWorkoutActivityType {
+        switch self {
+        case .footvolley:   return .soccer
+        case .volleyball:   return .volleyball
+        case .beachTennis:  return .tennis
+        }
+    }
+
+    var displayName: String {
+        switch self {
+        case .footvolley:   return "Futevôlei"
+        case .volleyball:   return "Vôlei de praia"
+        case .beachTennis:  return "Beach Tennis"
+        }
+    }
+
+    static func from(hkType: HKWorkoutActivityType) -> Sport? {
+        switch hkType {
+        case .soccer:      return .footvolley
+        case .volleyball:  return .volleyball
+        case .tennis:      return .beachTennis
+        default:           return nil
+        }
+    }
+}
+
 class HealthManager: ObservableObject, @unchecked Sendable {
 
     let healthStore = HKHealthStore()
@@ -11,6 +44,7 @@ class HealthManager: ObservableObject, @unchecked Sendable {
 
     @Published var workouts: [Workout] = []
     @Published var workoutsByDay: [Date: [Workout]] = [:]
+    @Published var workoutsBySport: [Sport: [Workout]] = [:]
     @Published var totalWorkoutsCount: Int = 0
     @Published var currentStreak: Int = 0
 
@@ -198,26 +232,35 @@ class HealthManager: ObservableObject, @unchecked Sendable {
         currentStreak = streak
         storedStreak = streak
     }
+    
+    private func makePredicate(start: Date?, end: Date?, sports: [Sport]?) -> NSPredicate? {
+        var subs: [NSPredicate] = []
+
+        if let start, let end {
+            subs.append(HKQuery.predicateForSamples(withStart: start, end: end))
+        } else if let end {
+            subs.append(HKQuery.predicateForSamples(withStart: .distantPast, end: end))
+        }
+
+        if let sports, !sports.isEmpty {
+            // Combine vários esportes (se um dia crescer a lista)
+            let sportPreds = sports.map { HKQuery.predicateForWorkouts(with: $0.hkType) }
+            subs.append(NSCompoundPredicate(orPredicateWithSubpredicates: sportPreds))
+        }
+
+        guard !subs.isEmpty else { return nil }
+        return NSCompoundPredicate(andPredicateWithSubpredicates: subs)
+    }
 
     @MainActor
-    func fetchAllWorkouts(until endDate: Date = Date()) {
+    func fetchAllWorkouts(until endDate: Date = Date(), sport: Sport? = nil) {
         self.workouts.removeAll()
         self.newWorkouts.removeAll()
         self.totalWorkoutsCount = 0
 
         let workoutType = HKObjectType.workoutType()
-        let timePredicate = HKQuery.predicateForSamples(
-            withStart: .distantPast,
-            end: endDate
-        )
-        let workoutPredicate = HKQuery.predicateForWorkouts(with: .soccer)
-        let predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [
-            timePredicate, workoutPredicate,
-        ])
-        let sortDescriptor = NSSortDescriptor(
-            key: HKSampleSortIdentifierEndDate,
-            ascending: true
-        )
+        let predicate = makePredicate(start: .distantPast, end: endDate, sports: sport.map { [$0] })
+        let sortDescriptor = NSSortDescriptor(key: HKSampleSortIdentifierEndDate, ascending: true)
 
         let query = HKSampleQuery(
             sampleType: workoutType,
@@ -229,41 +272,46 @@ class HealthManager: ObservableObject, @unchecked Sendable {
                 print("Erro ao buscar workouts: \(error?.localizedDescription ?? "desconhecido")")
                 return
             }
-
             if workouts.isEmpty {
                 print("Nenhum treino encontrado")
-                return
             }
 
             Task { @MainActor in
-                var tempWorkouts: [Workout] = []
-                
+                var temp: [Workout] = []
+
                 await withTaskGroup(of: Workout?.self) { group in
-                    for workout in workouts {
-                        group.addTask {
-                            await self.fetchWorkoutData(for: workout)
-                        }
-                    }
-                    
-                    for await workout in group {
-                        if let workout = workout {
-                            tempWorkouts.append(workout)
-                        }
-                    }
+                    for w in workouts { group.addTask { await self.fetchWorkoutData(for: w) } }
+                    for await s in group { if let s { temp.append(s) } }
                 }
 
-                let uniqueWorkouts = Array(
-                    Dictionary(grouping: tempWorkouts, by: { $0.id }).values.map { $0.first! }
-                )
-                
-                let enrichedWorkouts = await self.enrichWorkoutsWithExtras(uniqueWorkouts)
-                self.newWorkouts = enrichedWorkouts.sorted { $0.dateWorkout < $1.dateWorkout }
+                let unique = Array(Dictionary(grouping: temp, by: { $0.id }).values.compactMap(\.first))
+                let enriched = await self.enrichWorkoutsWithExtras(unique)
+                self.newWorkouts = enriched.sorted { $0.dateWorkout < $1.dateWorkout }
                 self.workouts = self.newWorkouts
                 self.totalWorkoutsCount = self.workouts.count
                 self.updateWorkoutsByDay(filtered: self.workouts)
+
+                // preenche o dicionário por esporte também
+                self.indexBySport(self.workouts)
             }
         }
         healthStore.execute(query)
+    }
+
+    @MainActor
+    private func indexBySport(_ items: [Workout]) {
+        var dict: [Sport: [Workout]] = [:]
+
+        for wk in items {
+            guard
+                let hkType = HKWorkoutActivityType(rawValue: UInt(wk.idWorkoutType)),
+                let sport = Sport.from(hkType: hkType)
+            else { continue }
+
+            dict[sport, default: []].append(wk)
+        }
+
+        self.workoutsBySport = dict
     }
 
     @MainActor
@@ -332,148 +380,101 @@ class HealthManager: ObservableObject, @unchecked Sendable {
     
     
 
-    func fetchDataWorkout(endDate: Date, period: String) {
+    func fetchDataWorkout(endDate: Date, period: String, sport: Sport? = nil) {
         self.workouts.removeAll()
         self.newWorkouts.removeAll()
         self.totalWorkoutsCount = 0
 
+        // calcula janela de datas (como você já faz)
         let startDate: Date
         let adjustedEndDate: Date
-
         switch period {
         case "day":
             startDate = calendar.startOfDay(for: endDate)
-            adjustedEndDate = calendar.date(
-                byAdding: .day,
-                value: 1,
-                to: startDate
-            )!.addingTimeInterval(-1)
+            adjustedEndDate = calendar.date(byAdding: .day, value: 1, to: startDate)!.addingTimeInterval(-1)
         case "week":
             adjustedEndDate = endDate
-            startDate = calendar.date(
-                byAdding: .weekOfYear,
-                value: -1,
-                to: adjustedEndDate
-            )!
+            startDate = calendar.date(byAdding: .weekOfYear, value: -1, to: adjustedEndDate)!
         case "month":
             adjustedEndDate = endDate
-            startDate = calendar.date(
-                byAdding: .month,
-                value: -1,
-                to: adjustedEndDate
-            )!
+            startDate = calendar.date(byAdding: .month, value: -1, to: adjustedEndDate)!
         case "sixmonth":
             adjustedEndDate = endDate
-            startDate = calendar.date(
-                byAdding: .month,
-                value: -6,
-                to: adjustedEndDate
-            )!
+            startDate = calendar.date(byAdding: .month, value: -6, to: adjustedEndDate)!
         case "year":
             adjustedEndDate = endDate
-            startDate = calendar.date(
-                byAdding: .year,
-                value: -1,
-                to: adjustedEndDate
-            )!
+            startDate = calendar.date(byAdding: .year, value: -1, to: adjustedEndDate)!
         default:
             return
         }
 
         let workoutType = HKObjectType.workoutType()
-        let timePredicate = HKQuery.predicateForSamples(
-            withStart: startDate,
-            end: adjustedEndDate
-        )
-        let workoutPredicate = HKQuery.predicateForWorkouts(with: .soccer)
-        let predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [
-            timePredicate, workoutPredicate,
-        ])
+        let predicate = makePredicate(start: startDate, end: adjustedEndDate, sports: sport.map { [$0] })
 
         let query = HKSampleQuery(
             sampleType: workoutType,
             predicate: predicate,
             limit: HKObjectQueryNoLimit,
-            sortDescriptors: [
-                NSSortDescriptor(
-                    key: HKSampleSortIdentifierEndDate,
-                    ascending: true
-                )
-            ]
+            sortDescriptors: [NSSortDescriptor(key: HKSampleSortIdentifierEndDate, ascending: true)]
         ) { _, samples, error in
             guard let workouts = samples as? [HKWorkout], error == nil else {
-                print(
-                    "Erro ao buscar workouts: \(error?.localizedDescription ?? "desconhecido")"
-                )
+                print("Erro ao buscar workouts: \(error?.localizedDescription ?? "desconhecido")")
                 return
             }
-            
+
             let group = DispatchGroup()
-            
+
+            var collected: [Workout] = []
             for workout in workouts {
                 group.enter()
-                
-                queryFrequenciaCardiaca(
-                    workout: workout,
-                    healthStore: self.healthStore
-                ) { bpm in
-                    let energyType = HKQuantityType.quantityType(
-                        forIdentifier: .activeEnergyBurned
-                    )!
+                queryFrequenciaCardiaca(workout: workout, healthStore: self.healthStore) { bpm in
+                    let energyType = HKQuantityType.quantityType(forIdentifier: .activeEnergyBurned)!
                     let calories: Int
                     if let totalEnergy = workout.statistics(for: energyType)?.sumQuantity() {
                         calories = Int(totalEnergy.doubleValue(for: .kilocalorie()))
                     } else {
                         calories = 0
                     }
-                    
+
                     let stepsType = HKQuantityType.quantityType(forIdentifier: .stepCount)!
                     let predicateSteps = HKQuery.predicateForObjects(from: workout)
-                    _ = HKStatisticsQuery(quantityType: stepsType, quantitySamplePredicate: predicateSteps, options: .cumulativeSum) { _, result, _ in
+                    let stepsQuery = HKStatisticsQuery(quantityType: stepsType, quantitySamplePredicate: predicateSteps, options: .cumulativeSum) { _, result, _ in
                         var steps = 0.0
                         if let sum = result?.sumQuantity() {
                             steps = sum.doubleValue(for: .count())
                         }
-                        
-                        
+
                         Task { @MainActor in
-                            let summary = Workout(
-                                id: workout.uuid,
-                                idWorkoutType: Int(
-                                    workout.workoutActivityType.rawValue
-                                ),
-                                duration: workout.duration,
-                                calories: Int(calories),
-                                distance: Int(
-                                    workout.totalDistance?.doubleValue(
-                                        for: .meter()
-                                    ) ?? 0
-                                ),
-                                frequencyHeart: bpm,
-                                dateWorkout: workout.endDate,
-                                higherJump: 0.0,  
-                                pointsPath: [], 
-                                stepCount: Int (steps)
+                            collected.append(
+                                Workout(
+                                    id: workout.uuid,
+                                    idWorkoutType: Int(workout.workoutActivityType.rawValue),
+                                    duration: workout.duration,
+                                    calories: calories,
+                                    distance: Int(workout.totalDistance?.doubleValue(for: .meter()) ?? 0),
+                                    frequencyHeart: bpm,
+                                    dateWorkout: workout.endDate,
+                                    higherJump: 0.0,
+                                    pointsPath: [],
+                                    stepCount: Int(steps)
+                                )
                             )
-                            
-                            self.newWorkouts.append(summary)
                             group.leave()
                         }
                     }
+                    self.healthStore.execute(stepsQuery)
                 }
-                
-                group.notify(queue: .main) {
-                    Task { @MainActor in
-                        let enrichedWorkouts = await self.enrichWorkoutsWithExtras(
-                            self.newWorkouts
-                        )
-                        
-                        self.workouts = enrichedWorkouts.sorted {
-                            $0.dateWorkout < $1.dateWorkout
-                        }
-                        self.totalWorkoutsCount = self.workouts.count
-                        self.updateWorkoutsByDay(filtered: self.workouts)
-                    }
+            }
+
+            // ⚠️ O notify precisa estar FORA do loop
+            group.notify(queue: .main) {
+                Task { @MainActor in
+                    let unique = Array(Dictionary(grouping: collected, by: { $0.id }).values.compactMap(\.first))
+                    let enriched = await self.enrichWorkoutsWithExtras(unique)
+                    self.workouts = enriched.sorted { $0.dateWorkout < $1.dateWorkout }
+                    self.totalWorkoutsCount = self.workouts.count
+                    self.updateWorkoutsByDay(filtered: self.workouts)
+                    self.indexBySport(self.workouts)
                 }
             }
         }
@@ -481,7 +482,7 @@ class HealthManager: ObservableObject, @unchecked Sendable {
         healthStore.execute(query)
     }
 
-    func filterWorkouts(period: String, referenceDate: Date = Date()) {
+    func filterWorkouts(period: String, sport: Sport?, referenceDate: Date = Date()) {
         let startDate: Date
         let endDate: Date
 
@@ -491,11 +492,7 @@ class HealthManager: ObservableObject, @unchecked Sendable {
             endDate = calendar.date(byAdding: .day, value: 1, to: startDate)!
         case "week":
             endDate = referenceDate
-            startDate = calendar.date(
-                byAdding: .weekOfYear,
-                value: -1,
-                to: endDate
-            )!
+            startDate = calendar.date(byAdding: .weekOfYear, value: -1, to: endDate)!
         case "month":
             endDate = referenceDate
             startDate = calendar.date(byAdding: .month, value: -1, to: endDate)!
@@ -507,9 +504,8 @@ class HealthManager: ObservableObject, @unchecked Sendable {
             endDate = Date()
         }
 
-        let filtered = workouts.filter {
-            $0.dateWorkout >= startDate && $0.dateWorkout < endDate
-        }
+        let base = (sport != nil) ? (workoutsBySport[sport!] ?? []) : workouts
+        let filtered = base.filter { $0.dateWorkout >= startDate && $0.dateWorkout < endDate }
 
         Task { @MainActor in
             self.updateWorkoutsByDay(filtered: filtered)

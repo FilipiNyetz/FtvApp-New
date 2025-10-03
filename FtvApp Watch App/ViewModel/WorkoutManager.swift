@@ -45,6 +45,7 @@ class WorkoutManager: NSObject, ObservableObject {
     private var isEndingWorkout = false
     @ObservedObject var positionManager = managerPosition.shared
     @Published var serializablePath: [[String: Double]] = []
+    @Published var selectedWorkoutType: HKWorkoutActivityType?
     
     
     private let motionManager = CMMotionManager()
@@ -60,6 +61,7 @@ class WorkoutManager: NSObject, ObservableObject {
     
     @MainActor
     func startWorkout(workoutType: HKWorkoutActivityType) {
+        self.selectedWorkoutType = workoutType
         self.accumulatedTime = 0
         self.elapsedTime = 0
         self.heartRate = 0
