@@ -28,9 +28,9 @@ enum Sport: Int, CaseIterable, Identifiable {
     
     var iconName: String {
         switch self {
-        case .beachTennis: return "tennis.racket"
-        case .footvolley: return "soccerball"
-        case .volleyball: return "sportscourt"
+        case .beachTennis: return "figure.tennis"
+        case .footvolley: return "figure.taichi"
+        case .volleyball: return "figure.volleyball"
         }
     }
 

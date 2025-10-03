@@ -126,17 +126,7 @@ struct HomeView: View {
                             }
                         }
                     } label: {
-                        HStack(spacing: 4) {
-                            Text(selectedSport.displayName)
-                                .font(.subheadline)
-                                .fontWeight(.semibold)
-                            Image(systemName: selectedSport.iconName)
-                        }
-                        .padding(.horizontal, 10)
-                        .padding(.vertical, 6)
-                        .background(Color.white.opacity(0.2))
-                        .foregroundColor(.white)
-                        .clipShape(Capsule())
+                        menuLabel()
                     }
                 }
             }
@@ -159,6 +149,29 @@ struct HomeView: View {
         }
         // .navigationBarHidden(true)
     }
+    
+    @ViewBuilder
+    private func menuLabel() -> some View {
+        // Define o conteúdo base do label
+        let content = HStack(spacing: 4) {
+            Text(selectedSport.displayName)
+                .font(.subheadline)
+                .fontWeight(.semibold)
+            Image(systemName: selectedSport.iconName)
+        }
+        .padding(.horizontal, 10)
+        .padding(.vertical, 6)
+        .foregroundColor(.white)
+        .clipShape(Capsule())
+
+        if #available(iOS 26.0, *) {
+            content
+        } else {
+            content
+                .background(Color.white.opacity(0.2))
+                .clipShape(Capsule())
+        }
+    }
 }
 private var toolbarTrailingPlacement: ToolbarItemPlacement {
     if #available(iOS 17.0, *) {
@@ -167,3 +180,4 @@ private var toolbarTrailingPlacement: ToolbarItemPlacement {
         return .navigationBarTrailing
     }
 }
+
