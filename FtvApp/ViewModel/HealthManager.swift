@@ -388,12 +388,11 @@ class HealthManager: ObservableObject, @unchecked Sendable {
     
     
 
-    func fetchDataWorkout(endDate: Date, period: String, sport: Sport? = nil) {
+    @MainActor
+    func fetchDataWorkout(endDate: Date, period: String, sport: Sport? = nil) async {
         self.workouts.removeAll()
         self.newWorkouts.removeAll()
         self.totalWorkoutsCount = 0
-
-        // calcula janela de datas (como você já faz)
         let startDate: Date
         let adjustedEndDate: Date
         switch period {
@@ -416,78 +415,55 @@ class HealthManager: ObservableObject, @unchecked Sendable {
             return
         }
 
-        let workoutType = HKObjectType.workoutType()
         let predicate = makePredicate(start: startDate, end: adjustedEndDate, sports: sport.map { [$0] })
 
-        let query = HKSampleQuery(
-            sampleType: workoutType,
-            predicate: predicate,
-            limit: HKObjectQueryNoLimit,
-            sortDescriptors: [NSSortDescriptor(key: HKSampleSortIdentifierEndDate, ascending: true)]
-        ) { _, samples, error in
-            guard let workouts = samples as? [HKWorkout], error == nil else {
-                print("Erro ao buscar workouts: \(error?.localizedDescription ?? "desconhecido")")
+        do {
+            let workoutType = HKObjectType.workoutType()
+            let sortDescriptor = NSSortDescriptor(key: HKSampleSortIdentifierEndDate, ascending: true)
+            
+            let samples = try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<[HKSample], Error>) in
+                let query = HKSampleQuery(sampleType: workoutType, predicate: predicate, limit: HKObjectQueryNoLimit, sortDescriptors: [sortDescriptor]) { _, samples, error in
+                    if let error {
+                        continuation.resume(throwing: error)
+                        return
+                    }
+                    continuation.resume(returning: samples ?? [])
+                }
+                healthStore.execute(query)
+            }
+
+            guard let hkWorkouts = samples as? [HKWorkout], !hkWorkouts.isEmpty else {
+                print("Nenhum treino encontrado para o período.")
+                self.updateWorkoutsByDay(filtered: [])
+                self.indexBySport([])
                 return
             }
-
-            let group = DispatchGroup()
-
-            var collected: [Workout] = []
-            for workout in workouts {
-                group.enter()
-                queryFrequenciaCardiaca(workout: workout, healthStore: self.healthStore) { bpm in
-                    let energyType = HKQuantityType.quantityType(forIdentifier: .activeEnergyBurned)!
-                    let calories: Int
-                    if let totalEnergy = workout.statistics(for: energyType)?.sumQuantity() {
-                        calories = Int(totalEnergy.doubleValue(for: .kilocalorie()))
-                    } else {
-                        calories = 0
+            
+            var collectedWorkouts: [Workout] = []
+            await withTaskGroup(of: Workout?.self) { group in
+                for workout in hkWorkouts {
+                    group.addTask {
+                        return await self.fetchWorkoutData(for: workout)
                     }
-
-                    let stepsType = HKQuantityType.quantityType(forIdentifier: .stepCount)!
-                    let predicateSteps = HKQuery.predicateForObjects(from: workout)
-                    let stepsQuery = HKStatisticsQuery(quantityType: stepsType, quantitySamplePredicate: predicateSteps, options: .cumulativeSum) { _, result, _ in
-                        var steps = 0.0
-                        if let sum = result?.sumQuantity() {
-                            steps = sum.doubleValue(for: .count())
-                        }
-
-                        Task { @MainActor in
-                            collected.append(
-                                Workout(
-                                    id: workout.uuid,
-                                    idWorkoutType: Int(workout.workoutActivityType.rawValue),
-                                    duration: workout.duration,
-                                    calories: calories,
-                                    distance: Int(workout.totalDistance?.doubleValue(for: .meter()) ?? 0),
-                                    frequencyHeart: bpm,
-                                    dateWorkout: workout.endDate,
-                                    higherJump: 0.0,
-                                    pointsPath: [],
-                                    stepCount: Int(steps)
-                                )
-                            )
-                            group.leave()
-                        }
+                }
+                for await result in group {
+                    if let workout = result {
+                        collectedWorkouts.append(workout)
                     }
-                    self.healthStore.execute(stepsQuery)
                 }
             }
+            let unique = Array(Dictionary(grouping: collectedWorkouts, by: { $0.id }).values.compactMap(\.first))
+            let enriched = await self.enrichWorkoutsWithExtras(unique)
+            let sortedWorkouts = enriched.sorted { $0.dateWorkout < $1.dateWorkout }
 
-            // ⚠️ O notify precisa estar FORA do loop
-            group.notify(queue: .main) {
-                Task { @MainActor in
-                    let unique = Array(Dictionary(grouping: collected, by: { $0.id }).values.compactMap(\.first))
-                    let enriched = await self.enrichWorkoutsWithExtras(unique)
-                    self.workouts = enriched.sorted { $0.dateWorkout < $1.dateWorkout }
-                    self.totalWorkoutsCount = self.workouts.count
-                    self.updateWorkoutsByDay(filtered: self.workouts)
-                    self.indexBySport(self.workouts)
-                }
-            }
+            self.workouts = sortedWorkouts
+            self.totalWorkoutsCount = sortedWorkouts.count
+            self.updateWorkoutsByDay(filtered: sortedWorkouts)
+            self.indexBySport(sortedWorkouts)
+
+        } catch {
+            print("Erro ao buscar workouts: \(error.localizedDescription)")
         }
-
-        healthStore.execute(query)
     }
 
     func filterWorkouts(period: String, sport: Sport?, referenceDate: Date = Date()) {
