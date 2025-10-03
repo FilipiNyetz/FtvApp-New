@@ -25,6 +25,14 @@ enum Sport: Int, CaseIterable, Identifiable {
         case .beachTennis:  return "Beach Tennis"
         }
     }
+    
+    var iconName: String {
+        switch self {
+        case .beachTennis: return "tennis.racket"
+        case .footvolley: return "soccerball"
+        case .volleyball: return "sportscourt"
+        }
+    }
 
     static func from(hkType: HKWorkoutActivityType) -> Sport? {
         switch hkType {

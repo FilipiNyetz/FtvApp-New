@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>SETE - Início</title>
+    <meta name="description"
+        content="O aplicativo SETE foi desenvolvido para atletas de esportes de quadra, oferecendo ferramentas para melhorar performance e conectar a comunidade esportiva." />
+
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/home.css" />
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap"
+        rel="stylesheet" />
+
+    <!-- Favicon -->
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎯</text></svg>" />
+
+<!-- Code injected by Five-server -->
+  <script async data-id="five-server" data-file="/Users/gustavosouto/Documents/siteSete/index.html" type="application/javascript" src="/fiveserver.js"></script>
+  </head>
+
+<body>
+    <header>
+        <div class="container header-container">
+            <a href="/index.html" class="logo">
+                <img src="/assets/logoSete.svg" alt="Logo da SETE" class="logo-img">
+                <span>SETE</span>
+            </a>
+
+            <button class="mobile-menu-btn" aria-label="Abrir menu">☰</button>
+
+            <ul class="nav-menu">
+                <li><a href="/index.html">Início</a></li>
+                <li><a href="/privacy.html">Privacidade</a></li>
+                <li><a href="/contact.html">Contato</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <main>
+        <!-- Seção Hero -->
+        <section id="hero">
+            <div class="container hero-content">
+                <h1 class="hero-title">SETE: Sua performance esportiva no próximo nível.</h1>
+                <p class="hero-subtitle">Vamos levar sua performance esportiva para o próximo nível com
+                    <b>tecnologia de ponta</b></p>
+
+                <div class="hero-benefits">
+                    <div class="benefit-item">
+                        <div class="benefit-icon">📊</div>
+                        <h3>Estatísticas</h3>
+                        <p>Acompanhe seu desempenho com métricas exclusivas</p>
+                    </div>
+                    <div class="benefit-item">
+                        <div class="benefit-icon">👥</div>
+                        <h3>Comunidade</h3>
+                        <p>Compartilhe suas partidas com o mundo</p>
+                    </div>
+                    <div class="benefit-item">
+                        <div class="benefit-icon">🎯</div>
+                        <h3>Desafios</h3>
+                        <p>Participe de competições e melhore suas habilidades</p>
+                    </div>
+                </div>
+
+                <div class="app-badges">
+                    <a href="#" class="app-badge">Disponível na App Store</a>
+                    <a href="#" class="app-badge">Disponível no Google Play</a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container footer-content">
+            <div class="footer-logo"><span>SETE</div>
+
+            <ul class="footer-links">
+                <li><a href="/index.html">Início</a></li>
+                <li><a href="/privacy.html">Privacidade</a></li>
+                <li><a href="/contact.html">Contato</a></li>
+            </ul>
+
+            <p class="copyright">© 2023 SETE App. Todos os direitos reservados.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Menu mobile (para futura implementação se desejar)
+        const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+        const navMenu = document.querySelector('.nav-menu');
+
+        mobileMenuBtn?.addEventListener('click', () => {
+            if (navMenu.style.display === 'flex') {
+                navMenu.style.display = 'none';
+            } else {
+                navMenu.style.display = 'flex';
+                navMenu.style.flexDirection = 'column';
+                navMenu.style.position = 'absolute';
+                navMenu.style.backgroundColor = '#000';
+                navMenu.style.top = '60px';
+                navMenu.style.right = '20px';
+                navMenu.style.padding = '1rem';
+                navMenu.style.borderRadius = '8px';
+            }
+        });
+    </script>
+</body>
+
+</html>

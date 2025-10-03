@@ -113,31 +113,33 @@ struct HomeView: View {
                     }
                 }
             }
-            .toolbar(content: {
-                ToolbarItem(placement: toolbarTrailingPlacement) {
-                    Menu(
-                        content: {
-                            ForEach(todosOsEsportes, id: \.id) { sport in
-                                Button(action: {
-                                    selectedSport = sport
-                                    manager.fetchAllWorkouts(until: Date(), sport: sport)
-                                    manager.filterWorkouts(period: "day", sport: sport, referenceDate: selectedDate)
-                                }, label: {
-                                    HStack(spacing: 8) {
-                                        Text(sport.displayName)
-                                    }
-                                })
-                            }
-                        },
-                        label: {
-                            HStack(spacing: 6) {
-                                 [
-                                Text(selectedSport.displayName)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Menu {
+                        ForEach(todosOsEsportes, id: \.id) { sport in
+                            Button {
+                                selectedSport = sport
+                                manager.fetchAllWorkouts(until: Date(), sport: sport)
+                                manager.filterWorkouts(period: "day", sport: sport, referenceDate: selectedDate)
+                            } label: {
+                                Label(sport.displayName, systemImage: sport.iconName)
                             }
                         }
-                    )
+                    } label: {
+                        HStack(spacing: 4) {
+                            Text(selectedSport.displayName)
+                                .font(.subheadline)
+                                .fontWeight(.semibold)
+                            Image(systemName: selectedSport.iconName)
+                        }
+                        .padding(.horizontal, 10)
+                        .padding(.vertical, 6)
+                        .background(Color.white.opacity(0.2))
+                        .foregroundColor(.white)
+                        .clipShape(Capsule())
+                    }
                 }
-            })
+            }
             // se quiser título minimalista sem esconder a barra:
             .navigationTitle("")  // título vazio
             .navigationBarTitleDisplayMode(.inline)  // sem “Large Title”
