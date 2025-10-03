@@ -5,6 +5,7 @@ class UserManager: ObservableObject {
     
     @Published var bagdeNames: [String] = []
     @Published var goalBadge: Int = 10
+    @Published var badgeStart: Int = 0
     
     @Published var pendingMedal: String? {
         didSet {
@@ -26,6 +27,7 @@ class UserManager: ObservableObject {
     private static let earnedMedalsKey = "earnedMedalsKey"
     
     private let medalGoals: [(name: String, requiredWorkouts: Int)] = [
+        ("1stGoal", 0),
         ("2ndGoal", 10),
         ("3rdGoal", 50),
         ("4thGoal", 150),
@@ -75,25 +77,28 @@ class UserManager: ObservableObject {
         if totalWorkouts < 10 {
             bagdeNames = ["1stGoal", "2ndGoal"]
             goalBadge = 10
+            badgeStart = 0
         } else if let nextGoalIndex = medalGoals.firstIndex(where: { totalWorkouts < $0.requiredWorkouts }) {
             let currentGoal = medalGoals[nextGoalIndex - 1]
             let nextGoal = medalGoals[nextGoalIndex]
             bagdeNames = [currentGoal.name, nextGoal.name]
             goalBadge = nextGoal.requiredWorkouts
+            badgeStart = currentGoal.requiredWorkouts
         } else {
             if let lastGoal = medalGoals.last {
                 bagdeNames = [lastGoal.name, lastGoal.name] 
                 goalBadge = lastGoal.requiredWorkouts
+                badgeStart = lastGoal.requiredWorkouts
             }
         }
     }
     
-    func badgeStartValue() -> Int {
-        if let lastAchievedGoal = medalGoals.last(where: { earnedMedals.contains($0.name) }) {
-            return lastAchievedGoal.requiredWorkouts
-        }
-        return 0
-    }
+//    func badgeStartValue() -> Int {
+//        if let lastAchievedGoal = medalGoals.last(where: { earnedMedals.contains($0.name) }) {
+//            return lastAchievedGoal.requiredWorkouts
+//        }
+//        return 0
+//    }
 
     func setPendingMedal(_ name: String) {
         pendingMedal = name

@@ -48,10 +48,8 @@ struct StartView: View {
                         self.isCountingDown = true
                     },
                     onCancel: {
-                        // Volta para a StartView para permitir trocar o esporte
                         self.isCalibratingOrigin = false
-                        // Opcional: zere a seleção para forçar nova escolha
-                        // self.selectedWorkoutType = nil
+                        self.selectedWorkoutType = nil
                     }
                 )
 
@@ -69,87 +67,53 @@ struct StartView: View {
     }
 
     var startScreenContent: some View {
-        ZStack {
-            Image("LogoS")
-                .resizable()
-                .scaledToFill()
-                .opacity(0.20)
-                .ignoresSafeArea()
-                .scaleEffect(0.7)
-
-            LinearGradient(
-                gradient: Gradient(colors: [
-                    .gradiente1, .gradiente2, .gradiente2, .gradiente2,
-                ]),
-                startPoint: .bottomLeading,
-                endPoint: .topTrailing
-            )
-            .opacity(0.85)
-            .ignoresSafeArea()
-
-            VStack(spacing: 12) {
-                Text("Escolha seu esporte para iniciar")
-                    .font(.headline)
-                    .fontWeight(.medium)
-                    .fontDesign(.rounded)
-                    .multilineTextAlignment(.center)
-                    .foregroundStyle(.white)
-                    .padding(.horizontal)
-
-                Button(action: {
-                    let type: HKWorkoutActivityType = .soccer
-                    self.selectedWorkoutType = type
-                    self.manager.selectedWorkoutType = type
-                    self.isCalibratingOrigin = true
-                }) {
-                    Text("Futevolei")
-                        .font(.headline.bold())
-                        .frame(maxWidth: .infinity, maxHeight: 35)
-                        .foregroundStyle(.black)
-                        .background(Color.colorPrimal)
-                        .clipShape(RoundedRectangle(cornerRadius: 24))
+        ScrollView {
+                VStack(alignment: .leading, spacing: 12) {
+                    ForEach(workoutTypes) { workoutType in
+                        GeometryReader { proxy in
+                            let scrollY = proxy.frame(in: .global).minY
+                            
+                            SportCardView(
+                                sportName: workoutType.name,
+                                sportIcon: workoutType.iconName,
+                                color: workoutType.color
+                            ) {
+                                self.selectedWorkoutType = workoutType
+                                self.manager.selectedWorkoutType = workoutType
+                                self.isCalibratingOrigin = true
+                            }
+                            .brightness(calculateBrightness(from: scrollY))
+                        }
+                        .frame(height: 130)
+                        .padding(.horizontal)
+                    }
                 }
-                .buttonStyle(.plain)
-                .padding(.horizontal, 12)
-                
-                Button(action: {
-                    let type: HKWorkoutActivityType = .volleyball
-                    self.selectedWorkoutType = type
-                    self.manager.selectedWorkoutType = type
-                    self.isCalibratingOrigin = true
-                }) {
-                    Text("Vôlei")
-                        .font(.headline.bold())
-                        .frame(maxWidth: .infinity, maxHeight: 35)
-                        .foregroundStyle(.black)
-                        .background(Color.colorPrimal)
-                        .clipShape(RoundedRectangle(cornerRadius: 24))
-                }
-                .buttonStyle(.plain)
-                .padding(.horizontal,12)
-                
-                Button(action: {
-                    let type: HKWorkoutActivityType = .tennis
-                    self.selectedWorkoutType = type
-                    self.manager.selectedWorkoutType = type
-                    self.isCalibratingOrigin = true
-                }) {
-                    Text("Beach Tennis")
-                        .font(.headline.bold())
-                        .frame(maxWidth: .infinity, maxHeight: 35)
-                        .foregroundStyle(.black)
-                        .background(Color.colorPrimal)
-                        .clipShape(RoundedRectangle(cornerRadius: 24))
-                }
-                .buttonStyle(.plain)
-                .padding(.horizontal,12)
+                .padding(.top)
             }
-            .padding(.horizontal, 12)
-        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .background(Color.black.ignoresSafeArea())
         .onAppear {
             manager.requestAuthorization()
             wcSessionDelegate.startSession()
         }
+        .toolbar {
+                ToolbarItem(placement: .topBarLeading) {
+                    Text("Esportes")
+                        .font(.title3)
+                        .fontWeight(.bold)
+                        .foregroundColor(workoutTypes.first?.color ?? .green)
+                }
+            }
+            .toolbarBackground(.hidden, for: .navigationBar)
+            
+    }
+    private func calculateBrightness(from scrollY: CGFloat) -> Double {
+        let fadeStart: CGFloat = 75
+        let fadeEnd: CGFloat = -50
+        let fadeRange = fadeStart - fadeEnd
+        let progress = (fadeStart - scrollY) / fadeRange
+        let clampedProgress = max(0, min(1, progress))
+        return Double(clampedProgress * -0.8)
     }
 }
 
@@ -163,9 +127,25 @@ extension HKWorkoutActivityType: @retroactive Identifiable {
     var name: String {
         switch self {
         case .soccer: return "Futevôlei"
-        case .volleyball: return "Vôlei de praia"
+        case .volleyball: return "Vôlei de Praia"
         case .tennis: return "Beach Tennis"
         default: return "Treino"
+        }
+    }
+    
+    var iconName: String {
+        switch self {
+        case .soccer: return "figure.taichi"
+        case .volleyball: return "figure.volleyball"
+        case .tennis: return "figure.tennis"
+        default: return "figure.walk"
+        }
+    }
+
+    var color: Color {
+        switch self {
+        case .soccer, .volleyball, .tennis: return Color.colorPrimal
+        default: return .green
         }
     }
 }

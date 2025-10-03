@@ -23,7 +23,7 @@ struct ProgressBarView: View {
                         .frame(width: 45, height: 50)
                 }
 
-                Text("\(userManager.badgeStartValue())")
+                Text("\(userManager.badgeStart)")
                     .font(.footnote)
                     .foregroundStyle(Color.textGray)
                     .fontWeight(.medium)
